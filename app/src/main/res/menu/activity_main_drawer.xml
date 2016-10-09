@@ -4,23 +4,23 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
-            android:title="Home" />
+            android:title="@string/nav_home" />
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map"
-            android:title="Places" />
+            android:title="@string/nav_places" />
         <item
             android:id="@+id/nav_attachment"
             android:icon="@drawable/ic_attachment"
-            android:title="Task description" />
+            android:title="@string/nav_task_description" />
         <item
             android:id="@+id/nav_github"
             android:icon="@drawable/ic_github_box"
-            android:title="Source code" />
+            android:title="@string/nav_source_code" />
         <item
             android:id="@+id/nav_linkedin"
             android:icon="@drawable/ic_linkedin_box"
-            android:title="My LinkedIn"
+            android:title="@string/nav_my_linkedIn"
             android:visible="false" />
     </group>
 </menu>

@@ -29,8 +29,8 @@ public final class AppNavigationUtil {
         return new Intent(context, PlaceDetailsActivity.class);
     }
 
-    public static Intent getWebIntent(Context context, String url) {
-        return WebActivity.buildIntent(context, url);
+    public static Intent getWebIntent(Context context, String url, CharSequence title) {
+        return WebActivity.buildIntent(context, url, title);
     }
 
     public static void startActivityWithAnimations(Activity activity, Intent intent) {
