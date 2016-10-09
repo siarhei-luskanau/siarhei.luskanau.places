@@ -54,7 +54,7 @@ public abstract class DrawerActivity extends BaseActivity
                 break;
 
             case R.id.nav_attachment:
-                intent = AppNavigationUtil.getWebIntent(this, "file:///android_asset/TaskAndroid.html");
+                intent = AppNavigationUtil.getWebIntent(this, AppConstants.TEST_TASK_URL);
                 break;
 
             case R.id.nav_github:
