@@ -3,6 +3,7 @@
     package="siarhei.luskanau.places">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".AppApplication"
@@ -11,6 +12,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDlqpg6Zn3zUGr8Tv9N0x-uLIclr3WTu6M" />
 
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
