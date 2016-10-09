@@ -10,4 +10,9 @@ public class PlaceDetailsActivity extends DrawerWithToolbarActivity {
         return R.layout.activity_place_details;
     }
 
+    @Override
+    public int getDrawerMenuItemId() {
+        return R.id.nav_map;
+    }
+
 }

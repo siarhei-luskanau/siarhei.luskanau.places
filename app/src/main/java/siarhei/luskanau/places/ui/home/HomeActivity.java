@@ -24,6 +24,11 @@ public class HomeActivity extends DrawerWithToolbarActivity {
     }
 
     @Override
+    public int getDrawerMenuItemId() {
+        return R.id.nav_home;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

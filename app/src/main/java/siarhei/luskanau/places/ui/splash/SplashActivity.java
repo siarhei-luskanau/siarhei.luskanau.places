@@ -51,7 +51,7 @@ public class SplashActivity extends BaseActivity implements WebPresenterInterfac
     }
 
     private void next() {
-        Intent intent = AppNavigationUtil.getHomeIntent(this);
+        Intent intent = AppNavigationUtil.getPlacesIntent(this);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         AppNavigationUtil.startActivityWithAnimations(this, intent);
         finish();

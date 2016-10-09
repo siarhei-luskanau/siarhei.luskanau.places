@@ -13,6 +13,7 @@ import android.widget.Toast;
 import siarhei.luskanau.places.AppConstants;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.ui.home.HomeActivity;
+import siarhei.luskanau.places.ui.places.PlacesActivity;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 
 public abstract class DrawerActivity extends BaseActivity
@@ -29,9 +30,12 @@ public abstract class DrawerActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(getDrawerMenuItemId());
     }
 
     public abstract int getDrawerContentResId();
+
+    public abstract int getDrawerMenuItemId();
 
     @Override
     public void onBackPressed() {
@@ -50,6 +54,12 @@ public abstract class DrawerActivity extends BaseActivity
             case R.id.nav_home:
                 if (!(this instanceof HomeActivity)) {
                     intent = AppNavigationUtil.getHomeIntent(this);
+                }
+                break;
+
+            case R.id.nav_map:
+                if (!(this instanceof PlacesActivity)) {
+                    intent = AppNavigationUtil.getPlacesIntent(this);
                 }
                 break;
 
@@ -76,7 +86,7 @@ public abstract class DrawerActivity extends BaseActivity
             AppNavigationUtil.startActivityWithAnimations(this, intent);
         }
 
-        return true;
+        return false;
     }
 
 }

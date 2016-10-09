@@ -13,6 +13,7 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.utils.AppUtils;
 
+// TODO use CustomTabs library from supports
 public class WebFragment extends BaseFragment {
 
     private WebView webView;
