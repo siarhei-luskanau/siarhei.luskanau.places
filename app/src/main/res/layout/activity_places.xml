@@ -2,15 +2,14 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.places.PlaceDetailsActivity"
+    tools:context=".ui.places.PlacesActivity"
     tools:showIn="@layout/activity_toolbar">
 
-    <LinearLayout
+    <fragment
+        android:id="@+id/PlacesPresenterFragment"
+        android:name="siarhei.luskanau.places.ui.places.BasePlacesPresenterFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    </LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </merge>

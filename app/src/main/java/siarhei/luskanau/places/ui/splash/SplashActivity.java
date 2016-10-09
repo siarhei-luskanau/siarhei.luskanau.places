@@ -26,7 +26,8 @@ public class SplashActivity extends BaseActivity implements WebPresenterInterfac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Observable.interval(SPLASH_DURATION_SEC, TimeUnit.SECONDS)
+        releaseSubscription(subscription);
+        subscription = Observable.interval(SPLASH_DURATION_SEC, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<Long>() {
