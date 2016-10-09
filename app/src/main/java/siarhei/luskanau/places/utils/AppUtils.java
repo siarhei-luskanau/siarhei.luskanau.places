@@ -17,7 +17,10 @@ public final class AppUtils {
     }
 
     public static Drawable getTintDrawable(Context context, @DrawableRes int drawableResId, @ColorRes int tintResId) {
-        return getTintDrawable(ContextCompat.getDrawable(context, drawableResId), ContextCompat.getColor(context, tintResId));
+        return getTintDrawable(
+                ContextCompat.getDrawable(context, drawableResId),
+                ContextCompat.getColor(context, tintResId)
+        );
     }
 
     public static Drawable getTintDrawable(@NonNull Drawable drawable, @ColorInt int tint) {
@@ -34,7 +37,7 @@ public final class AppUtils {
         }
 
         StringBuilder message = new StringBuilder();
-        message.append("Parent ").append(parentClass.getCanonicalName()).append(" not found in:");
+        message.append("Parent ").append(parentClass).append(" not found in:");
         for (Object parentObject : parentObjects) {
             message.append(" ").append(parentObject);
         }

@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+apply from: '../config/quality.gradle'
+check.dependsOn 'checkstyle', 'findbugs', 'pmd'
+
 android {
 
     compileSdkVersion project.ANDROID_BUILD_SDK_VERSION

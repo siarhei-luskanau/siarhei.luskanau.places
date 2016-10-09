@@ -5,7 +5,7 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-public class RxUtils {
+public final class RxUtils {
 
     private RxUtils() {
     }
