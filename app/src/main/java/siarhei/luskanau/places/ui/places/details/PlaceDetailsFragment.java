@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -35,6 +34,7 @@ import siarhei.luskanau.places.databinding.ListItemPlaceDetailsMapBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhotoBinding;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
+import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
 import siarhei.luskanau.places.utils.glide.PlacePhotoId;
 import siarhei.luskanau.places.utils.glide.PlacePhotoIdModelLoader;
@@ -64,7 +64,9 @@ public class PlaceDetailsFragment extends BaseFragment {
                 Object item = adapter.getItem(position);
                 if (item instanceof PlaceMapAdapterItem) {
                     Place place = ((PlaceMapAdapterItem) item).place;
-                    Snackbar.make(getView(), place.getName() + "\n" + place.getAddress(), Snackbar.LENGTH_LONG).show();
+                    String url = AppUtils.buildMapUrl(place.getLatLng());
+                    AppNavigationUtil.startActivityWithAnimations(getActivity(),
+                            AppNavigationUtil.getWebIntent(context, url, place.getName()));
                 }
             }
         });

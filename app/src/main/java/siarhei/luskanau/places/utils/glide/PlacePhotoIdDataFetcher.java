@@ -20,16 +20,22 @@ public class PlacePhotoIdDataFetcher implements DataFetcher<InputStream> {
 
     public PlacePhotoIdDataFetcher(PlacePhotoId model, int width, int height) {
         this.model = model;
-
-        double ratio = Math.min(model.getPlacePhotoMetadata().getMaxWidth() / width,
-                model.getPlacePhotoMetadata().getMaxHeight() / height);
-
-        if (ratio > 1) {
-            scaledWidth = (int) (width / ratio);
-            scaledHeight = (int) (height / ratio);
+        int maxWidth = model.getPlacePhotoMetadata().getMaxWidth();
+        int maxHeight = model.getPlacePhotoMetadata().getMaxHeight();
+        double ratio = (double) model.getPlacePhotoMetadata().getMaxWidth() / width;
+        int scale = 1;
+        while (true) {
+            if (scale * 2 > ratio) {
+                break;
+            }
+            scale *= 2;
+        }
+        if (scale > 1) {
+            scaledWidth = maxWidth / scale;
+            scaledHeight = maxHeight / scale;
         } else {
-            scaledWidth = width;
-            scaledHeight = height;
+            scaledWidth = maxWidth;
+            scaledHeight = maxHeight;
         }
     }
 

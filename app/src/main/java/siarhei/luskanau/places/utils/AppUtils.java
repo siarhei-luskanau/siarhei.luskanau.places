@@ -11,6 +11,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Locale;
+
 public final class AppUtils {
 
     private AppUtils() {
@@ -55,6 +59,11 @@ public final class AppUtils {
                 return null;
             }
         }
+    }
+
+    public static String buildMapUrl(LatLng latLng) {
+        return String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=%f,%f",
+                latLng.latitude, latLng.longitude);
     }
 
 }

@@ -33,7 +33,8 @@ public class PlaceDetailMapView extends LinearLayout {
     }
 
     public void setPlace(Place place) {
-        binding.placeLatLng.setText(String.valueOf(place.getLatLng()));
+        //binding.placeLatLng.setText(String.valueOf(place.getLatLng()));
+        binding.placeLatLng.setText(R.string.place_detail_show_on_map);
     }
 
 }
