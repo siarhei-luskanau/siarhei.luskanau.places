@@ -1,5 +1,6 @@
 package siarhei.luskanau.places.api;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 import com.google.android.gms.location.places.PlacePhotoMetadataResult;
+import com.google.android.gms.location.places.PlacePhotoResult;
 import com.google.android.gms.location.places.Places;
 
 import java.util.List;
@@ -96,6 +98,23 @@ public class PlacesApi {
                 List<PlacePhotoMetadata> placePhotoMetadataList
                         = DataBufferUtils.freezeAndClose(placePhotoMetadataResult.getPhotoMetadata());
                 return Observable.just(placePhotoMetadataList);
+            }
+        });
+    }
+
+    public Observable<Bitmap> getPlacePhotoBitmap(final PlacePhotoMetadata placePhotoMetadata) {
+        return Observable.defer(new Func0<Observable<Bitmap>>() {
+            @Override
+            public Observable<Bitmap> call() {
+                PendingResult<PlacePhotoResult> pendingResult = placePhotoMetadata.getPhoto(googleApiClient);
+                PlacePhotoResult placePhotoResult = pendingResult.await();
+
+                Status status = placePhotoResult.getStatus();
+                if (!status.isSuccess()) {
+                    throw new RuntimeException(status.getStatusMessage());
+                }
+
+                return Observable.just(placePhotoResult.getBitmap());
             }
         });
     }
