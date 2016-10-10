@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 
 import siarhei.luskanau.places.AppConstants;
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.ui.home.HomeActivity;
 import siarhei.luskanau.places.ui.places.PlacesActivity;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.RoundedBitmapImageViewTarget;
@@ -71,12 +70,6 @@ public abstract class DrawerActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         Intent intent = null;
         switch (item.getItemId()) {
-            case R.id.nav_home:
-                if (!(this instanceof HomeActivity)) {
-                    intent = AppNavigationUtil.getHomeIntent(this);
-                }
-                break;
-
             case R.id.nav_map:
                 if (!(this instanceof PlacesActivity)) {
                     intent = AppNavigationUtil.getPlacesIntent(this);

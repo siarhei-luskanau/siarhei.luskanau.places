@@ -17,7 +17,7 @@ import com.google.android.gms.location.places.PlacePhotoMetadata;
 import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.Places;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func0;
@@ -29,7 +29,7 @@ public class PlacesApi {
 
     public PlacesApi(FragmentActivity activity) {
         googleApiClient = new GoogleApiClient.Builder(activity)
-                .enableAutoManage(activity, 0 /* clientId */,
+                .enableAutoManage(activity,
                         new GoogleApiClient.OnConnectionFailedListener() {
                             @Override
                             public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -41,10 +41,10 @@ public class PlacesApi {
                 .build();
     }
 
-    public Observable<ArrayList<AutocompletePrediction>> getAutocompletePredictions(final String query) {
-        return Observable.defer(new Func0<Observable<ArrayList<AutocompletePrediction>>>() {
+    public Observable<List<AutocompletePrediction>> getAutocompletePredictions(final String query) {
+        return Observable.defer(new Func0<Observable<List<AutocompletePrediction>>>() {
             @Override
-            public Observable<ArrayList<AutocompletePrediction>> call() {
+            public Observable<List<AutocompletePrediction>> call() {
                 PendingResult<AutocompletePredictionBuffer> pendingResult
                         = Places.GeoDataApi.getAutocompletePredictions(googleApiClient, query, null, null);
                 AutocompletePredictionBuffer autocompletePredictionBuffer = pendingResult.await();
@@ -54,17 +54,17 @@ public class PlacesApi {
                     throw new RuntimeException(status.getStatusMessage());
                 }
 
-                ArrayList<AutocompletePrediction> autocompletePredictions
+                List<AutocompletePrediction> autocompletePredictions
                         = DataBufferUtils.freezeAndClose(autocompletePredictionBuffer);
                 return Observable.just(autocompletePredictions);
             }
         });
     }
 
-    public Observable<ArrayList<Place>> getPlace(final String placeId) {
-        return Observable.defer(new Func0<Observable<ArrayList<Place>>>() {
+    public Observable<Place> getPlace(final String placeId) {
+        return Observable.defer(new Func0<Observable<Place>>() {
             @Override
-            public Observable<ArrayList<Place>> call() {
+            public Observable<Place> call() {
                 PendingResult<PlaceBuffer> pendingResult
                         = Places.GeoDataApi.getPlaceById(googleApiClient, placeId);
                 PlaceBuffer placeBuffer = pendingResult.await();
@@ -74,16 +74,16 @@ public class PlacesApi {
                     throw new RuntimeException(status.getStatusMessage());
                 }
 
-                ArrayList<Place> places = DataBufferUtils.freezeAndClose(placeBuffer);
-                return Observable.just(places);
+                List<Place> places = DataBufferUtils.freezeAndClose(placeBuffer);
+                return Observable.from(places);
             }
         });
     }
 
-    public Observable<ArrayList<PlacePhotoMetadata>> getPlacePhotos(final String placeId) {
-        return Observable.defer(new Func0<Observable<ArrayList<PlacePhotoMetadata>>>() {
+    public Observable<List<PlacePhotoMetadata>> getPlacePhotos(final String placeId) {
+        return Observable.defer(new Func0<Observable<List<PlacePhotoMetadata>>>() {
             @Override
-            public Observable<ArrayList<PlacePhotoMetadata>> call() {
+            public Observable<List<PlacePhotoMetadata>> call() {
                 PendingResult<PlacePhotoMetadataResult> pendingResult
                         = Places.GeoDataApi.getPlacePhotos(googleApiClient, placeId);
                 PlacePhotoMetadataResult placePhotoMetadataResult = pendingResult.await();
@@ -93,7 +93,7 @@ public class PlacesApi {
                     throw new RuntimeException(status.getStatusMessage());
                 }
 
-                ArrayList<PlacePhotoMetadata> placePhotoMetadataList
+                List<PlacePhotoMetadata> placePhotoMetadataList
                         = DataBufferUtils.freezeAndClose(placePhotoMetadataResult.getPhotoMetadata());
                 return Observable.just(placePhotoMetadataList);
             }

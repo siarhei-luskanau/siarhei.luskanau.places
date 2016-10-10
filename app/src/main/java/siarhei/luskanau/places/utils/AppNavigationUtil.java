@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 
-import siarhei.luskanau.places.ui.home.HomeActivity;
 import siarhei.luskanau.places.ui.places.PlaceDetailsActivity;
 import siarhei.luskanau.places.ui.places.PlacesActivity;
 import siarhei.luskanau.places.ui.web.WebActivity;
@@ -15,10 +14,6 @@ import siarhei.luskanau.places.ui.web.WebActivity;
 public final class AppNavigationUtil {
 
     private AppNavigationUtil() {
-    }
-
-    public static Intent getHomeIntent(Context context) {
-        return HomeActivity.buildIntent(context);
     }
 
     public static Intent getPlacesIntent(Context context) {

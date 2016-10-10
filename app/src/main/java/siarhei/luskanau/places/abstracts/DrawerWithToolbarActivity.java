@@ -1,12 +1,13 @@
 package siarhei.luskanau.places.abstracts;
 
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.utils.AppUtils;
@@ -30,8 +31,9 @@ public abstract class DrawerWithToolbarActivity extends DrawerActivity {
                 R.color.app_white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-        LayoutInflater.from(this).inflate(getContentResId(), coordinatorLayout, true);
+        FrameLayout contentContainer = (FrameLayout) findViewById(R.id.content_container);
+        View view = LayoutInflater.from(this).inflate(getContentResId(), contentContainer, false);
+        contentContainer.addView(view);
     }
 
     @Override
