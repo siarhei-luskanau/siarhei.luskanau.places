@@ -5,6 +5,7 @@
 
     <string name="nav_home">Home</string>
     <string name="nav_places">Places</string>
+    <string name="nav_place_details">Place Details</string>
     <string name="nav_task_description">Task description</string>
     <string name="nav_source_code">Source code</string>
     <string name="nav_my_linkedIn">My LinkedIn</string>

@@ -19,6 +19,8 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
+import siarhei.luskanau.places.ui.places.PlacesPresenterInterface;
+import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlaceListFragment extends BaseFragment {
 
@@ -62,8 +64,13 @@ public class PlaceListFragment extends BaseFragment {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlacePicker.getPlace(getContext(), data);
+
                 Snackbar.make(getView(), place.getName() + "\n" + place.getAddress(), Snackbar.LENGTH_LONG).show();
-                return;
+
+                PlacesPresenterInterface placesPresenterInterface = AppUtils.getParentInterface(
+                        PlacesPresenterInterface.class,
+                        getActivity(), getParentFragment(), getTargetFragment());
+                placesPresenterInterface.onPlaceSelected(place);
             }
         }
     }

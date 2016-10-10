@@ -20,8 +20,8 @@ public final class AppNavigationUtil {
         return new Intent(context, PlacesActivity.class);
     }
 
-    public static Intent getPlaceDetailsIntent(Context context) {
-        return new Intent(context, PlaceDetailsActivity.class);
+    public static Intent getPlaceDetailsIntent(Context context, String placeId) {
+        return PlaceDetailsActivity.buildIntent(context, placeId);
     }
 
     public static Intent getWebIntent(Context context, String url, CharSequence title) {

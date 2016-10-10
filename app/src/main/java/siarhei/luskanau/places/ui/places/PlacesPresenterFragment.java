@@ -2,12 +2,14 @@ package siarhei.luskanau.places.ui.places;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
 
 import java.util.List;
 
@@ -18,8 +20,10 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.api.PlacesApi;
 import siarhei.luskanau.places.rx.SimpleObserver;
+import siarhei.luskanau.places.ui.places.details.PlaceDetailsFragment;
+import siarhei.luskanau.places.utils.AppNavigationUtil;
 
-public class PlacesPresenterFragment extends BaseFragment {
+public class PlacesPresenterFragment extends BaseFragment implements PlacesPresenterInterface {
 
     private static final String TAG = "PlacesPresenterFragment";
 
@@ -34,13 +38,6 @@ public class PlacesPresenterFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        placesApi = new PlacesApi(getActivity());
-    }
-
-
-    @Override
     public void onStart() {
         super.onStart();
         loadData();
@@ -53,9 +50,28 @@ public class PlacesPresenterFragment extends BaseFragment {
         subscription = null;
     }
 
+    @Override
+    public void onPlaceSelected(Place place) {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeDetailsFragment);
+        if (fragment instanceof PlaceDetailsFragment) {
+            PlaceDetailsFragment placeDetailsFragment = (PlaceDetailsFragment) fragment;
+            placeDetailsFragment.onPlaceUpdated(place);
+        } else {
+            AppNavigationUtil.startActivityWithAnimations(getActivity(),
+                    AppNavigationUtil.getPlaceDetailsIntent(getContext(), place.getId()));
+        }
+    }
+
+    private PlacesApi getPlacesApi() {
+        if (placesApi == null) {
+            placesApi = new PlacesApi(getActivity());
+        }
+        return placesApi;
+    }
+
     private void loadData() {
         releaseSubscription(subscription);
-        subscription = placesApi.getAutocompletePredictions("")
+        subscription = getPlacesApi().getAutocompletePredictions("")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<List<AutocompletePrediction>>() {
