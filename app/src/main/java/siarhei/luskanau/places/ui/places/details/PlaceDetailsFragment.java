@@ -9,14 +9,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +36,10 @@ import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhotoBinding;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
+import siarhei.luskanau.places.utils.glide.PlacePhotoId;
+import siarhei.luskanau.places.utils.glide.PlacePhotoIdModelLoader;
 
 public class PlaceDetailsFragment extends BaseFragment {
-
-    private static final String TAG = "PlaceDetailsFragment";
 
     private PlacesApi placesApi;
     private Subscription subscription;
@@ -131,12 +132,6 @@ public class PlaceDetailsFragment extends BaseFragment {
 
     private void onPlacePhotosUpdated(List<PlacePhotoMetadata> placePhotoMetadataList) {
         this.placePhotoMetadataList = placePhotoMetadataList;
-        if (placePhotoMetadataList != null) {
-            for (PlacePhotoMetadata placePhotoMetadata : placePhotoMetadataList) {
-                Log.d(TAG, "w" + placePhotoMetadata.getMaxWidth() + " h" + placePhotoMetadata.getMaxHeight()
-                        + " " + placePhotoMetadata.getAttributions());
-            }
-        }
         updateAdapter();
     }
 
@@ -147,7 +142,9 @@ public class PlaceDetailsFragment extends BaseFragment {
             adapterItems.add(new PlaceMapAdapterItem(place));
         }
         if (placePhotoMetadataList != null) {
-            adapterItems.addAll(placePhotoMetadataList);
+            for (PlacePhotoMetadata placePhotoMetadata : placePhotoMetadataList) {
+                adapterItems.add(new PlacePhotoAdapterItem(place, placePhotoMetadata));
+            }
         }
         adapter.setData(adapterItems);
     }
@@ -157,6 +154,11 @@ public class PlaceDetailsFragment extends BaseFragment {
         public static final int TYPE_PLACE_HEADER = 1;
         public static final int TYPE_MAP = 2;
         public static final int TYPE_PHOTO = 3;
+
+        public PlaceDetailsAdapter() {
+            Glide.get(getContext())
+                    .register(PlacePhotoId.class, InputStream.class, new PlacePhotoIdModelLoader.Factory());
+        }
 
         @Override
         public BindableViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
@@ -198,9 +200,10 @@ public class PlaceDetailsFragment extends BaseFragment {
                     break;
 
                 case TYPE_PHOTO:
-                    PlacePhotoMetadata placePhotoMetadata = (PlacePhotoMetadata) getItem(position);
+                    PlacePhotoAdapterItem placePhotoAdapterItem = (PlacePhotoAdapterItem) getItem(position);
                     ((ListItemPlaceDetailsPhotoBinding) holder.getBindings())
-                            .item.setPlacePhotoMetadata(position, placePhotoMetadata, getPlacesApi());
+                            .item.setPlacePhotoMetadata(placePhotoAdapterItem.place,
+                            placePhotoAdapterItem.placePhotoMetadata, getPlacesApi());
                     break;
 
                 default:
@@ -215,12 +218,11 @@ public class PlaceDetailsFragment extends BaseFragment {
                 return TYPE_PLACE_HEADER;
             } else if (object instanceof PlaceMapAdapterItem) {
                 return TYPE_MAP;
-            } else if (object instanceof PlacePhotoMetadata) {
+            } else if (object instanceof PlacePhotoAdapterItem) {
                 return TYPE_PHOTO;
             }
             return -1;
         }
-
     }
 
     private static class PlaceHeaderAdapterItem {
@@ -236,6 +238,16 @@ public class PlaceDetailsFragment extends BaseFragment {
 
         public PlaceMapAdapterItem(Place place) {
             this.place = place;
+        }
+    }
+
+    private static class PlacePhotoAdapterItem {
+        private Place place;
+        private PlacePhotoMetadata placePhotoMetadata;
+
+        public PlacePhotoAdapterItem(Place place, PlacePhotoMetadata placePhotoMetadata) {
+            this.place = place;
+            this.placePhotoMetadata = placePhotoMetadata;
         }
     }
 

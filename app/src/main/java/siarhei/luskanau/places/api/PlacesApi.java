@@ -102,11 +102,13 @@ public class PlacesApi {
         });
     }
 
-    public Observable<Bitmap> getPlacePhotoBitmap(final PlacePhotoMetadata placePhotoMetadata) {
+    public Observable<Bitmap> getPlacePhotoBitmap(final PlacePhotoMetadata placePhotoMetadata,
+                                                  final int width, final int height) {
         return Observable.defer(new Func0<Observable<Bitmap>>() {
             @Override
             public Observable<Bitmap> call() {
-                PendingResult<PlacePhotoResult> pendingResult = placePhotoMetadata.getPhoto(googleApiClient);
+                PendingResult<PlacePhotoResult> pendingResult = placePhotoMetadata
+                        .getScaledPhoto(googleApiClient, width, height);
                 PlacePhotoResult placePhotoResult = pendingResult.await();
 
                 Status status = placePhotoResult.getStatus();
