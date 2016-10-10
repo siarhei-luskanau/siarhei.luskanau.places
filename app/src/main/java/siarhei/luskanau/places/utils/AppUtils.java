@@ -36,10 +36,10 @@ public final class AppUtils {
             }
         }
 
-        StringBuilder message = new StringBuilder();
+        StringBuilder message = new StringBuilder(128);
         message.append("Parent ").append(parentClass).append(" not found in:");
         for (Object parentObject : parentObjects) {
-            message.append(" ").append(parentObject);
+            message.append(' ').append(parentObject);
         }
         throw new IllegalStateException(message.toString());
     }
