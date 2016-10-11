@@ -19,15 +19,16 @@ import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.api.PlacesApi;
+import siarhei.luskanau.places.api.PlacesApiInterface;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.ui.places.details.PlaceDetailsFragment;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
+import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlacesPresenterFragment extends BaseFragment implements PlacesPresenterInterface {
 
     private static final String TAG = "PlacesPresenterFragment";
 
-    private PlacesApi placesApi;
     private Subscription subscription;
 
     @Nullable
@@ -63,10 +64,7 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
     }
 
     private PlacesApi getPlacesApi() {
-        if (placesApi == null) {
-            placesApi = new PlacesApi(getActivity());
-        }
-        return placesApi;
+        return AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi();
     }
 
     private void loadData() {

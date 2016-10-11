@@ -1,11 +1,7 @@
 package siarhei.luskanau.places.api;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
@@ -26,21 +22,10 @@ import rx.functions.Func0;
 
 public class PlacesApi {
 
-    private static final String TAG = "PlacesApi";
     private GoogleApiClient googleApiClient;
 
-    public PlacesApi(FragmentActivity activity) {
-        googleApiClient = new GoogleApiClient.Builder(activity)
-                .enableAutoManage(activity,
-                        new GoogleApiClient.OnConnectionFailedListener() {
-                            @Override
-                            public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                                Log.e(TAG, String.valueOf(connectionResult));
-                            }
-                        })
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .build();
+    public PlacesApi(GoogleApiClient googleApiClient) {
+        this.googleApiClient = googleApiClient;
     }
 
     public Observable<List<AutocompletePrediction>> getAutocompletePredictions(final String query) {

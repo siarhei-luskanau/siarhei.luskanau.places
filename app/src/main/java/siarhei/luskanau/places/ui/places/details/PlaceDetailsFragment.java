@@ -29,6 +29,7 @@ import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.api.PlacesApi;
+import siarhei.luskanau.places.api.PlacesApiInterface;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsHeaderBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsMapBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhotoBinding;
@@ -41,7 +42,6 @@ import siarhei.luskanau.places.utils.glide.PlacePhotoIdModelLoader;
 
 public class PlaceDetailsFragment extends BaseFragment {
 
-    private PlacesApi placesApi;
     private Subscription subscription;
     private PlaceDetailsAdapter adapter;
     private Place place;
@@ -84,10 +84,7 @@ public class PlaceDetailsFragment extends BaseFragment {
     }
 
     private PlacesApi getPlacesApi() {
-        if (placesApi == null) {
-            placesApi = new PlacesApi(getActivity());
-        }
-        return placesApi;
+        return AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi();
     }
 
     public void onPlaceIdUpdated(String placeId) {
