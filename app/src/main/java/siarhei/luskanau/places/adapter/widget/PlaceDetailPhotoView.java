@@ -36,9 +36,10 @@ public class PlaceDetailPhotoView extends LinearLayout {
                 R.layout.view_place_detail_photo, this, true);
     }
 
-    public void setPlacePhotoMetadata(Place place, PlacePhotoMetadata placePhotoMetadata, PlacesApi placesApi) {
+    public void setPlacePhotoMetadata(Place place, int position,
+                                      PlacePhotoMetadata placePhotoMetadata, PlacesApi placesApi) {
         Glide.with(getContext())
-                .load(new PlacePhotoId(place, placePhotoMetadata, placesApi))
+                .load(new PlacePhotoId(place, position, placePhotoMetadata, placesApi))
                 .fitCenter()
                 .placeholder(null)
                 .into(binding.placePhoto);

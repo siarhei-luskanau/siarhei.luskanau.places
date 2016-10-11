@@ -3,6 +3,7 @@ package siarhei.luskanau.places.ui.places;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlacesPresenterFragment extends BaseFragment implements PlacesPresenterInterface {
 
+    private static final String TAG = "PlacesPresenterFragment";
     private Subscription subscription;
 
     @Nullable
@@ -85,7 +87,8 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
                         return getPlacesApi().getCurrentPlace()
                                 .onErrorReturn(new Func1<Throwable, List<Place>>() {
                                     @Override
-                                    public List<Place> call(Throwable throwable) {
+                                    public List<Place> call(Throwable e) {
+                                        Log.e(TAG, e.getMessage(), e);
                                         return null;
                                     }
                                 });

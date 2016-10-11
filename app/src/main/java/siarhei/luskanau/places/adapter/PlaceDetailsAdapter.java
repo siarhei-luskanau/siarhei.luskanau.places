@@ -1,18 +1,14 @@
 package siarhei.luskanau.places.adapter;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.io.InputStream;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
@@ -23,8 +19,6 @@ import siarhei.luskanau.places.databinding.ListItemPlaceDetailsMapBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhoneBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhotoBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsWebsiteBinding;
-import siarhei.luskanau.places.utils.glide.PlacePhotoId;
-import siarhei.luskanau.places.utils.glide.PlacePhotoIdModelLoader;
 
 public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, BindableViewHolder> {
 
@@ -33,10 +27,6 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
     public static final int TYPE_WEBSITE = 3;
     public static final int TYPE_MAP = 4;
     public static final int TYPE_PHOTO = 5;
-
-    public PlaceDetailsAdapter(Context context) {
-        Glide.get(context).register(PlacePhotoId.class, InputStream.class, new PlacePhotoIdModelLoader.Factory());
-    }
 
     @Override
     public BindableViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
@@ -100,7 +90,7 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
             case TYPE_PHOTO:
                 PlacePhotoAdapterItem placePhotoAdapterItem = (PlacePhotoAdapterItem) getItem(position);
                 ((ListItemPlaceDetailsPhotoBinding) holder.getBindings())
-                        .item.setPlacePhotoMetadata(placePhotoAdapterItem.place,
+                        .item.setPlacePhotoMetadata(placePhotoAdapterItem.place, placePhotoAdapterItem.position,
                         placePhotoAdapterItem.placePhotoMetadata, placePhotoAdapterItem.placesApi);
                 break;
 
@@ -172,11 +162,14 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
 
     public static class PlacePhotoAdapterItem {
         private Place place;
+        private int position;
         private PlacePhotoMetadata placePhotoMetadata;
         private PlacesApi placesApi;
 
-        public PlacePhotoAdapterItem(Place place, PlacePhotoMetadata placePhotoMetadata, PlacesApi placesApi) {
+        public PlacePhotoAdapterItem(Place place, int position,
+                                     PlacePhotoMetadata placePhotoMetadata, PlacesApi placesApi) {
             this.place = place;
+            this.position = position;
             this.placePhotoMetadata = placePhotoMetadata;
             this.placesApi = placesApi;
         }

@@ -14,7 +14,7 @@ public class PlacePhotoIdModelLoader implements StreamModelLoader<PlacePhotoId> 
 
     @Override
     public DataFetcher<InputStream> getResourceFetcher(PlacePhotoId model, int width, int height) {
-        return new PlacePhotoIdDataFetcher(model, width, height);
+        return new PlacePhotoIdDataFetcher(model);
     }
 
     public static class Factory implements ModelLoaderFactory<PlacePhotoId, InputStream> {

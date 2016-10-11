@@ -1,11 +1,10 @@
 package siarhei.luskanau.places.utils.glide;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.data.DataFetcher;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,39 +13,22 @@ import java.util.Locale;
 
 public class PlacePhotoIdDataFetcher implements DataFetcher<InputStream> {
 
+    private static final String TAG = "PlacePhotoIdDataFetcher";
     private PlacePhotoId model;
-    private int scaledWidth;
-    private int scaledHeight;
 
-    public PlacePhotoIdDataFetcher(PlacePhotoId model, int width, int height) {
+    public PlacePhotoIdDataFetcher(PlacePhotoId model) {
         this.model = model;
-        int maxWidth = model.getPlacePhotoMetadata().getMaxWidth();
-        int maxHeight = model.getPlacePhotoMetadata().getMaxHeight();
-        double ratio = (double) model.getPlacePhotoMetadata().getMaxWidth() / width;
-        int scale = 1;
-        while (true) {
-            if (scale * 2 > ratio) {
-                break;
-            }
-            scale *= 2;
-        }
-        if (scale > 1) {
-            scaledWidth = maxWidth / scale;
-            scaledHeight = maxHeight / scale;
-        } else {
-            scaledWidth = maxWidth;
-            scaledHeight = maxHeight;
-        }
     }
 
     @Override
     public InputStream loadData(Priority priority) throws Exception {
+        Log.d(TAG, getId());
         Bitmap bitmap = model.getPlacesApi()
-                .getPlacePhotoBitmap(model.getPlacePhotoMetadata(), scaledWidth, scaledHeight)
+                .getPlacePhotoBitmap(model.getPlacePhotoMetadata(), 0, 0)
                 .toBlocking().first();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream);
         return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
     }
 
@@ -56,11 +38,8 @@ public class PlacePhotoIdDataFetcher implements DataFetcher<InputStream> {
 
     @Override
     public String getId() {
-        Place place = model.getPlace();
-        PlacePhotoMetadata placePhotoMetadata = model.getPlacePhotoMetadata();
-        return String.format(Locale.getDefault(), "%s_w%d_h%d_%s_w%d_h%d",
-                place.getId(), placePhotoMetadata.getMaxWidth(), placePhotoMetadata.getMaxHeight(),
-                placePhotoMetadata.getAttributions(), scaledWidth, scaledHeight);
+        return String.format(Locale.getDefault(), "%s_%d",
+                model.getPlace().getId(), model.getPosition());
     }
 
     @Override

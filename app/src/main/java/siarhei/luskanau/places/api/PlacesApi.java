@@ -103,10 +103,16 @@ public class PlacesApi {
         return Observable.defer(new Func0<Observable<Bitmap>>() {
             @Override
             public Observable<Bitmap> call() {
-                Log.d(TAG, String.format(Locale.getDefault(),
-                        "PlacePhotoMetadata.getScaledPhoto_w%d_h%d", width, height));
-                PendingResult<PlacePhotoResult> pendingResult = placePhotoMetadata
-                        .getScaledPhoto(googleApiClient, width, height);
+                PendingResult<PlacePhotoResult> pendingResult;
+                if (width > 0 && height > 0) {
+                    Log.d(TAG, String.format(Locale.getDefault(),
+                            "PlacePhotoMetadata.getScaledPhoto_w%d_h%d", width, height));
+                    pendingResult = placePhotoMetadata.getScaledPhoto(googleApiClient, width, height);
+                } else {
+                    Log.d(TAG, "PlacePhotoMetadata.getPhoto");
+                    pendingResult = placePhotoMetadata.getPhoto(googleApiClient);
+                }
+
                 PlacePhotoResult placePhotoResult = pendingResult.await();
 
                 Status status = placePhotoResult.getStatus();

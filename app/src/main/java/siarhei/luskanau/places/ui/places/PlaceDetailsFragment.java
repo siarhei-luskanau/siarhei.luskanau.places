@@ -53,7 +53,7 @@ public class PlaceDetailsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new PlaceDetailsAdapter(getContext());
+        adapter = new PlaceDetailsAdapter();
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<BindableViewHolder>() {
             @Override
             public void onClick(Context context, BindableViewHolder holder, int position) {
@@ -112,6 +112,7 @@ public class PlaceDetailsFragment extends BaseFragment {
 
     public void onPlaceUpdated(Place place) {
         this.place = place;
+        this.placePhotoMetadataList = null;
         if (place != null) {
             AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
                     .onToolbarTitle(!TextUtils.isEmpty(place.getName()) ? place.getName() : place.getAddress());
@@ -132,8 +133,6 @@ public class PlaceDetailsFragment extends BaseFragment {
                             onPlacePhotosUpdated(data);
                         }
                     });
-        } else {
-            onPlacePhotosUpdated(null);
         }
     }
 
@@ -156,8 +155,10 @@ public class PlaceDetailsFragment extends BaseFragment {
         }
         if (placePhotoMetadataList != null) {
             PlacesApi placesApi = getPlacesApi();
-            for (PlacePhotoMetadata placePhotoMetadata : placePhotoMetadataList) {
-                adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(place, placePhotoMetadata, placesApi));
+            for (int i = 0; i < placePhotoMetadataList.size(); i++) {
+                PlacePhotoMetadata placePhotoMetadata = placePhotoMetadataList.get(i);
+                adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(place, i,
+                        placePhotoMetadata, placesApi));
             }
         }
         adapter.setData(adapterItems);
