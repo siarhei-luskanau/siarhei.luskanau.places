@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import com.google.android.gms.location.places.Place;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
@@ -62,9 +65,20 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
         return AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi();
     }
 
-    private void loadData() {
+    public void loadData() {
+        if (!AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).isPermissionsGranted()) {
+            AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).requestPermissions();
+            return;
+        }
+
         releaseSubscription(subscription);
-        subscription = getPlacesApi().getCurrentPlace()
+        subscription = Observable.interval(0, 30, TimeUnit.SECONDS)
+                .flatMap(new Func1<Long, Observable<List<Place>>>() {
+                    @Override
+                    public Observable<List<Place>> call(Long aLong) {
+                        return getPlacesApi().getCurrentPlace();
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<List<Place>>() {

@@ -1,6 +1,8 @@
 package siarhei.luskanau.places.api;
 
 import android.graphics.Bitmap;
+import android.support.v4.util.Pair;
+import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -17,12 +19,15 @@ import com.google.android.gms.location.places.Places;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import rx.Observable;
 import rx.functions.Func0;
+import rx.functions.Func2;
 
 public class PlacesApi {
 
+    private static final String TAG = "PlacesApi";
     private GoogleApiClient googleApiClient;
 
     public PlacesApi(GoogleApiClient googleApiClient) {
@@ -33,6 +38,7 @@ public class PlacesApi {
         return Observable.defer(new Func0<Observable<List<Place>>>() {
             @Override
             public Observable<List<Place>> call() {
+                Log.d(TAG, "Places.PlaceDetectionApi.getCurrentPlace");
                 PendingResult<PlaceLikelihoodBuffer> pendingResult
                         = Places.PlaceDetectionApi.getCurrentPlace(googleApiClient, null);
                 PlaceLikelihoodBuffer autocompletePredictionBuffer = pendingResult.await();
@@ -55,6 +61,7 @@ public class PlacesApi {
         return Observable.defer(new Func0<Observable<Place>>() {
             @Override
             public Observable<Place> call() {
+                Log.d(TAG, "Places.GeoDataApi.getPlaceById");
                 PendingResult<PlaceBuffer> pendingResult
                         = Places.GeoDataApi.getPlaceById(googleApiClient, placeId);
                 PlaceBuffer placeBuffer = pendingResult.await();
@@ -74,6 +81,7 @@ public class PlacesApi {
         return Observable.defer(new Func0<Observable<List<PlacePhotoMetadata>>>() {
             @Override
             public Observable<List<PlacePhotoMetadata>> call() {
+                Log.d(TAG, "Places.GeoDataApi.getPlacePhotos");
                 PendingResult<PlacePhotoMetadataResult> pendingResult
                         = Places.GeoDataApi.getPlacePhotos(googleApiClient, placeId);
                 PlacePhotoMetadataResult placePhotoMetadataResult = pendingResult.await();
@@ -95,6 +103,8 @@ public class PlacesApi {
         return Observable.defer(new Func0<Observable<Bitmap>>() {
             @Override
             public Observable<Bitmap> call() {
+                Log.d(TAG, String.format(Locale.getDefault(),
+                        "PlacePhotoMetadata.getScaledPhoto_w%d_h%d", width, height));
                 PendingResult<PlacePhotoResult> pendingResult = placePhotoMetadata
                         .getScaledPhoto(googleApiClient, width, height);
                 PlacePhotoResult placePhotoResult = pendingResult.await();
@@ -107,6 +117,16 @@ public class PlacesApi {
                 return Observable.just(placePhotoResult.getBitmap());
             }
         });
+    }
+
+    public Observable<Pair<Place, List<PlacePhotoMetadata>>> getPlaceWithPhotos(final String placeId) {
+        return getPlace(placeId).zipWith(getPlacePhotos(placeId),
+                new Func2<Place, List<PlacePhotoMetadata>, Pair<Place, List<PlacePhotoMetadata>>>() {
+                    @Override
+                    public Pair<Place, List<PlacePhotoMetadata>> call(Place place, List<PlacePhotoMetadata> photos) {
+                        return new Pair<>(place, photos);
+                    }
+                });
     }
 
 }

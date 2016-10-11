@@ -2,29 +2,17 @@ package siarhei.luskanau.places.ui.places;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Places;
 
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.abstracts.DrawerWithToolbarActivity;
-import siarhei.luskanau.places.api.PlacesApi;
-import siarhei.luskanau.places.api.PlacesApiInterface;
+import siarhei.luskanau.places.abstracts.GoogleApiClientActivity;
 
-public class PlaceDetailsActivity extends DrawerWithToolbarActivity
-        implements PlaceDetailsPresenterInterface, PlacesApiInterface {
+public class PlaceDetailsActivity extends GoogleApiClientActivity
+        implements PlaceDetailsPresenterInterface {
 
-    private static final String TAG = "PlaceDetailsActivity";
     private static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
-    private static final int CONNECTION_RESOLUTION_REQUEST_CODE = 100;
-    private PlacesApi placesApi;
 
     public static Intent buildIntent(Context context, String placeId) {
         return new Intent(context, PlaceDetailsActivity.class)
@@ -65,32 +53,6 @@ public class PlaceDetailsActivity extends DrawerWithToolbarActivity
         } else {
             getSupportActionBar().setTitle(placeTitle);
         }
-    }
-
-    @Override
-    public PlacesApi getPlacesApi() {
-        if (placesApi == null) {
-            GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this,
-                            new GoogleApiClient.OnConnectionFailedListener() {
-                                @Override
-                                public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                                    Log.e(TAG, String.valueOf(connectionResult));
-                                    placesApi = null;
-                                    try {
-                                        connectionResult.startResolutionForResult(PlaceDetailsActivity.this,
-                                                CONNECTION_RESOLUTION_REQUEST_CODE);
-                                    } catch (IntentSender.SendIntentException e) {
-                                        Log.e(TAG, e.getMessage(), e);
-                                    }
-                                }
-                            })
-                    .addApi(Places.GEO_DATA_API)
-                    .addApi(Places.PLACE_DETECTION_API)
-                    .build();
-            placesApi = new PlacesApi(googleApiClient);
-        }
-        return placesApi;
     }
 
 }
