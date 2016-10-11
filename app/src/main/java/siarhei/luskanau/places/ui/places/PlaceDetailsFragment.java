@@ -1,11 +1,14 @@
 package siarhei.luskanau.places.ui.places;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,7 @@ import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlaceDetailsFragment extends BaseFragment {
 
+    private static final String TAG = "PlaceDetailsFragment";
     private Subscription subscription;
     private PlaceDetailsAdapter adapter;
     private Place place;
@@ -54,7 +58,19 @@ public class PlaceDetailsFragment extends BaseFragment {
             @Override
             public void onClick(Context context, BindableViewHolder holder, int position) {
                 Object item = adapter.getItem(position);
-                if (item instanceof PlaceDetailsAdapter.PlaceMapAdapterItem) {
+                if (item instanceof PlaceDetailsAdapter.PlacePhoneAdapterItem) {
+                    try {
+                        CharSequence phoneNumber = ((PlaceDetailsAdapter.PlacePhoneAdapterItem) item).getPhoneNumber();
+                        Intent intent = new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:" + phoneNumber));
+                        AppNavigationUtil.startActivityWithAnimations(getActivity(), intent);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+                } else if (item instanceof PlaceDetailsAdapter.PlaceWebsiteAdapterItem) {
+                    Uri uri = ((PlaceDetailsAdapter.PlaceWebsiteAdapterItem) item).getUri();
+                    AppNavigationUtil.startActivityWithAnimations(getActivity(),
+                            AppNavigationUtil.getWebIntent(context, uri.toString(), place.getName()));
+                } else if (item instanceof PlaceDetailsAdapter.PlaceMapAdapterItem) {
                     LatLng latLng = ((PlaceDetailsAdapter.PlaceMapAdapterItem) item).getLatLng();
                     String url = AppUtils.buildMapUrl(latLng);
                     AppNavigationUtil.startActivityWithAnimations(getActivity(),

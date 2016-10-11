@@ -26,7 +26,13 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewH
     @Override
     public void onBindViewHolder(BindableViewHolder holder, int position) {
         ListItemPlaceBinding binding = (ListItemPlaceBinding) holder.getBindings();
-        binding.item.setPlace(getItem(position));
+        Place place = getItem(position);
+        binding.item.setPlace(place, place.getId().equals(selectedPlaceId));
+    }
+
+    public void setSelectedPlaceId(String selectedPlaceId) {
+        this.selectedPlaceId = selectedPlaceId;
+        notifyDataSetChanged();
     }
 
 }

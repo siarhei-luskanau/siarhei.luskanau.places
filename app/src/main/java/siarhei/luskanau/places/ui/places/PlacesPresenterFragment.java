@@ -55,6 +55,12 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
         if (fragment instanceof PlaceDetailsFragment) {
             PlaceDetailsFragment placeDetailsFragment = (PlaceDetailsFragment) fragment;
             placeDetailsFragment.onPlaceUpdated(place);
+
+            fragment = getChildFragmentManager().findFragmentById(R.id.placeListFragment);
+            if (fragment instanceof PlaceListFragment) {
+                PlaceListFragment placeListFragment = (PlaceListFragment) fragment;
+                placeListFragment.onPlaceHighlighted(place);
+            }
         } else {
             AppNavigationUtil.startActivityWithAnimations(getActivity(),
                     AppNavigationUtil.getPlaceDetailsIntent(getContext(), place.getId()));
@@ -76,7 +82,13 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
                 .flatMap(new Func1<Long, Observable<List<Place>>>() {
                     @Override
                     public Observable<List<Place>> call(Long aLong) {
-                        return getPlacesApi().getCurrentPlace();
+                        return getPlacesApi().getCurrentPlace()
+                                .onErrorReturn(new Func1<Throwable, List<Place>>() {
+                                    @Override
+                                    public List<Place> call(Throwable throwable) {
+                                        return null;
+                                    }
+                                });
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -90,10 +102,12 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
     }
 
     private void onDataLoaded(List<Place> data) {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeListFragment);
-        if (fragment instanceof PlaceListFragment) {
-            PlaceListFragment placeListFragment = (PlaceListFragment) fragment;
-            placeListFragment.updatePlaces(data);
+        if (data != null) {
+            Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeListFragment);
+            if (fragment instanceof PlaceListFragment) {
+                PlaceListFragment placeListFragment = (PlaceListFragment) fragment;
+                placeListFragment.updatePlaces(data);
+            }
         }
     }
 

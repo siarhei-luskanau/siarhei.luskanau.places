@@ -140,6 +140,10 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
         public PlacePhoneAdapterItem(CharSequence phoneNumber) {
             this.phoneNumber = phoneNumber;
         }
+
+        public CharSequence getPhoneNumber() {
+            return phoneNumber;
+        }
     }
 
     public static class PlaceWebsiteAdapterItem {
@@ -147,6 +151,10 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
 
         public PlaceWebsiteAdapterItem(Uri uri) {
             this.uri = uri;
+        }
+
+        public Uri getUri() {
+            return uri;
         }
     }
 

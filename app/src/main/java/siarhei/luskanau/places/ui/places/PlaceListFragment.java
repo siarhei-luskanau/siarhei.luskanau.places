@@ -102,4 +102,8 @@ public class PlaceListFragment extends BaseFragment {
         placesPresenterInterface.onPlaceSelected(place);
     }
 
+    public void onPlaceHighlighted(Place place) {
+        adapter.setSelectedPlaceId(place.getId());
+    }
+
 }

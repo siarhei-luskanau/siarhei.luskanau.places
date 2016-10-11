@@ -1,32 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardUseCompatPadding="true">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/selected_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:padding="8dp">
 
-            <TextView
-                android:id="@+id/placeName"
+            <LinearLayout
+                android:id="@+id/base_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/placeAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                <TextView
+                    android:id="@+id/placeName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    tools:text="placeName" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/placeAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="placeAddress" />
+
+                <TextView
+                    android:id="@+id/placeDistance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:text="100 m"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/placePhone"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignBottom="@+id/base_container"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_call_black"
+                android:tint="@color/app_gray" />
+
+            <ImageView
+                android:id="@+id/placeWebsite"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignBottom="@+id/base_container"
+                android:layout_toLeftOf="@+id/placePhone"
+                android:layout_toStartOf="@+id/placePhone"
+                android:src="@drawable/ic_public"
+                android:tint="@color/app_gray" />
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
