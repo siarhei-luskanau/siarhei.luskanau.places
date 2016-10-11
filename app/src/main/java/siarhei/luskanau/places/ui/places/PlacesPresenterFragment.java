@@ -3,12 +3,10 @@ package siarhei.luskanau.places.ui.places;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 
 import java.util.List;
@@ -21,13 +19,10 @@ import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.api.PlacesApi;
 import siarhei.luskanau.places.api.PlacesApiInterface;
 import siarhei.luskanau.places.rx.SimpleObserver;
-import siarhei.luskanau.places.ui.places.details.PlaceDetailsFragment;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlacesPresenterFragment extends BaseFragment implements PlacesPresenterInterface {
-
-    private static final String TAG = "PlacesPresenterFragment";
 
     private Subscription subscription;
 
@@ -69,22 +64,22 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
 
     private void loadData() {
         releaseSubscription(subscription);
-        subscription = getPlacesApi().getAutocompletePredictions("")
+        subscription = getPlacesApi().getCurrentPlace()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<AutocompletePrediction>>() {
+                .subscribe(new SimpleObserver<List<Place>>() {
                     @Override
-                    public void onNext(List<AutocompletePrediction> data) {
+                    public void onNext(List<Place> data) {
                         onDataLoaded(data);
                     }
                 });
     }
 
-    private void onDataLoaded(List<AutocompletePrediction> data) {
-        if (data != null) {
-            for (AutocompletePrediction autocompletePrediction : data) {
-                Log.d(TAG, String.valueOf(autocompletePrediction));
-            }
+    private void onDataLoaded(List<Place> data) {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeListFragment);
+        if (fragment instanceof PlaceListFragment) {
+            PlaceListFragment placeListFragment = (PlaceListFragment) fragment;
+            placeListFragment.updatePlaces(data);
         }
     }
 

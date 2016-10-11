@@ -6,15 +6,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataBufferUtils;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.PlacePhotoResult;
 import com.google.android.gms.location.places.Places;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -28,22 +29,24 @@ public class PlacesApi {
         this.googleApiClient = googleApiClient;
     }
 
-    public Observable<List<AutocompletePrediction>> getAutocompletePredictions(final String query) {
-        return Observable.defer(new Func0<Observable<List<AutocompletePrediction>>>() {
+    public Observable<List<Place>> getCurrentPlace() {
+        return Observable.defer(new Func0<Observable<List<Place>>>() {
             @Override
-            public Observable<List<AutocompletePrediction>> call() {
-                PendingResult<AutocompletePredictionBuffer> pendingResult
-                        = Places.GeoDataApi.getAutocompletePredictions(googleApiClient, query, null, null);
-                AutocompletePredictionBuffer autocompletePredictionBuffer = pendingResult.await();
+            public Observable<List<Place>> call() {
+                PendingResult<PlaceLikelihoodBuffer> pendingResult
+                        = Places.PlaceDetectionApi.getCurrentPlace(googleApiClient, null);
+                PlaceLikelihoodBuffer autocompletePredictionBuffer = pendingResult.await();
 
                 Status status = autocompletePredictionBuffer.getStatus();
                 if (!status.isSuccess()) {
                     throw new RuntimeException(status.getStatusMessage());
                 }
 
-                List<AutocompletePrediction> autocompletePredictions
-                        = DataBufferUtils.freezeAndClose(autocompletePredictionBuffer);
-                return Observable.just(autocompletePredictions);
+                List<Place> list = new ArrayList<>();
+                for (PlaceLikelihood placeLikelihood : DataBufferUtils.freezeAndClose(autocompletePredictionBuffer)) {
+                    list.add(placeLikelihood.getPlace());
+                }
+                return Observable.just(list);
             }
         });
     }
@@ -61,8 +64,8 @@ public class PlacesApi {
                     throw new RuntimeException(status.getStatusMessage());
                 }
 
-                List<Place> places = DataBufferUtils.freezeAndClose(placeBuffer);
-                return Observable.from(places);
+                List<Place> list = DataBufferUtils.freezeAndClose(placeBuffer);
+                return Observable.from(list);
             }
         });
     }
@@ -80,9 +83,9 @@ public class PlacesApi {
                     throw new RuntimeException(status.getStatusMessage());
                 }
 
-                List<PlacePhotoMetadata> placePhotoMetadataList
+                List<PlacePhotoMetadata> list
                         = DataBufferUtils.freezeAndClose(placePhotoMetadataResult.getPhotoMetadata());
-                return Observable.just(placePhotoMetadataList);
+                return Observable.just(list);
             }
         });
     }

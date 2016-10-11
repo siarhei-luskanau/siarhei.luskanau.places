@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.places.details.widget;
+package siarhei.luskanau.places.adapter.widget;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;

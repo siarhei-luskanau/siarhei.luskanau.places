@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.places.details.widget;
+package siarhei.luskanau.places.adapter.widget;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -9,27 +9,27 @@ import android.widget.LinearLayout;
 import com.google.android.gms.location.places.Place;
 
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.databinding.ViewPlaceDetailHeaderBinding;
+import siarhei.luskanau.places.databinding.ViewPlaceBinding;
 
-public class PlaceDetailHeaderView extends LinearLayout {
+public class PlaceView extends LinearLayout {
 
-    private ViewPlaceDetailHeaderBinding binding;
+    private ViewPlaceBinding binding;
 
-    public PlaceDetailHeaderView(Context context) {
+    public PlaceView(Context context) {
         super(context);
     }
 
-    public PlaceDetailHeaderView(Context context, AttributeSet attrs) {
+    public PlaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public PlaceDetailHeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PlaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.view_place_detail_header, this, true);
+                R.layout.view_place, this, true);
     }
 
     public void setPlace(Place place) {

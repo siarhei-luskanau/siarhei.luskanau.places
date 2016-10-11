@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:id="@+id/placeLatLng"
+        android:id="@+id/placeWebsite"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="false"
-        android:drawableTop="@drawable/ic_map"
+        android:drawableTop="@drawable/ic_public"
         android:duplicateParentState="true"
         android:text="@string/place_detail_show_on_map" />
 

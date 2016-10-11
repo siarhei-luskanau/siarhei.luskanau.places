@@ -17,7 +17,6 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.DrawerWithToolbarActivity;
 import siarhei.luskanau.places.api.PlacesApi;
 import siarhei.luskanau.places.api.PlacesApiInterface;
-import siarhei.luskanau.places.ui.places.details.PlaceDetailsFragment;
 
 public class PlaceDetailsActivity extends DrawerWithToolbarActivity
         implements PlaceDetailsPresenterInterface, PlacesApiInterface {
