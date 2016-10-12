@@ -1,6 +1,7 @@
 package siarhei.luskanau.places.api;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.support.v4.util.Pair;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataBufferUtils;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.PlaceLikelihood;
@@ -32,6 +34,17 @@ public class PlacesApi {
 
     public PlacesApi(GoogleApiClient googleApiClient) {
         this.googleApiClient = googleApiClient;
+    }
+
+    public Observable<Location> getLastLocation() {
+        return Observable.defer(new Func0<Observable<Location>>() {
+            @Override
+            public Observable<Location> call() {
+                Log.d(TAG, "LocationServices.FusedLocationApi.getLastLocation");
+                Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                return Observable.just(location);
+            }
+        });
     }
 
     public Observable<List<Place>> getCurrentPlace() {

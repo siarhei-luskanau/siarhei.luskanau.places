@@ -11,5 +11,6 @@
     <string name="nav_my_linkedIn">My LinkedIn</string>
 
     <string name="place_detail_show_on_map">Show on map</string>
+    <string name="place_distance">%d m</string>
 
 </resources>

@@ -2,6 +2,7 @@ package siarhei.luskanau.places.adapter.widget;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.location.Location;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -39,12 +40,22 @@ public class PlaceView extends LinearLayout {
         grayColor = ContextCompat.getColor(getContext(), R.color.app_gray);
     }
 
-    public void setPlace(Place place, boolean isSelected) {
+    public void setPlace(Place place, Location location, boolean isSelected) {
         binding.placeName.setText(place.getName());
         binding.placeAddress.setText(place.getAddress());
         binding.placePhone.setVisibility(TextUtils.isEmpty(place.getPhoneNumber()) ? GONE : VISIBLE);
         binding.placeWebsite.setVisibility(place.getWebsiteUri() == null ? GONE : VISIBLE);
         binding.selectedContainer.setBackgroundColor(isSelected ? grayColor : whiteColor);
+
+        if (location != null && place.getLatLng() != null) {
+            Location placeLocation = new Location("");
+            placeLocation.setLatitude(place.getLatLng().latitude);
+            placeLocation.setLongitude(place.getLatLng().longitude);
+            int distance = (int) location.distanceTo(placeLocation);
+            binding.placeDistance.setText(getResources().getString(R.string.place_distance, distance));
+        } else {
+            binding.placeDistance.setText(null);
+        }
     }
 
 }
