@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
@@ -23,9 +20,8 @@ import java.util.List;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
+import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.adapter.PlaceDetailsAdapter;
 import siarhei.luskanau.places.api.PlacesApi;
@@ -34,7 +30,7 @@ import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
 
-public class PlaceDetailsFragment extends BaseFragment {
+public class PlaceDetailsFragment extends BaseRecyclerFragment {
 
     private static final String TAG = "PlaceDetailsFragment";
     private Subscription subscription;
@@ -42,16 +38,15 @@ public class PlaceDetailsFragment extends BaseFragment {
     private Place place;
     private List<PlacePhotoMetadata> placePhotoMetadataList;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_place_details, container, false);
-    }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getSwipeRefreshLayout().setEnabled(false);
+    }
+
+    @Override
+    protected void setupRecyclerView(RecyclerView recyclerView) {
+        super.setupRecyclerView(recyclerView);
 
         adapter = new PlaceDetailsAdapter();
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<BindableViewHolder>() {
@@ -78,9 +73,6 @@ public class PlaceDetailsFragment extends BaseFragment {
                 }
             }
         });
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
     }
 
@@ -98,13 +90,21 @@ public class PlaceDetailsFragment extends BaseFragment {
     public void onPlaceIdUpdated(String placeId) {
         updateAdapter();
 
+        setRefreshing(true);
         releaseSubscription(subscription);
         subscription = getPlacesApi().getPlace(placeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<Place>() {
                     @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        setRefreshing(false);
+                    }
+
+                    @Override
                     public void onNext(Place data) {
+                        setRefreshing(false);
                         onPlaceUpdated(data);
                     }
                 });

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,19 +20,29 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
+import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.adapter.PlacesAdapter;
+import siarhei.luskanau.places.api.PlacesApi;
+import siarhei.luskanau.places.api.PlacesApiInterface;
+import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppUtils;
 
-public class PlaceListFragment extends BaseFragment {
+public class PlaceListFragment extends BaseRecyclerFragment {
 
     private static final String TAG = "PlaceListFragment";
     private static final int PLACE_PICKER_REQUEST = 1;
 
+    private Subscription subscription;
     private PlacesAdapter adapter;
 
     @Nullable
@@ -46,18 +55,6 @@ public class PlaceListFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        adapter = new PlacesAdapter();
-        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<BindableViewHolder>() {
-            @Override
-            public void onClick(Context context, BindableViewHolder holder, int position) {
-                onPlaceSelected(adapter.getItem(position));
-            }
-        });
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.place_picker_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +77,34 @@ public class PlaceListFragment extends BaseFragment {
     }
 
     @Override
+    protected void setupRecyclerView(RecyclerView recyclerView) {
+        super.setupRecyclerView(recyclerView);
+
+        adapter = new PlacesAdapter();
+        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<BindableViewHolder>() {
+            @Override
+            public void onClick(Context context, BindableViewHolder holder, int position) {
+                onPlaceSelected(adapter.getItem(position));
+            }
+        });
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+
+        loadData();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releaseSubscription(subscription);
+        subscription = null;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST) {
@@ -91,7 +116,45 @@ public class PlaceListFragment extends BaseFragment {
         }
     }
 
-    public void updatePlaces(List<Place> places) {
+    private PlacesApi getPlacesApi() {
+        return AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi();
+    }
+
+    public void loadData() {
+        setRefreshing(true);
+        releaseSubscription(subscription);
+        subscription = Observable.interval(0, 30, TimeUnit.SECONDS)
+                .flatMap(new Func1<Long, Observable<List<Place>>>() {
+                    @Override
+                    public Observable<List<Place>> call(Long aLong) {
+                        return getPlacesApi().getCurrentPlace()
+                                .onErrorReturn(new Func1<Throwable, List<Place>>() {
+                                    @Override
+                                    public List<Place> call(Throwable e) {
+                                        Log.e(TAG, e.getMessage(), e);
+                                        return null;
+                                    }
+                                });
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<List<Place>>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onNext(List<Place> data) {
+                        setRefreshing(false);
+                        onDataLoaded(data);
+                    }
+                });
+    }
+
+    private void onDataLoaded(List<Place> places) {
         adapter.setData(places);
     }
 
