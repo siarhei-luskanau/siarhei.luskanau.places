@@ -24,8 +24,8 @@ import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
 import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.adapter.PlaceDetailsAdapter;
-import siarhei.luskanau.places.api.PlacesApi;
-import siarhei.luskanau.places.api.PlacesApiInterface;
+import siarhei.luskanau.places.api.RxGoogleApi;
+import siarhei.luskanau.places.api.RxGoogleApiInterface;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
@@ -87,8 +87,8 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
         subscription = null;
     }
 
-    private PlacesApi getPlacesApi() {
-        return AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi();
+    private RxGoogleApi getRxGoogleApi() {
+        return AppUtils.getParentInterface(RxGoogleApiInterface.class, getActivity()).getRxGoogleApi();
     }
 
     public void onPlaceIdUpdated(String placeId) {
@@ -96,7 +96,7 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
 
         setRefreshing(true);
         releaseSubscription(subscription);
-        subscription = getPlacesApi().getPlace(placeId)
+        subscription = getRxGoogleApi().getPlace(placeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<Place>() {
@@ -128,7 +128,7 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
 
         if (place != null) {
             releaseSubscription(subscription);
-            subscription = getPlacesApi().getPlacePhotos(place.getId())
+            subscription = getRxGoogleApi().getPlacePhotos(place.getId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SimpleObserver<List<PlacePhotoMetadata>>() {
@@ -158,11 +158,11 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
             adapterItems.add(new PlaceDetailsAdapter.PlaceMapAdapterItem(place.getLatLng()));
         }
         if (placePhotoMetadataList != null) {
-            PlacesApi placesApi = getPlacesApi();
+            RxGoogleApi rxGoogleApi = getRxGoogleApi();
             for (int i = 0; i < placePhotoMetadataList.size(); i++) {
                 PlacePhotoMetadata placePhotoMetadata = placePhotoMetadataList.get(i);
                 adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(place, i,
-                        placePhotoMetadata, placesApi));
+                        placePhotoMetadata, rxGoogleApi));
             }
         }
         adapter.setData(adapterItems);

@@ -35,8 +35,8 @@ import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
 import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.adapter.PlacesAdapter;
-import siarhei.luskanau.places.api.PlacesApi;
-import siarhei.luskanau.places.api.PlacesApiInterface;
+import siarhei.luskanau.places.api.RxGoogleApi;
+import siarhei.luskanau.places.api.RxGoogleApiInterface;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppUtils;
 
@@ -121,8 +121,8 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         }
     }
 
-    private PlacesApi getPlacesApi() {
-        return AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi();
+    private RxGoogleApi getRxGoogleApi() {
+        return AppUtils.getParentInterface(RxGoogleApiInterface.class, getActivity()).getRxGoogleApi();
     }
 
     public void loadData() {
@@ -132,10 +132,11 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                 .flatMap(new Func1<Long, Observable<Pair<Location, List<Place>>>>() {
                     @Override
                     public Observable<Pair<Location, List<Place>>> call(Long aLong) {
-                        return getPlacesApi().getLastLocation()
+                        return getRxGoogleApi().getLastLocation()
                                 .onErrorReturn(new Func1<Throwable, Location>() {
                                     @Override
-                                    public Location call(Throwable throwable) {
+                                    public Location call(Throwable e) {
+                                        Log.e(TAG, e.getMessage(), e);
                                         return null;
                                     }
                                 })
@@ -157,7 +158,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                                         return true;
                                     }
                                 })
-                                .zipWith(getPlacesApi().getCurrentPlace()
+                                .zipWith(getRxGoogleApi().getCurrentPlace()
                                         .onErrorReturn(new Func1<Throwable, List<Place>>() {
                                             @Override
                                             public List<Place> call(Throwable e) {

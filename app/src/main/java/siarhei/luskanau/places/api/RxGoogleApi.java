@@ -27,12 +27,12 @@ import rx.Observable;
 import rx.functions.Func0;
 import rx.functions.Func2;
 
-public class PlacesApi {
+public class RxGoogleApi {
 
-    private static final String TAG = "PlacesApi";
+    private static final String TAG = "RxGoogleApi";
     private GoogleApiClient googleApiClient;
 
-    public PlacesApi(GoogleApiClient googleApiClient) {
+    public RxGoogleApi(GoogleApiClient googleApiClient) {
         this.googleApiClient = googleApiClient;
     }
 

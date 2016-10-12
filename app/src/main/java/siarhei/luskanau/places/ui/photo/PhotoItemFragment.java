@@ -13,7 +13,7 @@ import com.google.android.gms.location.places.PlacePhotoMetadata;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
-import siarhei.luskanau.places.api.PlacesApiInterface;
+import siarhei.luskanau.places.api.RxGoogleApiInterface;
 import siarhei.luskanau.places.utils.AppUtils;
 import siarhei.luskanau.places.utils.glide.PlacePhotoId;
 
@@ -61,7 +61,7 @@ public class PhotoItemFragment extends BaseFragment {
         PlacePhotoMetadata placePhotoMetadata = placePhotosFragment.getPlacePhotoMetadata(position);
         if (place != null && placePhotoMetadata != null) {
             PlacePhotoId placePhotoId = new PlacePhotoId(place, position, placePhotoMetadata,
-                    AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi());
+                    AppUtils.getParentInterface(RxGoogleApiInterface.class, getActivity()).getRxGoogleApi());
             Glide.with(getContext())
                     .load(placePhotoId)
                     .fitCenter()

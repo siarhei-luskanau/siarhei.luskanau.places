@@ -1,11 +1,11 @@
 package siarhei.luskanau.places.api;
 
-public interface PlacesApiInterface {
+public interface RxGoogleApiInterface {
 
     boolean isPermissionsGranted();
 
     void requestPermissions();
 
-    PlacesApi getPlacesApi();
+    RxGoogleApi getRxGoogleApi();
 
 }

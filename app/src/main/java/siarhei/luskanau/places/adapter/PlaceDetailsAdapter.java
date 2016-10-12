@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
-import siarhei.luskanau.places.api.PlacesApi;
+import siarhei.luskanau.places.api.RxGoogleApi;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsHeaderBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsMapBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhoneBinding;
@@ -91,7 +91,7 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
                 PlacePhotoAdapterItem placePhotoAdapterItem = (PlacePhotoAdapterItem) getItem(position);
                 ((ListItemPlaceDetailsPhotoBinding) holder.getBindings())
                         .item.setPlacePhotoMetadata(placePhotoAdapterItem.place, placePhotoAdapterItem.position,
-                        placePhotoAdapterItem.placePhotoMetadata, placePhotoAdapterItem.placesApi);
+                        placePhotoAdapterItem.placePhotoMetadata, placePhotoAdapterItem.rxGoogleApi);
                 break;
 
             default:
@@ -164,14 +164,14 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
         private Place place;
         private int position;
         private PlacePhotoMetadata placePhotoMetadata;
-        private PlacesApi placesApi;
+        private RxGoogleApi rxGoogleApi;
 
         public PlacePhotoAdapterItem(Place place, int position,
-                                     PlacePhotoMetadata placePhotoMetadata, PlacesApi placesApi) {
+                                     PlacePhotoMetadata placePhotoMetadata, RxGoogleApi rxGoogleApi) {
             this.place = place;
             this.position = position;
             this.placePhotoMetadata = placePhotoMetadata;
-            this.placesApi = placesApi;
+            this.rxGoogleApi = rxGoogleApi;
         }
 
         public int getPosition() {

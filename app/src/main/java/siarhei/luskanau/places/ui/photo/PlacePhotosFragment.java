@@ -23,8 +23,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
-import siarhei.luskanau.places.api.PlacesApi;
-import siarhei.luskanau.places.api.PlacesApiInterface;
+import siarhei.luskanau.places.api.RxGoogleApi;
+import siarhei.luskanau.places.api.RxGoogleApiInterface;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
@@ -79,14 +79,14 @@ public class PlacePhotosFragment extends BaseFragment {
         subscription = null;
     }
 
-    private PlacesApi getPlacesApi() {
-        return AppUtils.getParentInterface(PlacesApiInterface.class, getActivity()).getPlacesApi();
+    private RxGoogleApi getRxGoogleApi() {
+        return AppUtils.getParentInterface(RxGoogleApiInterface.class, getActivity()).getRxGoogleApi();
     }
 
     private void loadData() {
         String placeId = AppUtils.getParentInterface(PlacePhotosPresenterInterface.class, getActivity()).getPlaceId();
         releaseSubscription(subscription);
-        subscription = getPlacesApi().getPlaceWithPhotos(placeId)
+        subscription = getRxGoogleApi().getPlaceWithPhotos(placeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<Pair<Place, List<PlacePhotoMetadata>>>() {

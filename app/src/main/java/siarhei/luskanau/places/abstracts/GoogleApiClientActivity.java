@@ -13,15 +13,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 
-import siarhei.luskanau.places.api.PlacesApi;
-import siarhei.luskanau.places.api.PlacesApiInterface;
+import siarhei.luskanau.places.api.RxGoogleApi;
+import siarhei.luskanau.places.api.RxGoogleApiInterface;
 
-public abstract class GoogleApiClientActivity extends DrawerWithToolbarActivity implements PlacesApiInterface {
+public abstract class GoogleApiClientActivity extends DrawerWithToolbarActivity implements RxGoogleApiInterface {
 
     private static final String TAG = "PlacesActivity";
     private static final int CONNECTION_RESOLUTION_REQUEST_CODE = 100;
     private static final int PERMISSIONS_REQUEST = 200;
-    private PlacesApi placesApi;
+    private RxGoogleApi rxGoogleApi;
 
     @Override
     public boolean isPermissionsGranted() {
@@ -58,15 +58,15 @@ public abstract class GoogleApiClientActivity extends DrawerWithToolbarActivity 
     }
 
     @Override
-    public PlacesApi getPlacesApi() {
-        if (placesApi == null) {
+    public RxGoogleApi getRxGoogleApi() {
+        if (rxGoogleApi == null) {
             GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
                     .enableAutoManage(this,
                             new GoogleApiClient.OnConnectionFailedListener() {
                                 @Override
                                 public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                                     Log.e(TAG, String.valueOf(connectionResult));
-                                    placesApi = null;
+                                    rxGoogleApi = null;
                                     try {
                                         connectionResult.startResolutionForResult(GoogleApiClientActivity.this,
                                                 CONNECTION_RESOLUTION_REQUEST_CODE);
@@ -79,9 +79,9 @@ public abstract class GoogleApiClientActivity extends DrawerWithToolbarActivity 
                     .addApi(Places.GEO_DATA_API)
                     .addApi(Places.PLACE_DETECTION_API)
                     .build();
-            placesApi = new PlacesApi(googleApiClient);
+            rxGoogleApi = new RxGoogleApi(googleApiClient);
         }
-        return placesApi;
+        return rxGoogleApi;
     }
 
 }
