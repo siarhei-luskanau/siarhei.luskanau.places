@@ -173,6 +173,10 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
             this.placePhotoMetadata = placePhotoMetadata;
             this.placesApi = placesApi;
         }
+
+        public int getPosition() {
+            return position;
+        }
     }
 
 }

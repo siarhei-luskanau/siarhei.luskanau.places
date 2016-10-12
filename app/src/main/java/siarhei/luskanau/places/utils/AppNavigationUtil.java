@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 
+import siarhei.luskanau.places.ui.photo.PlacePhotosActivity;
 import siarhei.luskanau.places.ui.places.PlaceDetailsActivity;
 import siarhei.luskanau.places.ui.places.PlacesActivity;
 import siarhei.luskanau.places.ui.web.WebActivity;
@@ -22,6 +23,10 @@ public final class AppNavigationUtil {
 
     public static Intent getPlaceDetailsIntent(Context context, String placeId) {
         return PlaceDetailsActivity.buildIntent(context, placeId);
+    }
+
+    public static Intent getPlacePhotosIntent(Context context, String placeId, int position) {
+        return PlacePhotosActivity.buildIntent(context, placeId, position);
     }
 
     public static Intent getWebIntent(Context context, String url, CharSequence title) {

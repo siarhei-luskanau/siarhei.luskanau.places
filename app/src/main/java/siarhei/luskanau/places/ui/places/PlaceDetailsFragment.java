@@ -70,6 +70,10 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
                     String url = AppUtils.buildMapUrl(latLng);
                     AppNavigationUtil.startActivityWithAnimations(getActivity(),
                             AppNavigationUtil.getWebIntent(context, url, place.getName()));
+                } else if (item instanceof PlaceDetailsAdapter.PlacePhotoAdapterItem) {
+                    int photoPosition = ((PlaceDetailsAdapter.PlacePhotoAdapterItem) item).getPosition();
+                    AppNavigationUtil.startActivityWithAnimations(getActivity(),
+                            AppNavigationUtil.getPlacePhotosIntent(context, place.getId(), photoPosition));
                 }
             }
         });
