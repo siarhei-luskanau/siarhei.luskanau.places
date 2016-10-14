@@ -127,11 +127,12 @@ public class PlaceListFragment extends BaseRecyclerFragment {
 
     public void loadData() {
         setRefreshing(true);
+        lastLocation = null;
         releaseSubscription(subscription);
-        subscription = Observable.interval(0, 30, TimeUnit.SECONDS)
-                .flatMap(new Func1<Long, Observable<Pair<Location, List<Place>>>>() {
+        subscription = Observable.interval(0, 1, TimeUnit.SECONDS)
+                .flatMap(new Func1<Long, Observable<Location>>() {
                     @Override
-                    public Observable<Pair<Location, List<Place>>> call(Long aLong) {
+                    public Observable<Location> call(Long aLong) {
                         return getRxGoogleApi().getLastLocation()
                                 .onErrorReturn(new Func1<Throwable, Location>() {
                                     @Override
@@ -145,7 +146,6 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                                     public Boolean call(Location location) {
                                         if (lastLocation != null && location != null) {
                                             if (lastLocation.distanceTo(location) < DISTANCE_IN_METERS) {
-                                                Log.d(TAG, "Place updating skipped by distance filter");
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -157,7 +157,13 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                                         }
                                         return true;
                                     }
-                                })
+                                });
+                    }
+                })
+                .flatMap(new Func1<Location, Observable<Pair<Location, List<Place>>>>() {
+                    @Override
+                    public Observable<Pair<Location, List<Place>>> call(Location location) {
+                        return Observable.just(location)
                                 .zipWith(getRxGoogleApi().getCurrentPlace()
                                         .onErrorReturn(new Func1<Throwable, List<Place>>() {
                                             @Override
@@ -193,8 +199,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
     }
 
     private void onDataLoaded(List<Place> places) {
-        adapter.setLocation(lastLocation);
-        adapter.setData(places);
+        adapter.setData(lastLocation, places);
     }
 
     private void onPlaceSelected(Place place) {

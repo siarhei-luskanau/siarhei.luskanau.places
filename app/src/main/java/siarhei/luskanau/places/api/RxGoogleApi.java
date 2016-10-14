@@ -40,7 +40,6 @@ public class RxGoogleApi {
         return Observable.defer(new Func0<Observable<Location>>() {
             @Override
             public Observable<Location> call() {
-                Log.d(TAG, "LocationServices.FusedLocationApi.getLastLocation");
                 Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                 return Observable.just(location);
             }
