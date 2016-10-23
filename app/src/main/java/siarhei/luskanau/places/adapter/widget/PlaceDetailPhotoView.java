@@ -11,7 +11,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.api.RxGoogleApi;
+import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.databinding.ViewPlaceDetailPhotoBinding;
 import siarhei.luskanau.places.utils.glide.PlacePhotoId;
 
@@ -37,9 +37,9 @@ public class PlaceDetailPhotoView extends LinearLayout {
     }
 
     public void setPlacePhotoMetadata(Place place, int position,
-                                      PlacePhotoMetadata placePhotoMetadata, RxGoogleApi rxGoogleApi) {
+                                      PlacePhotoMetadata placePhotoMetadata, GoogleApi googleApi) {
         Glide.with(getContext())
-                .load(new PlacePhotoId(place, position, placePhotoMetadata, rxGoogleApi))
+                .load(new PlacePhotoId(place, position, placePhotoMetadata, googleApi))
                 .fitCenter()
                 .placeholder(null)
                 .into(binding.placePhoto);

@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.location.places.Place;
-
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
-import siarhei.luskanau.places.api.RxGoogleApiInterface;
+import siarhei.luskanau.places.abstracts.GoogleApiInterface;
+import siarhei.luskanau.places.model.PlaceModel;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
 
@@ -32,7 +31,7 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
     }
 
     @Override
-    public void onPlaceSelected(Place place) {
+    public void onPlaceSelected(PlaceModel place) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeDetailsFragment);
         if (fragment instanceof PlaceDetailsFragment) {
             PlaceDetailsFragment placeDetailsFragment = (PlaceDetailsFragment) fragment;
@@ -50,8 +49,8 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
     }
 
     public void loadData() {
-        if (!AppUtils.getParentInterface(RxGoogleApiInterface.class, getActivity()).isPermissionsGranted()) {
-            AppUtils.getParentInterface(RxGoogleApiInterface.class, getActivity()).requestPermissions();
+        if (!AppUtils.getParentInterface(GoogleApiInterface.class, getActivity()).isPermissionsGranted()) {
+            AppUtils.getParentInterface(GoogleApiInterface.class, getActivity()).requestPermissions();
         } else {
             Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeListFragment);
             if (fragment instanceof PlaceListFragment) {

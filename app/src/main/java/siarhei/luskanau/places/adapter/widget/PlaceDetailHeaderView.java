@@ -6,10 +6,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import com.google.android.gms.location.places.Place;
-
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.databinding.ViewPlaceDetailHeaderBinding;
+import siarhei.luskanau.places.model.PlaceModel;
 
 public class PlaceDetailHeaderView extends LinearLayout {
 
@@ -32,7 +31,7 @@ public class PlaceDetailHeaderView extends LinearLayout {
                 R.layout.view_place_detail_header, this, true);
     }
 
-    public void setPlace(Place place) {
+    public void setPlace(PlaceModel place) {
         binding.placeName.setText(place.getName());
         binding.placeAddress.setText(place.getAddress());
     }

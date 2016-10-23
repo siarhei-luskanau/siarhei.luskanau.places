@@ -45,27 +45,32 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/placePhone"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/base_container"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/ic_call_black"
-                android:tint="@color/app_gray" />
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-            <ImageView
-                android:id="@+id/placeWebsite"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignBottom="@+id/base_container"
-                android:layout_toLeftOf="@+id/placePhone"
-                android:layout_toStartOf="@+id/placePhone"
-                android:src="@drawable/ic_public"
-                android:tint="@color/app_gray" />
+                <ImageView
+                    android:id="@+id/placeWebsite"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_public"
+                    android:tint="@color/app_gray" />
+
+                <ImageView
+                    android:id="@+id/placePhone"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_call_black"
+                    android:tint="@color/app_gray" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

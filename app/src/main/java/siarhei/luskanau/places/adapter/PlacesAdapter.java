@@ -6,8 +6,6 @@ import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.google.android.gms.location.places.Place;
-
 import java.util.Collection;
 
 import rx.Observable;
@@ -16,22 +14,23 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.databinding.ListItemPlaceBinding;
+import siarhei.luskanau.places.model.PlaceModel;
 
-public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewHolder> {
+public class PlacesAdapter extends BaseRecyclerArrayAdapter<PlaceModel, BindableViewHolder> {
 
     private String selectedPlaceId;
     private Location location;
 
-    private Func2<Place, Place, Integer> placeDistanceComparator = new Func2<Place, Place, Integer>() {
+    private Func2<PlaceModel, PlaceModel, Integer> placeDistanceComparator = new Func2<PlaceModel, PlaceModel, Integer>() {
         @Override
-        public Integer call(Place place1, Place place2) {
+        public Integer call(PlaceModel place1, PlaceModel place2) {
             if (location != null) {
                 Location location1 = new Location("");
-                location1.setLatitude(place1.getLatLng().latitude);
-                location1.setLongitude(place1.getLatLng().longitude);
+                location1.setLatitude(place1.getLatitude());
+                location1.setLongitude(place1.getLongitude());
                 Location location2 = new Location("");
-                location2.setLatitude(place2.getLatLng().latitude);
-                location2.setLongitude(place2.getLatLng().longitude);
+                location2.setLatitude(place2.getLatitude());
+                location2.setLongitude(place2.getLongitude());
                 Integer compare = Float.compare(location.distanceTo(location1), location.distanceTo(location2));
                 if (compare == 0) {
                     compare = String.valueOf(place1.getName()).compareTo(String.valueOf(place2.getName()));
@@ -42,7 +41,7 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewH
         }
     };
 
-    public void setData(Location location, Collection<Place> data) {
+    public void setData(Location location, Collection<PlaceModel> data) {
         this.location = location;
         if (location != null && data != null) {
             super.setData(Observable.from(data)
@@ -63,7 +62,7 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewH
     @Override
     public void onBindViewHolder(BindableViewHolder holder, int position) {
         ListItemPlaceBinding binding = (ListItemPlaceBinding) holder.getBindings();
-        Place place = getItem(position);
+        PlaceModel place = getItem(position);
         binding.item.setPlace(place, location, place.getId().equals(selectedPlaceId));
     }
 

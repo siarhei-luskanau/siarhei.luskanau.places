@@ -10,9 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +21,10 @@ import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
 import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
+import siarhei.luskanau.places.abstracts.GoogleApiInterface;
 import siarhei.luskanau.places.adapter.PlaceDetailsAdapter;
-import siarhei.luskanau.places.api.RxGoogleApi;
-import siarhei.luskanau.places.api.RxGoogleApiInterface;
+import siarhei.luskanau.places.api.GoogleApi;
+import siarhei.luskanau.places.model.PlaceModel;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
@@ -35,7 +34,7 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
     private static final String TAG = "PlaceDetailsFragment";
     private Subscription subscription;
     private PlaceDetailsAdapter adapter;
-    private Place place;
+    private PlaceModel place;
     private List<PlacePhotoMetadata> placePhotoMetadataList;
 
     @Override
@@ -62,12 +61,12 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
                         Log.e(TAG, e.getMessage(), e);
                     }
                 } else if (item instanceof PlaceDetailsAdapter.PlaceWebsiteAdapterItem) {
-                    Uri uri = ((PlaceDetailsAdapter.PlaceWebsiteAdapterItem) item).getUri();
+                    String uri = ((PlaceDetailsAdapter.PlaceWebsiteAdapterItem) item).getUri();
                     AppNavigationUtil.startActivityWithAnimations(getActivity(),
-                            AppNavigationUtil.getWebIntent(context, uri.toString(), place.getName()));
+                            AppNavigationUtil.getWebIntent(context, uri, place.getName()));
                 } else if (item instanceof PlaceDetailsAdapter.PlaceMapAdapterItem) {
-                    LatLng latLng = ((PlaceDetailsAdapter.PlaceMapAdapterItem) item).getLatLng();
-                    String url = AppUtils.buildMapUrl(latLng);
+                    PlaceModel place = ((PlaceDetailsAdapter.PlaceMapAdapterItem) item).getPlace();
+                    String url = AppUtils.buildMapUrl(place.getLatitude(), place.getLongitude());
                     AppNavigationUtil.startActivityWithAnimations(getActivity(),
                             AppNavigationUtil.getWebIntent(context, url, place.getName()));
                 } else if (item instanceof PlaceDetailsAdapter.PlacePhotoAdapterItem) {
@@ -87,8 +86,8 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
         subscription = null;
     }
 
-    private RxGoogleApi getRxGoogleApi() {
-        return AppUtils.getParentInterface(RxGoogleApiInterface.class, getActivity()).getRxGoogleApi();
+    private GoogleApi getGoogleApi() {
+        return AppUtils.getParentInterface(GoogleApiInterface.class, getActivity()).getGoogleApi();
     }
 
     public void onPlaceIdUpdated(String placeId) {
@@ -96,10 +95,10 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
 
         setRefreshing(true);
         releaseSubscription(subscription);
-        subscription = getRxGoogleApi().getPlace(placeId)
+        subscription = getGoogleApi().getPlace(placeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Place>() {
+                .subscribe(new SimpleObserver<PlaceModel>() {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
@@ -107,14 +106,14 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
                     }
 
                     @Override
-                    public void onNext(Place data) {
+                    public void onNext(PlaceModel data) {
                         setRefreshing(false);
                         onPlaceUpdated(data);
                     }
                 });
     }
 
-    public void onPlaceUpdated(Place place) {
+    public void onPlaceUpdated(PlaceModel place) {
         this.place = place;
         this.placePhotoMetadataList = null;
         if (place != null) {
@@ -128,7 +127,7 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
 
         if (place != null) {
             releaseSubscription(subscription);
-            subscription = getRxGoogleApi().getPlacePhotos(place.getId())
+            subscription = getGoogleApi().getPlacePhotos(place.getId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SimpleObserver<List<PlacePhotoMetadata>>() {
@@ -152,17 +151,17 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
             if (!TextUtils.isEmpty(place.getPhoneNumber())) {
                 adapterItems.add(new PlaceDetailsAdapter.PlacePhoneAdapterItem(place.getPhoneNumber()));
             }
-            if (place.getWebsiteUri() != null) {
+            if (!TextUtils.isEmpty(place.getWebsiteUri())) {
                 adapterItems.add(new PlaceDetailsAdapter.PlaceWebsiteAdapterItem(place.getWebsiteUri()));
             }
-            adapterItems.add(new PlaceDetailsAdapter.PlaceMapAdapterItem(place.getLatLng()));
+            adapterItems.add(new PlaceDetailsAdapter.PlaceMapAdapterItem(place));
         }
         if (placePhotoMetadataList != null) {
-            RxGoogleApi rxGoogleApi = getRxGoogleApi();
+            GoogleApi googleApi = getGoogleApi();
             for (int i = 0; i < placePhotoMetadataList.size(); i++) {
                 PlacePhotoMetadata placePhotoMetadata = placePhotoMetadataList.get(i);
                 adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(place, i,
-                        placePhotoMetadata, rxGoogleApi));
+                        placePhotoMetadata, googleApi));
             }
         }
         adapter.setData(adapterItems);

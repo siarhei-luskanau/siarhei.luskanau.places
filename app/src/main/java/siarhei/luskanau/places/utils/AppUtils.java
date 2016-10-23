@@ -2,7 +2,9 @@ package siarhei.luskanau.places.utils;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -10,12 +12,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-
-import com.google.android.gms.maps.model.LatLng;
+import android.util.Log;
 
 import java.util.Locale;
 
 public final class AppUtils {
+
+    private static final String TAG = "AppUtils";
+    private static final String GEO_API_KEY = "com.google.android.geo.API_KEY";
 
     private AppUtils() {
     }
@@ -61,9 +65,30 @@ public final class AppUtils {
         }
     }
 
-    public static String buildMapUrl(LatLng latLng) {
-        return String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=%f,%f",
-                latLng.latitude, latLng.longitude);
+    public static String buildMapUrl(double latitude, double longitude) {
+        return String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=%f,%f", latitude, longitude);
+    }
+
+    public static String getGeoApiKey(Context context) {
+        Object key = getManifestMetadata(context, GEO_API_KEY);
+        if (key != null) {
+            return String.valueOf(key);
+        }
+        return null;
+    }
+
+    public static Object getManifestMetadata(Context context, String key) {
+        try {
+            Bundle metaData = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
+                    .metaData;
+            if (metaData != null && metaData.containsKey(key)) {
+                return metaData.get(key);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
     }
 
 }

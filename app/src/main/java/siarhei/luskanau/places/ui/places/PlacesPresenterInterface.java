@@ -1,9 +1,9 @@
 package siarhei.luskanau.places.ui.places;
 
-import com.google.android.gms.location.places.Place;
+import siarhei.luskanau.places.model.PlaceModel;
 
 public interface PlacesPresenterInterface {
 
-    void onPlaceSelected(Place place);
+    void onPlaceSelected(PlaceModel place);
 
 }

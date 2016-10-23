@@ -9,10 +9,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import com.google.android.gms.location.places.Place;
-
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.databinding.ViewPlaceBinding;
+import siarhei.luskanau.places.model.PlaceModel;
 
 public class PlaceView extends LinearLayout {
 
@@ -40,17 +39,17 @@ public class PlaceView extends LinearLayout {
         grayColor = ContextCompat.getColor(getContext(), R.color.app_gray);
     }
 
-    public void setPlace(Place place, Location location, boolean isSelected) {
+    public void setPlace(PlaceModel place, Location location, boolean isSelected) {
         binding.placeName.setText(place.getName());
         binding.placeAddress.setText(place.getAddress());
         binding.placePhone.setVisibility(TextUtils.isEmpty(place.getPhoneNumber()) ? GONE : VISIBLE);
-        binding.placeWebsite.setVisibility(place.getWebsiteUri() == null ? GONE : VISIBLE);
+        binding.placeWebsite.setVisibility(TextUtils.isEmpty(place.getWebsiteUri()) ? GONE : VISIBLE);
         binding.selectedContainer.setBackgroundColor(isSelected ? grayColor : whiteColor);
 
-        if (location != null && place.getLatLng() != null) {
+        if (location != null) {
             Location placeLocation = new Location("");
-            placeLocation.setLatitude(place.getLatLng().latitude);
-            placeLocation.setLongitude(place.getLatLng().longitude);
+            placeLocation.setLatitude(place.getLatitude());
+            placeLocation.setLongitude(place.getLongitude());
             int distance = (int) location.distanceTo(placeLocation);
             binding.placeDistance.setText(getResources().getString(R.string.place_distance, distance));
         } else {

@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.api;
+package siarhei.luskanau.places.api.android;
 
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -27,12 +27,12 @@ import rx.Observable;
 import rx.functions.Func0;
 import rx.functions.Func2;
 
-public class RxGoogleApi {
+public class GooglePlayServicesApi {
 
-    private static final String TAG = "RxGoogleApi";
+    private static final String TAG = "GooglePlayServicesApi";
     private GoogleApiClient googleApiClient;
 
-    public RxGoogleApi(GoogleApiClient googleApiClient) {
+    public GooglePlayServicesApi(GoogleApiClient googleApiClient) {
         this.googleApiClient = googleApiClient;
     }
 

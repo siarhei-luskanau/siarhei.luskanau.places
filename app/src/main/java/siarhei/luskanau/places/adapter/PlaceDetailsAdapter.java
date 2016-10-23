@@ -2,23 +2,20 @@ package siarhei.luskanau.places.adapter;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
-import com.google.android.gms.maps.model.LatLng;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
-import siarhei.luskanau.places.api.RxGoogleApi;
+import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsHeaderBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsMapBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhoneBinding;
-import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhotoBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsWebsiteBinding;
+import siarhei.luskanau.places.model.PlaceModel;
 
 public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, BindableViewHolder> {
 
@@ -84,14 +81,14 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
             case TYPE_MAP:
                 PlaceMapAdapterItem placeMapAdapterItem = (PlaceMapAdapterItem) getItem(position);
                 ((ListItemPlaceDetailsMapBinding) holder.getBindings())
-                        .item.setLatLng(placeMapAdapterItem.latLng);
+                        .item.setPlace(placeMapAdapterItem.place);
                 break;
 
             case TYPE_PHOTO:
-                PlacePhotoAdapterItem placePhotoAdapterItem = (PlacePhotoAdapterItem) getItem(position);
-                ((ListItemPlaceDetailsPhotoBinding) holder.getBindings())
-                        .item.setPlacePhotoMetadata(placePhotoAdapterItem.place, placePhotoAdapterItem.position,
-                        placePhotoAdapterItem.placePhotoMetadata, placePhotoAdapterItem.rxGoogleApi);
+//                PlacePhotoAdapterItem placePhotoAdapterItem = (PlacePhotoAdapterItem) getItem(position);
+//                ((ListItemPlaceDetailsPhotoBinding) holder.getBindings())
+//                        .item.setPlacePhotoMetadata(placePhotoAdapterItem.place, placePhotoAdapterItem.position,
+//                        placePhotoAdapterItem.placePhotoMetadata, placePhotoAdapterItem.googleApi);
                 break;
 
             default:
@@ -117,9 +114,9 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
     }
 
     public static class PlaceHeaderAdapterItem {
-        private Place place;
+        private PlaceModel place;
 
-        public PlaceHeaderAdapterItem(Place place) {
+        public PlaceHeaderAdapterItem(PlaceModel place) {
             this.place = place;
         }
     }
@@ -137,41 +134,41 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
     }
 
     public static class PlaceWebsiteAdapterItem {
-        private Uri uri;
+        private String uri;
 
-        public PlaceWebsiteAdapterItem(Uri uri) {
+        public PlaceWebsiteAdapterItem(String uri) {
             this.uri = uri;
         }
 
-        public Uri getUri() {
+        public String getUri() {
             return uri;
         }
     }
 
     public static class PlaceMapAdapterItem {
-        private LatLng latLng;
+        private PlaceModel place;
 
-        public PlaceMapAdapterItem(LatLng latLng) {
-            this.latLng = latLng;
+        public PlaceMapAdapterItem(PlaceModel place) {
+            this.place = place;
         }
 
-        public LatLng getLatLng() {
-            return latLng;
+        public PlaceModel getPlace() {
+            return place;
         }
     }
 
     public static class PlacePhotoAdapterItem {
-        private Place place;
+        private PlaceModel place;
         private int position;
         private PlacePhotoMetadata placePhotoMetadata;
-        private RxGoogleApi rxGoogleApi;
+        private GoogleApi googleApi;
 
-        public PlacePhotoAdapterItem(Place place, int position,
-                                     PlacePhotoMetadata placePhotoMetadata, RxGoogleApi rxGoogleApi) {
+        public PlacePhotoAdapterItem(PlaceModel place, int position,
+                                     PlacePhotoMetadata placePhotoMetadata, GoogleApi googleApi) {
             this.place = place;
             this.position = position;
             this.placePhotoMetadata = placePhotoMetadata;
-            this.rxGoogleApi = rxGoogleApi;
+            this.googleApi = googleApi;
         }
 
         public int getPosition() {

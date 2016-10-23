@@ -2,7 +2,6 @@ package siarhei.luskanau.places.adapter.widget;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -31,8 +30,8 @@ public class PlaceDetailWebsiteView extends LinearLayout {
                 R.layout.view_place_detail_website, this, true);
     }
 
-    public void setUri(Uri uri) {
-        binding.placeWebsite.setText(uri.toString());
+    public void setUri(String uri) {
+        binding.placeWebsite.setText(uri);
     }
 
 }

@@ -6,10 +6,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.databinding.ViewPlaceDetailMapBinding;
+import siarhei.luskanau.places.model.PlaceModel;
 
 public class PlaceDetailMapView extends LinearLayout {
 
@@ -32,7 +31,7 @@ public class PlaceDetailMapView extends LinearLayout {
                 R.layout.view_place_detail_map, this, true);
     }
 
-    public void setLatLng(LatLng latLng) {
+    public void setPlace(PlaceModel place) {
         //binding.placeLatLng.setText(String.valueOf(latLng));
         binding.placeLatLng.setText(R.string.place_detail_show_on_map);
     }
