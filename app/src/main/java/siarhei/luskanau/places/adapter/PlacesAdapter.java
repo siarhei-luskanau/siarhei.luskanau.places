@@ -21,7 +21,8 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<PlaceModel, Bindable
     private String selectedPlaceId;
     private Location location;
 
-    private Func2<PlaceModel, PlaceModel, Integer> placeDistanceComparator = new Func2<PlaceModel, PlaceModel, Integer>() {
+    private Func2<PlaceModel, PlaceModel, Integer> placeDistanceComparator
+            = new Func2<PlaceModel, PlaceModel, Integer>() {
         @Override
         public Integer call(PlaceModel place1, PlaceModel place2) {
             if (location != null) {

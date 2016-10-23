@@ -68,14 +68,14 @@ public final class MapsGoogleApi {
                         Log.d(TAG, "placeNearbySearch: " + json);
                         PlacesResponse response = GSON.fromJson(json, PlacesResponse.class);
                         checkResponse(response);
-                        return response.results;
+                        return response.getResults();
                     }
                 });
     }
 
     private void checkResponse(BaseResponse response) {
-        if (!BaseResponse.OK.equalsIgnoreCase(response.status)) {
-            throw new RuntimeException(response.status);
+        if (!BaseResponse.OK.equalsIgnoreCase(response.getStatus())) {
+            throw new RuntimeException(response.getStatus());
         }
     }
 
@@ -118,7 +118,7 @@ public final class MapsGoogleApi {
 
         @Override
         public Request authenticate(Route route, Response response) throws IOException {
-            Log.d(TAG, "response: " + String.valueOf(response));
+            Log.d(TAG, "response: " + response);
             if (responseCount(response) >= 3) {
                 // If we've failed 3 times, give up.
                 return null;

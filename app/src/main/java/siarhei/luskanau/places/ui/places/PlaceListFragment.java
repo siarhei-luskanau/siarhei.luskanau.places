@@ -175,7 +175,8 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                                             }
                                         }), new Func2<Location, List<PlaceModel>, Pair<Location, List<PlaceModel>>>() {
                                     @Override
-                                    public Pair<Location, List<PlaceModel>> call(Location location, List<PlaceModel> places) {
+                                    public Pair<Location, List<PlaceModel>> call(Location location,
+                                                                                 List<PlaceModel> places) {
                                         return new Pair<>(location, places);
                                     }
                                 });

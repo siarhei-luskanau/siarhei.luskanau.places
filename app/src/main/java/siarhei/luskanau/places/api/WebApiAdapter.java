@@ -32,16 +32,12 @@ public final class WebApiAdapter {
 
     private static PlaceModel toPlaceModel(Place place) {
         PlaceModel placeModel = new PlaceModel();
-        placeModel.setId(place.placeId);
-        placeModel.setName(place.name);
-        placeModel.setAddress(place.vicinity);
-//        placeModel.setPhoneNumber(place.getPhoneNumber());
-//        if (place.getWebsiteUri() != null) {
-//            placeModel.setWebsiteUri(place.getWebsiteUri().toString());
-//        }
-        if (place.geometry != null & place.geometry.location != null) {
-            placeModel.setLatitude(place.geometry.location.lat);
-            placeModel.setLongitude(place.geometry.location.lng);
+        placeModel.setId(place.getPlaceId());
+        placeModel.setName(place.getName());
+        placeModel.setAddress(place.getVicinity());
+        if (place.getGeometry() != null && place.getGeometry().getLocation() != null) {
+            placeModel.setLatitude(place.getGeometry().getLocation().getLat());
+            placeModel.setLongitude(place.getGeometry().getLocation().getLng());
         }
         return placeModel;
     }
