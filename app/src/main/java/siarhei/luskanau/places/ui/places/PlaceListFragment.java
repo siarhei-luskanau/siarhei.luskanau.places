@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Pair;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.List;
@@ -88,7 +90,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<BindableViewHolder>() {
             @Override
             public void onClick(Context context, BindableViewHolder holder, int position) {
-                onPlaceSelected(adapter.getItem(position));
+                onPlaceSelected(adapter.getItem(position), null);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -113,9 +115,9 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-//                Place place = PlacePicker.getPlace(getContext(), data);
-//                Snackbar.make(getView(), place.getName() + "\n" + place.getAddress(), Snackbar.LENGTH_LONG).show();
-//                onPlaceSelected(place);
+                Place place = PlacePicker.getPlace(getContext(), data);
+                Snackbar.make(getView(), place.getName() + "\n" + place.getAddress(), Snackbar.LENGTH_LONG).show();
+                onPlaceSelected(null, place.getId());
             }
         }
     }
@@ -205,15 +207,15 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         adapter.setData(lastLocation, places);
     }
 
-    private void onPlaceSelected(PlaceModel place) {
+    private void onPlaceSelected(PlaceModel place, String placeId) {
         PlacesPresenterInterface placesPresenterInterface = AppUtils.getParentInterface(
                 PlacesPresenterInterface.class,
                 getActivity(), getParentFragment(), getTargetFragment());
-        placesPresenterInterface.onPlaceSelected(place);
+        placesPresenterInterface.onPlaceSelected(place, placeId);
     }
 
-    public void onPlaceHighlighted(PlaceModel place) {
-        adapter.setSelectedPlaceId(place.getId());
+    public void onPlaceHighlighted(String placeId) {
+        adapter.setSelectedPlaceId(placeId);
     }
 
 }

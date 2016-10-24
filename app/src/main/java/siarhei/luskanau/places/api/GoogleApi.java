@@ -40,8 +40,10 @@ public class GoogleApi {
     }
 
     public Observable<PlaceModel> getPlace(String placeId) {
-        //return googlePlayServicesApi.getPlace(placeId);
-        return null;
+        if (IS_USE_WEB) {
+        } else {
+        }
+        return AndroidApiAdapter.getPlace(googlePlayServicesApi, placeId);
     }
 
     public Observable<List<PlacePhotoMetadata>> getPlacePhotos(String placeId) {

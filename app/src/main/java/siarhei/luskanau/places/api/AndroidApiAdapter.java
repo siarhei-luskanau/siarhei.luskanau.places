@@ -29,6 +29,16 @@ public final class AndroidApiAdapter {
                 });
     }
 
+    public static Observable<PlaceModel> getPlace(GooglePlayServicesApi googlePlayServicesApi, String placeId) {
+        return googlePlayServicesApi.getPlace(placeId)
+                .map(new Func1<Place, PlaceModel>() {
+                    @Override
+                    public PlaceModel call(Place place) {
+                        return toPlaceModel(place);
+                    }
+                });
+    }
+
     private static PlaceModel toPlaceModel(Place place) {
         PlaceModel placeModel = new PlaceModel();
         placeModel.setId(place.getId());

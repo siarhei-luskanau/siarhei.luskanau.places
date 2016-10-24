@@ -31,16 +31,24 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
     }
 
     @Override
-    public void onPlaceSelected(PlaceModel place) {
+    public void onPlaceSelected(PlaceModel place, String placeId) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeDetailsFragment);
         if (fragment instanceof PlaceDetailsFragment) {
             PlaceDetailsFragment placeDetailsFragment = (PlaceDetailsFragment) fragment;
-            placeDetailsFragment.onPlaceUpdated(place);
+            if (place != null) {
+                placeDetailsFragment.onPlaceUpdated(place);
+            } else {
+                placeDetailsFragment.onPlaceIdUpdated(placeId);
+            }
 
             fragment = getChildFragmentManager().findFragmentById(R.id.placeListFragment);
             if (fragment instanceof PlaceListFragment) {
                 PlaceListFragment placeListFragment = (PlaceListFragment) fragment;
-                placeListFragment.onPlaceHighlighted(place);
+                if (place != null) {
+                    placeListFragment.onPlaceHighlighted(place.getId());
+                } else {
+                    placeListFragment.onPlaceHighlighted(placeId);
+                }
             }
         } else {
             AppNavigationUtil.startActivityWithAnimations(getActivity(),
