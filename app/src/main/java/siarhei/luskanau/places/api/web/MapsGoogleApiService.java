@@ -11,4 +11,7 @@ public interface MapsGoogleApiService {
     @GET("maps/api/place/nearbysearch/json?rankby=distance")
     Observable<String> placeNearbySearch(@Query("location") String location);
 
+    @GET("maps/api/place/details/json")
+    Observable<String> placeDetails(@Query("placeid") String placeid);
+
 }

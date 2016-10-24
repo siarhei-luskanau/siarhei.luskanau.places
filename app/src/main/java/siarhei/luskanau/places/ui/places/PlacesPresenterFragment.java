@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.abstracts.GoogleApiInterface;
-import siarhei.luskanau.places.model.PlaceModel;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
 
@@ -31,28 +30,20 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
     }
 
     @Override
-    public void onPlaceSelected(PlaceModel place, String placeId) {
+    public void onPlaceSelected(String placeId) {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.placeDetailsFragment);
         if (fragment instanceof PlaceDetailsFragment) {
             PlaceDetailsFragment placeDetailsFragment = (PlaceDetailsFragment) fragment;
-            if (place != null) {
-                placeDetailsFragment.onPlaceUpdated(place);
-            } else {
-                placeDetailsFragment.onPlaceIdUpdated(placeId);
-            }
+            placeDetailsFragment.onPlaceIdUpdated(placeId);
 
             fragment = getChildFragmentManager().findFragmentById(R.id.placeListFragment);
             if (fragment instanceof PlaceListFragment) {
                 PlaceListFragment placeListFragment = (PlaceListFragment) fragment;
-                if (place != null) {
-                    placeListFragment.onPlaceHighlighted(place.getId());
-                } else {
-                    placeListFragment.onPlaceHighlighted(placeId);
-                }
+                placeListFragment.onPlaceHighlighted(placeId);
             }
         } else {
             AppNavigationUtil.startActivityWithAnimations(getActivity(),
-                    AppNavigationUtil.getPlaceDetailsIntent(getContext(), place.getId()));
+                    AppNavigationUtil.getPlaceDetailsIntent(getContext(), placeId));
         }
     }
 

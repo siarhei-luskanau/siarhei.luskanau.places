@@ -28,6 +28,7 @@ import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.BuildConfig;
 import siarhei.luskanau.places.api.web.model.BaseResponse;
 import siarhei.luskanau.places.api.web.model.Place;
+import siarhei.luskanau.places.api.web.model.PlaceDetailsResponse;
 import siarhei.luskanau.places.api.web.model.PlacesResponse;
 import siarhei.luskanau.places.utils.AppUtils;
 
@@ -65,10 +66,23 @@ public final class MapsGoogleApi {
                 .map(new Func1<String, List<Place>>() {
                     @Override
                     public List<Place> call(String json) {
-                        Log.d(TAG, "placeNearbySearch: " + json);
+                        Log.d(TAG, "placeNearbySearch");
                         PlacesResponse response = GSON.fromJson(json, PlacesResponse.class);
                         checkResponse(response);
                         return response.getResults();
+                    }
+                });
+    }
+
+    public Observable<Place> getPlaceDetails(String placeId) {
+        return getService().placeDetails(placeId)
+                .map(new Func1<String, Place>() {
+                    @Override
+                    public Place call(String json) {
+                        Log.d(TAG, "placeDetails");
+                        PlaceDetailsResponse response = GSON.fromJson(json, PlaceDetailsResponse.class);
+                        checkResponse(response);
+                        return response.getResult();
                     }
                 });
     }

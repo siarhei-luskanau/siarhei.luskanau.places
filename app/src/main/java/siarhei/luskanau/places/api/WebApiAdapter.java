@@ -30,6 +30,16 @@ public final class WebApiAdapter {
                 });
     }
 
+    public static Observable<PlaceModel> getPlace(MapsGoogleApi mapsGoogleApi, String placeId) {
+        return mapsGoogleApi.getPlaceDetails(placeId)
+                .map(new Func1<Place, PlaceModel>() {
+                    @Override
+                    public PlaceModel call(Place place) {
+                        return toPlaceModel(place);
+                    }
+                });
+    }
+
     private static PlaceModel toPlaceModel(Place place) {
         PlaceModel placeModel = new PlaceModel();
         placeModel.setId(place.getPlaceId());

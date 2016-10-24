@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class BaseResponse<T> {
+public abstract class BaseResponse {
 
     public static final String OK = "OK";
     public static final String ZERO_RESULTS = "ZERO_RESULTS";
@@ -14,9 +14,6 @@ public class BaseResponse<T> {
 
     @SerializedName("html_attributions")
     private List<Object> htmlAttributions;
-
-    @SerializedName("results")
-    private T results;
 
     @SerializedName("status")
     private String status;
@@ -30,14 +27,6 @@ public class BaseResponse<T> {
 
     public void setHtmlAttributions(List<Object> htmlAttributions) {
         this.htmlAttributions = htmlAttributions;
-    }
-
-    public T getResults() {
-        return results;
-    }
-
-    public void setResults(T results) {
-        this.results = results;
     }
 
     public String getStatus() {

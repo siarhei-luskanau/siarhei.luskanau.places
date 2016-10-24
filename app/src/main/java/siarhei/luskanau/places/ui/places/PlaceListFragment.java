@@ -90,7 +90,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<BindableViewHolder>() {
             @Override
             public void onClick(Context context, BindableViewHolder holder, int position) {
-                onPlaceSelected(adapter.getItem(position), null);
+                onPlaceSelected(adapter.getItem(position).getId());
             }
         });
         recyclerView.setAdapter(adapter);
@@ -117,7 +117,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlacePicker.getPlace(getContext(), data);
                 Snackbar.make(getView(), place.getName() + "\n" + place.getAddress(), Snackbar.LENGTH_LONG).show();
-                onPlaceSelected(null, place.getId());
+                onPlaceSelected(place.getId());
             }
         }
     }
@@ -207,11 +207,11 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         adapter.setData(lastLocation, places);
     }
 
-    private void onPlaceSelected(PlaceModel place, String placeId) {
+    private void onPlaceSelected(String placeId) {
         PlacesPresenterInterface placesPresenterInterface = AppUtils.getParentInterface(
                 PlacesPresenterInterface.class,
                 getActivity(), getParentFragment(), getTargetFragment());
-        placesPresenterInterface.onPlaceSelected(place, placeId);
+        placesPresenterInterface.onPlaceSelected(placeId);
     }
 
     public void onPlaceHighlighted(String placeId) {
