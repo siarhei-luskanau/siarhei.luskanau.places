@@ -6,14 +6,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
 
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.databinding.ViewPlaceDetailPhotoBinding;
-import siarhei.luskanau.places.utils.glide.PlacePhotoId;
+import siarhei.luskanau.places.model.PhotoModel;
 
 public class PlaceDetailPhotoView extends LinearLayout {
 
@@ -36,13 +34,13 @@ public class PlaceDetailPhotoView extends LinearLayout {
                 R.layout.view_place_detail_photo, this, true);
     }
 
-    public void setPlacePhotoMetadata(Place place, int position,
-                                      PlacePhotoMetadata placePhotoMetadata, GoogleApi googleApi) {
-        Glide.with(getContext())
-                .load(new PlacePhotoId(place, position, placePhotoMetadata, googleApi))
-                .fitCenter()
-                .placeholder(null)
-                .into(binding.placePhoto);
+    public void setPhotoModel(PhotoModel photoModel) {
+        if (photoModel != null) {
+            DrawableTypeRequest drawableTypeRequest = photoModel.getPlacePhotoId() != null
+                    ? Glide.with(getContext()).load(photoModel.getPlacePhotoId())
+                    : Glide.with(getContext()).load(photoModel.getPhotoUrl());
+            drawableTypeRequest.fitCenter().placeholder(null).into(binding.placePhoto);
+        }
     }
 
 }

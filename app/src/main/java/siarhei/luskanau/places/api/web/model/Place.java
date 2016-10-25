@@ -6,18 +6,28 @@ import java.util.List;
 
 public class Place {
 
+    @SerializedName("address_components")
+    private Object addressComponents;
+    @SerializedName(value = "formattedAddress", alternate = "formatted_address")
+    private String formattedAddress;
+    @SerializedName("formatted_phone_number")
+    private String formattedPhoneNumber;
+    @SerializedName("geometry")
+    private Geometry geometry;
     @SerializedName("icon")
     private Object icon;
     @SerializedName("id")
     private String id;
-    @SerializedName("place_id")
-    private String placeId;
-    @SerializedName("geometry")
-    private Geometry geometry;
+    @SerializedName("international_phone_number")
+    private String internationalPhoneNumber;
     @SerializedName("name")
     private String name;
+    @SerializedName("opening_hours")
+    private Object openingHours;
     @SerializedName("photos")
-    private List<Object> photos;
+    private List<Photo> photos;
+    @SerializedName("place_id")
+    private String placeId;
     @SerializedName("scope")
     private Object scope;
     @SerializedName("price_level")
@@ -26,12 +36,50 @@ public class Place {
     private Object rating;
     @SerializedName("reference")
     private Object reference;
+    @SerializedName("reviews")
+    private List<Object> reviews;
     @SerializedName("types")
     private List<Object> types;
+    @SerializedName("url")
+    private String url;
+    @SerializedName("utc_offset")
+    private long utcOffset;
     @SerializedName("vicinity")
     private String vicinity;
-    @SerializedName("formattedAddress")
-    private String formattedAddress;
+    @SerializedName("website")
+    private String website;
+
+    public Object getAddressComponents() {
+        return addressComponents;
+    }
+
+    public void setAddressComponents(Object addressComponents) {
+        this.addressComponents = addressComponents;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
+    }
+
+    public String getFormattedPhoneNumber() {
+        return formattedPhoneNumber;
+    }
+
+    public void setFormattedPhoneNumber(String formattedPhoneNumber) {
+        this.formattedPhoneNumber = formattedPhoneNumber;
+    }
+
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
+    }
 
     public Object getIcon() {
         return icon;
@@ -49,20 +97,12 @@ public class Place {
         this.id = id;
     }
 
-    public String getPlaceId() {
-        return placeId;
+    public String getInternationalPhoneNumber() {
+        return internationalPhoneNumber;
     }
 
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
-    }
-
-    public Geometry getGeometry() {
-        return geometry;
-    }
-
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
+    public void setInternationalPhoneNumber(String internationalPhoneNumber) {
+        this.internationalPhoneNumber = internationalPhoneNumber;
     }
 
     public String getName() {
@@ -73,12 +113,28 @@ public class Place {
         this.name = name;
     }
 
-    public List<Object> getPhotos() {
+    public Object getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(Object openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<Object> photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 
     public Object getScope() {
@@ -113,12 +169,36 @@ public class Place {
         this.reference = reference;
     }
 
+    public List<Object> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Object> reviews) {
+        this.reviews = reviews;
+    }
+
     public List<Object> getTypes() {
         return types;
     }
 
     public void setTypes(List<Object> types) {
         this.types = types;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public long getUtcOffset() {
+        return utcOffset;
+    }
+
+    public void setUtcOffset(long utcOffset) {
+        this.utcOffset = utcOffset;
     }
 
     public String getVicinity() {
@@ -129,12 +209,12 @@ public class Place {
         this.vicinity = vicinity;
     }
 
-    public String getFormattedAddress() {
-        return formattedAddress;
+    public String getWebsite() {
+        return website;
     }
 
-    public void setFormattedAddress(String formattedAddress) {
-        this.formattedAddress = formattedAddress;
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
 }

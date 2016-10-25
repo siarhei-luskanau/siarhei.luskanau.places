@@ -23,7 +23,7 @@ public class PlacePhotoIdDataFetcher implements DataFetcher<InputStream> {
     @Override
     public InputStream loadData(Priority priority) throws Exception {
         Log.d(TAG, getId());
-        Bitmap bitmap = model.getGoogleApi()
+        Bitmap bitmap = model.getGooglePlayServicesApi()
                 .getPlacePhotoBitmap(model.getPlacePhotoMetadata(), 0, 0)
                 .toBlocking().first();
 

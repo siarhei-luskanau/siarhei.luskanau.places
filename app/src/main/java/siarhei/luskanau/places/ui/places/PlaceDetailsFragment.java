@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.location.places.PlacePhotoMetadata;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +22,7 @@ import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.abstracts.GoogleApiInterface;
 import siarhei.luskanau.places.adapter.PlaceDetailsAdapter;
 import siarhei.luskanau.places.api.GoogleApi;
+import siarhei.luskanau.places.model.PhotoModel;
 import siarhei.luskanau.places.model.PlaceModel;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppNavigationUtil;
@@ -35,7 +34,6 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
     private Subscription subscription;
     private PlaceDetailsAdapter adapter;
     private PlaceModel place;
-    private List<PlacePhotoMetadata> placePhotoMetadataList;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -115,32 +113,12 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
 
     public void onPlaceUpdated(PlaceModel place) {
         this.place = place;
-        this.placePhotoMetadataList = null;
         if (place != null) {
             AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
                     .onToolbarTitle(!TextUtils.isEmpty(place.getName()) ? place.getName() : place.getAddress());
         } else {
             AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity()).onToolbarTitle(null);
         }
-
-        updateAdapter();
-
-        if (place != null) {
-            releaseSubscription(subscription);
-            subscription = getGoogleApi().getPlacePhotos(place.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<List<PlacePhotoMetadata>>() {
-                        @Override
-                        public void onNext(List<PlacePhotoMetadata> data) {
-                            onPlacePhotosUpdated(data);
-                        }
-                    });
-        }
-    }
-
-    private void onPlacePhotosUpdated(List<PlacePhotoMetadata> placePhotoMetadataList) {
-        this.placePhotoMetadataList = placePhotoMetadataList;
         updateAdapter();
     }
 
@@ -155,13 +133,11 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
                 adapterItems.add(new PlaceDetailsAdapter.PlaceWebsiteAdapterItem(place.getWebsiteUri()));
             }
             adapterItems.add(new PlaceDetailsAdapter.PlaceMapAdapterItem(place));
-        }
-        if (placePhotoMetadataList != null) {
-            GoogleApi googleApi = getGoogleApi();
-            for (int i = 0; i < placePhotoMetadataList.size(); i++) {
-                PlacePhotoMetadata placePhotoMetadata = placePhotoMetadataList.get(i);
-                adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(place, i,
-                        placePhotoMetadata, googleApi));
+            if (place.getPhotos() != null) {
+                for (int i = 0; i < place.getPhotos().size(); i++) {
+                    PhotoModel photo = place.getPhotos().get(i);
+                    adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(photo, i));
+                }
             }
         }
         adapter.setData(adapterItems);

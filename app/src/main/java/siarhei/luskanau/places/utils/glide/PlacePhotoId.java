@@ -3,20 +3,21 @@ package siarhei.luskanau.places.utils.glide;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 
-import siarhei.luskanau.places.api.GoogleApi;
+import siarhei.luskanau.places.api.android.GooglePlayServicesApi;
 
 public class PlacePhotoId {
 
     private Place place;
     private int position;
     private PlacePhotoMetadata placePhotoMetadata;
-    private GoogleApi googleApi;
+    private GooglePlayServicesApi googlePlayServicesApi;
 
-    public PlacePhotoId(Place place, int position, PlacePhotoMetadata placePhotoMetadata, GoogleApi googleApi) {
+    public PlacePhotoId(Place place, int position, PlacePhotoMetadata placePhotoMetadata,
+                        GooglePlayServicesApi googlePlayServicesApi) {
         this.place = place;
         this.position = position;
         this.placePhotoMetadata = placePhotoMetadata;
-        this.googleApi = googleApi;
+        this.googlePlayServicesApi = googlePlayServicesApi;
     }
 
     public Place getPlace() {
@@ -31,8 +32,8 @@ public class PlacePhotoId {
         return placePhotoMetadata;
     }
 
-    public GoogleApi getGoogleApi() {
-        return googleApi;
+    public GooglePlayServicesApi getGooglePlayServicesApi() {
+        return googlePlayServicesApi;
     }
 
 }

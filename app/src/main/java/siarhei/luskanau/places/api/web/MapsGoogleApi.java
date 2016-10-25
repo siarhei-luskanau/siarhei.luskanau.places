@@ -27,6 +27,7 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.BuildConfig;
 import siarhei.luskanau.places.api.web.model.BaseResponse;
+import siarhei.luskanau.places.api.web.model.Photo;
 import siarhei.luskanau.places.api.web.model.Place;
 import siarhei.luskanau.places.api.web.model.PlaceDetailsResponse;
 import siarhei.luskanau.places.api.web.model.PlacesResponse;
@@ -85,6 +86,15 @@ public final class MapsGoogleApi {
                         return response.getResult();
                     }
                 });
+    }
+
+    public String getPlacePhotoUrl(Photo photo) {
+        return HttpUrl.parse(MapsGoogleApiService.BASE_URL).newBuilder()
+                .addEncodedPathSegments(MapsGoogleApiService.PLACE_PHOTO_SEGMENTS)
+                .setQueryParameter("maxwidth", String.valueOf(photo.getWidth()))
+                .setQueryParameter("photoreference", photo.getPhotoReference())
+                .setQueryParameter("key", geoApiKey)
+                .build().toString();
     }
 
     private void checkResponse(BaseResponse response) {

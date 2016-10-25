@@ -7,6 +7,7 @@ import rx.Observable;
 public interface MapsGoogleApiService {
 
     String BASE_URL = "https://maps.googleapis.com/";
+    String PLACE_PHOTO_SEGMENTS = "maps/api/place/photo";
 
     @GET("maps/api/place/nearbysearch/json?rankby=distance")
     Observable<String> placeNearbySearch(@Query("location") String location);

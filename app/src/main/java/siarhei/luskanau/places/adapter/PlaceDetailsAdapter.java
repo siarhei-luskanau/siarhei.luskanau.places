@@ -5,16 +5,15 @@ import android.databinding.ViewDataBinding;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.google.android.gms.location.places.PlacePhotoMetadata;
-
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
-import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsHeaderBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsMapBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhoneBinding;
+import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhotoBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsWebsiteBinding;
+import siarhei.luskanau.places.model.PhotoModel;
 import siarhei.luskanau.places.model.PlaceModel;
 
 public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, BindableViewHolder> {
@@ -85,10 +84,9 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
                 break;
 
             case TYPE_PHOTO:
-//                PlacePhotoAdapterItem placePhotoAdapterItem = (PlacePhotoAdapterItem) getItem(position);
-//                ((ListItemPlaceDetailsPhotoBinding) holder.getBindings())
-//                        .item.setPlacePhotoMetadata(placePhotoAdapterItem.place, placePhotoAdapterItem.position,
-//                        placePhotoAdapterItem.placePhotoMetadata, placePhotoAdapterItem.googleApi);
+                PlacePhotoAdapterItem placePhotoAdapterItem = (PlacePhotoAdapterItem) getItem(position);
+                ((ListItemPlaceDetailsPhotoBinding) holder.getBindings())
+                        .item.setPhotoModel(placePhotoAdapterItem.photo);
                 break;
 
             default:
@@ -158,17 +156,12 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
     }
 
     public static class PlacePhotoAdapterItem {
-        private PlaceModel place;
+        private PhotoModel photo;
         private int position;
-        private PlacePhotoMetadata placePhotoMetadata;
-        private GoogleApi googleApi;
 
-        public PlacePhotoAdapterItem(PlaceModel place, int position,
-                                     PlacePhotoMetadata placePhotoMetadata, GoogleApi googleApi) {
-            this.place = place;
+        public PlacePhotoAdapterItem(PhotoModel photo, int position) {
+            this.photo = photo;
             this.position = position;
-            this.placePhotoMetadata = placePhotoMetadata;
-            this.googleApi = googleApi;
         }
 
         public int getPosition() {

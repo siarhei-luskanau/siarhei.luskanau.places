@@ -5,15 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +21,8 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.abstracts.GoogleApiInterface;
 import siarhei.luskanau.places.api.GoogleApi;
+import siarhei.luskanau.places.model.PhotoModel;
+import siarhei.luskanau.places.model.PlaceModel;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
@@ -36,7 +34,6 @@ public class PlacePhotosFragment extends BaseFragment {
     private ViewPager viewPager;
     private PhotosPagerAdapter adapter;
     private int position;
-    private Place place;
 
     @Nullable
     @Override
@@ -86,23 +83,22 @@ public class PlacePhotosFragment extends BaseFragment {
     private void loadData() {
         String placeId = AppUtils.getParentInterface(PlacePhotosPresenterInterface.class, getActivity()).getPlaceId();
         releaseSubscription(subscription);
-        subscription = getGoogleApi().getPlaceWithPhotos(placeId)
+        subscription = getGoogleApi().getPlace(placeId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Pair<Place, List<PlacePhotoMetadata>>>() {
+                .subscribe(new SimpleObserver<PlaceModel>() {
                     @Override
-                    public void onNext(Pair<Place, List<PlacePhotoMetadata>> pair) {
-                        place = pair.first;
-                        if (place != null) {
+                    public void onNext(PlaceModel placeModel) {
+                        if (placeModel != null) {
                             AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
-                                    .onToolbarTitle(!TextUtils.isEmpty(place.getName())
-                                            ? place.getName() : place.getAddress());
+                                    .onToolbarTitle(!TextUtils.isEmpty(placeModel.getName())
+                                            ? placeModel.getName() : placeModel.getAddress());
                         } else {
                             AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
                                     .onToolbarTitle(null);
                         }
 
-                        adapter.setData(pair.second);
+                        adapter.setData(placeModel != null ? placeModel.getPhotos() : null);
                         viewPager.setCurrentItem(position);
                         List<Fragment> fragments = getChildFragmentManager().getFragments();
                         if (fragments != null) {
@@ -117,31 +113,31 @@ public class PlacePhotosFragment extends BaseFragment {
                 });
     }
 
-    public PlacePhotoMetadata getPlacePhotoMetadata(int position) {
-        if (adapter != null && position < adapter.data.size()) {
-            return adapter.data.get(position);
-        }
-        return null;
-    }
-
-    public Place getPlace() {
-        return place;
+    public PhotoModel getPhotoModel(int position) {
+        return adapter.getPhotoModel(position);
     }
 
     private static class PhotosPagerAdapter extends FragmentPagerAdapter {
 
-        private List<PlacePhotoMetadata> data = new ArrayList<>();
+        private List<PhotoModel> data = new ArrayList<>();
 
         public PhotosPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void setData(List<PlacePhotoMetadata> data) {
+        public void setData(List<PhotoModel> data) {
             this.data.clear();
             if (data != null) {
                 this.data.addAll(data);
             }
             notifyDataSetChanged();
+        }
+
+        public PhotoModel getPhotoModel(int position) {
+            if (data != null && position < data.size()) {
+                return data.get(position);
+            }
+            return null;
         }
 
         @Override

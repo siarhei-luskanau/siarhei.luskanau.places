@@ -7,15 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
-import siarhei.luskanau.places.abstracts.GoogleApiInterface;
-import siarhei.luskanau.places.utils.AppUtils;
-import siarhei.luskanau.places.utils.glide.PlacePhotoId;
+import siarhei.luskanau.places.model.PhotoModel;
 
 public class PhotoItemFragment extends BaseFragment {
 
@@ -57,16 +54,12 @@ public class PhotoItemFragment extends BaseFragment {
 
         PlacePhotosFragment placePhotosFragment = (PlacePhotosFragment) getParentFragment();
         int position = getArguments().getInt(POSITION);
-        Place place = placePhotosFragment.getPlace();
-        PlacePhotoMetadata placePhotoMetadata = placePhotosFragment.getPlacePhotoMetadata(position);
-        if (place != null && placePhotoMetadata != null) {
-            PlacePhotoId placePhotoId = new PlacePhotoId(place, position, placePhotoMetadata,
-                    AppUtils.getParentInterface(GoogleApiInterface.class, getActivity()).getGoogleApi());
-            Glide.with(getContext())
-                    .load(placePhotoId)
-                    .fitCenter()
-                    .placeholder(null)
-                    .into(placePhoto);
+        PhotoModel photoModel = placePhotosFragment.getPhotoModel(position);
+        if (photoModel != null) {
+            DrawableTypeRequest drawableTypeRequest = photoModel.getPlacePhotoId() != null
+                    ? Glide.with(getContext()).load(photoModel.getPlacePhotoId())
+                    : Glide.with(getContext()).load(photoModel.getPhotoUrl());
+            drawableTypeRequest.fitCenter().placeholder(null).into(placePhoto);
         }
     }
 

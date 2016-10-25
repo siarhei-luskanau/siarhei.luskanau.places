@@ -55,4 +55,13 @@ public final class AndroidApiAdapter {
         return placeModel;
     }
 
+//        if (placePhotoMetadataList != null) {
+//            GoogleApi googleApi = getGoogleApi();
+//            for (int i = 0; i < placePhotoMetadataList.size(); i++) {
+//                PlacePhotoMetadata placePhotoMetadata = placePhotoMetadataList.get(i);
+//                adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(place, i,
+//                        placePhotoMetadata, googleApi));
+//            }
+//        }
+
 }

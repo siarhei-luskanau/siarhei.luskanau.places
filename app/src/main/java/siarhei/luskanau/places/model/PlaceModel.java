@@ -1,5 +1,7 @@
 package siarhei.luskanau.places.model;
 
+import java.util.List;
+
 public class PlaceModel {
 
     private String id;
@@ -15,6 +17,8 @@ public class PlaceModel {
     private double latitude;
 
     private double longitude;
+
+    private List<PhotoModel> photos;
 
     public String getId() {
         return id;
@@ -70,6 +74,14 @@ public class PlaceModel {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public List<PhotoModel> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoModel> photos) {
+        this.photos = photos;
     }
 
 }

@@ -1,12 +1,8 @@
 package siarhei.luskanau.places.api;
 
-import android.graphics.Bitmap;
 import android.location.Location;
-import android.support.v4.util.Pair;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
 
 import java.util.List;
 
@@ -45,18 +41,6 @@ public class GoogleApi {
         } else {
             return AndroidApiAdapter.getPlace(googlePlayServicesApi, placeId);
         }
-    }
-
-    public Observable<List<PlacePhotoMetadata>> getPlacePhotos(String placeId) {
-        return googlePlayServicesApi.getPlacePhotos(placeId);
-    }
-
-    public Observable<Bitmap> getPlacePhotoBitmap(PlacePhotoMetadata placePhotoMetadata, int width, int height) {
-        return googlePlayServicesApi.getPlacePhotoBitmap(placePhotoMetadata, width, height);
-    }
-
-    public Observable<Pair<Place, List<PlacePhotoMetadata>>> getPlaceWithPhotos(String placeId) {
-        return googlePlayServicesApi.getPlaceWithPhotos(placeId);
     }
 
 }
