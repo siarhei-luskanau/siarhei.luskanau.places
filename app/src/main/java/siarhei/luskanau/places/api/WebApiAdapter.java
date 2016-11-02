@@ -20,16 +20,17 @@ public final class WebApiAdapter {
 
     public static Observable<List<PlaceModel>> getPlaces(final MapsGoogleApi mapsGoogleApi, Location location) {
         return mapsGoogleApi.getPlaces(location)
-                .map(new Func1<List<Place>, List<PlaceModel>>() {
+                .flatMap(new Func1<List<Place>, Observable<PlaceModel>>() {
                     @Override
-                    public List<PlaceModel> call(List<Place> places) {
-                        List<PlaceModel> list = new ArrayList<>();
+                    public Observable<PlaceModel> call(List<Place> places) {
+                        List<Observable<PlaceModel>> list = new ArrayList<>();
                         for (Place place : places) {
-                            list.add(toPlaceModel(mapsGoogleApi, place));
+                            list.add(getPlace(mapsGoogleApi, place.getPlaceId()));
                         }
-                        return list;
+                        return Observable.merge(list);
                     }
-                });
+                })
+                .toList();
     }
 
     public static Observable<PlaceModel> getPlace(final MapsGoogleApi mapsGoogleApi, String placeId) {
@@ -56,9 +57,7 @@ public final class WebApiAdapter {
         if (place.getPhotos() != null) {
             List<PhotoModel> photos = new ArrayList<>();
             for (Photo photo : place.getPhotos()) {
-                PhotoModel photoModel = new PhotoModel();
-                photoModel.setPhotoUrl(mapsGoogleApi.getPlacePhotoUrl(photo));
-                photos.add(photoModel);
+                photos.add(new PhotoModel(mapsGoogleApi.getPlacePhotoUrl(photo)));
             }
             placeModel.setPhotos(photos);
         }

@@ -44,6 +44,7 @@ public class PlaceView extends LinearLayout {
         binding.placeAddress.setText(place.getAddress());
         binding.placePhone.setVisibility(TextUtils.isEmpty(place.getPhoneNumber()) ? GONE : VISIBLE);
         binding.placeWebsite.setVisibility(TextUtils.isEmpty(place.getWebsiteUri()) ? GONE : VISIBLE);
+        binding.placePhotos.setVisibility(place.getPhotos() != null && !place.getPhotos().isEmpty() ? VISIBLE : GONE);
         binding.selectedContainer.setBackgroundColor(isSelected ? grayColor : whiteColor);
 
         if (location != null) {

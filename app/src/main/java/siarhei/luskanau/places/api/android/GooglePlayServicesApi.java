@@ -2,7 +2,6 @@ package siarhei.luskanau.places.api.android;
 
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,7 +24,6 @@ import java.util.Locale;
 
 import rx.Observable;
 import rx.functions.Func0;
-import rx.functions.Func2;
 
 public class GooglePlayServicesApi {
 
@@ -135,16 +133,6 @@ public class GooglePlayServicesApi {
                 return Observable.just(placePhotoResult.getBitmap());
             }
         });
-    }
-
-    public Observable<Pair<Place, List<PlacePhotoMetadata>>> getPlaceWithPhotos(final String placeId) {
-        return getPlace(placeId).zipWith(getPlacePhotos(placeId),
-                new Func2<Place, List<PlacePhotoMetadata>, Pair<Place, List<PlacePhotoMetadata>>>() {
-                    @Override
-                    public Pair<Place, List<PlacePhotoMetadata>> call(Place place, List<PlacePhotoMetadata> photos) {
-                        return new Pair<>(place, photos);
-                    }
-                });
     }
 
 }

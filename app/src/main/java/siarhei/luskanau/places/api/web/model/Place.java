@@ -16,8 +16,6 @@ public class Place {
     private Geometry geometry;
     @SerializedName("icon")
     private Object icon;
-    @SerializedName("id")
-    private String id;
     @SerializedName("international_phone_number")
     private String internationalPhoneNumber;
     @SerializedName("name")
@@ -87,14 +85,6 @@ public class Place {
 
     public void setIcon(Object icon) {
         this.icon = icon;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getInternationalPhoneNumber() {

@@ -38,8 +38,7 @@ public class PlacePhotoIdDataFetcher implements DataFetcher<InputStream> {
 
     @Override
     public String getId() {
-        return String.format(Locale.getDefault(), "%s_%d",
-                model.getPlace().getId(), model.getPosition());
+        return String.format(Locale.getDefault(), "%s_%d", model.getPlaceId(), model.getPosition());
     }
 
     @Override

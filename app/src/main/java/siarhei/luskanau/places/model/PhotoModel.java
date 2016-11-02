@@ -8,6 +8,14 @@ public class PhotoModel {
 
     private PlacePhotoId placePhotoId;
 
+    public PhotoModel(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public PhotoModel(PlacePhotoId placePhotoId) {
+        this.placePhotoId = placePhotoId;
+    }
+
     public String getPhotoUrl() {
         return photoUrl;
     }
