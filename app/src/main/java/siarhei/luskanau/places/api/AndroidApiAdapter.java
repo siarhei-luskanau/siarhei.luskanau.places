@@ -73,7 +73,8 @@ public final class AndroidApiAdapter {
                 .zipWith(googlePlayServicesApi.getPlacePhotos(placeModel.getId()),
                         new Func2<PlaceModel, List<PlacePhotoMetadata>, PlaceModel>() {
                             @Override
-                            public PlaceModel call(PlaceModel placeModel, List<PlacePhotoMetadata> placePhotoMetadatas) {
+                            public PlaceModel call(PlaceModel placeModel,
+                                                   List<PlacePhotoMetadata> placePhotoMetadatas) {
                                 if (placePhotoMetadatas != null) {
                                     List<PhotoModel> photos = new ArrayList<>();
                                     for (int i = 0; i < placePhotoMetadatas.size(); i++) {
