@@ -37,6 +37,7 @@ public class GooglePlayServicesApi {
     public Observable<Location> getLastLocation() {
         return Observable.defer(new Func0<Observable<Location>>() {
             @Override
+            @SuppressWarnings("MissingPermission")
             public Observable<Location> call() {
                 Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                 return Observable.just(location);
@@ -47,6 +48,7 @@ public class GooglePlayServicesApi {
     public Observable<List<Place>> getCurrentPlace() {
         return Observable.defer(new Func0<Observable<List<Place>>>() {
             @Override
+            @SuppressWarnings("MissingPermission")
             public Observable<List<Place>> call() {
                 Log.d(TAG, "Places.PlaceDetectionApi.getCurrentPlace");
                 PendingResult<PlaceLikelihoodBuffer> pendingResult

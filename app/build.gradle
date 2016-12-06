@@ -32,6 +32,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    compile 'com.google.dagger:dagger:2.8'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
+
     compile "com.android.support:design:${project.SUPPORT_LIBRARY_VERSION}"
     compile "com.android.support:cardview-v7:${project.SUPPORT_LIBRARY_VERSION}"
 
