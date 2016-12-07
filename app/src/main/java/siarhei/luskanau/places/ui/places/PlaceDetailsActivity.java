@@ -14,7 +14,7 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
 
     private static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
 
-    public static Intent buildIntent(Context context, String placeId) {
+    public static Intent getCallingIntent(Context context, String placeId) {
         return new Intent(context, PlaceDetailsActivity.class)
                 .putExtra(EXTRA_PLACE_ID, placeId);
     }

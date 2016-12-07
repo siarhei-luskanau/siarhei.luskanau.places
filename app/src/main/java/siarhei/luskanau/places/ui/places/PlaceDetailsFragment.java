@@ -25,7 +25,6 @@ import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.model.PhotoModel;
 import siarhei.luskanau.places.model.PlaceModel;
 import siarhei.luskanau.places.rx.SimpleObserver;
-import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlaceDetailsFragment extends BaseRecyclerFragment {
@@ -54,23 +53,23 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
                     try {
                         CharSequence phoneNumber = ((PlaceDetailsAdapter.PlacePhoneAdapterItem) item).getPhoneNumber();
                         Intent intent = new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:" + phoneNumber));
-                        AppNavigationUtil.startActivityWithAnimations(getActivity(), intent);
+                        navigator.startActivityWithAnimations(getActivity(), intent);
                     } catch (Exception e) {
                         Log.e(TAG, e.getMessage(), e);
                     }
                 } else if (item instanceof PlaceDetailsAdapter.PlaceWebsiteAdapterItem) {
                     String uri = ((PlaceDetailsAdapter.PlaceWebsiteAdapterItem) item).getUri();
-                    AppNavigationUtil.startActivityWithAnimations(getActivity(),
-                            AppNavigationUtil.getWebIntent(context, uri, place.getName()));
+                    navigator.startActivityWithAnimations(getActivity(),
+                            navigator.getWebIntent(context, uri, place.getName()));
                 } else if (item instanceof PlaceDetailsAdapter.PlaceMapAdapterItem) {
                     PlaceModel place = ((PlaceDetailsAdapter.PlaceMapAdapterItem) item).getPlace();
                     String url = AppUtils.buildMapUrl(place.getLatitude(), place.getLongitude());
-                    AppNavigationUtil.startActivityWithAnimations(getActivity(),
-                            AppNavigationUtil.getWebIntent(context, url, place.getName()));
+                    navigator.startActivityWithAnimations(getActivity(),
+                            navigator.getWebIntent(context, url, place.getName()));
                 } else if (item instanceof PlaceDetailsAdapter.PlacePhotoAdapterItem) {
                     int photoPosition = ((PlaceDetailsAdapter.PlacePhotoAdapterItem) item).getPosition();
-                    AppNavigationUtil.startActivityWithAnimations(getActivity(),
-                            AppNavigationUtil.getPlacePhotosIntent(context, place.getId(), photoPosition));
+                    navigator.startActivityWithAnimations(getActivity(),
+                            navigator.getPlacePhotosIntent(context, place.getId(), photoPosition));
                 }
             }
         });

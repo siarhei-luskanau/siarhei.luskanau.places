@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import siarhei.luskanau.places.AppConstants;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.ui.places.PlacesActivity;
-import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.RoundedBitmapImageViewTarget;
 
 public abstract class DrawerActivity extends BaseActivity
@@ -72,20 +71,20 @@ public abstract class DrawerActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_map:
                 if (!(this instanceof PlacesActivity)) {
-                    intent = AppNavigationUtil.getPlacesIntent(this);
+                    intent = navigator.getPlacesIntent(this);
                 }
                 break;
 
             case R.id.nav_attachment:
-                intent = AppNavigationUtil.getWebIntent(this, AppConstants.TEST_TASK_URL, item.getTitle());
+                intent = navigator.getWebIntent(this, AppConstants.TEST_TASK_URL, item.getTitle());
                 break;
 
             case R.id.nav_github:
-                intent = AppNavigationUtil.getWebIntent(this, AppConstants.GITHUB_URL, item.getTitle());
+                intent = navigator.getWebIntent(this, AppConstants.GITHUB_URL, item.getTitle());
                 break;
 
             case R.id.nav_linkedin:
-                intent = AppNavigationUtil.getWebIntent(this, AppConstants.LINKEDIN_URL, item.getTitle());
+                intent = navigator.getWebIntent(this, AppConstants.LINKEDIN_URL, item.getTitle());
                 break;
 
             default:
@@ -96,7 +95,7 @@ public abstract class DrawerActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
 
         if (intent != null) {
-            AppNavigationUtil.startActivityWithAnimations(this, intent);
+            navigator.startActivityWithAnimations(this, intent);
         }
 
         return false;

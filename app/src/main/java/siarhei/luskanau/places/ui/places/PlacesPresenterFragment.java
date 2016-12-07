@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.abstracts.GoogleApiInterface;
-import siarhei.luskanau.places.utils.AppNavigationUtil;
 import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlacesPresenterFragment extends BaseFragment implements PlacesPresenterInterface {
@@ -42,8 +41,8 @@ public class PlacesPresenterFragment extends BaseFragment implements PlacesPrese
                 placeListFragment.onPlaceHighlighted(placeId);
             }
         } else {
-            AppNavigationUtil.startActivityWithAnimations(getActivity(),
-                    AppNavigationUtil.getPlaceDetailsIntent(getContext(), placeId));
+            navigator.startActivityWithAnimations(getActivity(),
+                    navigator.getPlaceDetailsIntent(getContext(), placeId));
         }
     }
 

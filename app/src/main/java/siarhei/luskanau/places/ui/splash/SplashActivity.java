@@ -14,7 +14,6 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseActivity;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.ui.web.WebPresenterInterface;
-import siarhei.luskanau.places.utils.AppNavigationUtil;
 
 public class SplashActivity extends BaseActivity implements WebPresenterInterface {
 
@@ -51,9 +50,9 @@ public class SplashActivity extends BaseActivity implements WebPresenterInterfac
     }
 
     private void next() {
-        Intent intent = AppNavigationUtil.getPlacesIntent(this);
+        Intent intent = navigator.getPlacesIntent(this);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        AppNavigationUtil.startActivityWithAnimations(this, intent);
+        navigator.startActivityWithAnimations(this, intent);
         finish();
     }
 

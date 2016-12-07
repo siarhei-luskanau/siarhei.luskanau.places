@@ -1,5 +1,7 @@
 package siarhei.luskanau.places.ui.places;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -9,6 +11,10 @@ import siarhei.luskanau.places.abstracts.GoogleApiClientActivity;
 
 public class PlacesActivity extends GoogleApiClientActivity
         implements PlaceDetailsPresenterInterface {
+
+    public static Intent getCallingIntent(Context context) {
+        return new Intent(context, PlacesActivity.class);
+    }
 
     @Override
     public int getContentResId() {
