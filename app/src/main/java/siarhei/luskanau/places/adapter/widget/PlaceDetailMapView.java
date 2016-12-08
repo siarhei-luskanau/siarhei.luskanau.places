@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.databinding.ViewPlaceDetailMapBinding;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Place;
 
 public class PlaceDetailMapView extends LinearLayout {
 
@@ -31,9 +31,8 @@ public class PlaceDetailMapView extends LinearLayout {
                 R.layout.view_place_detail_map, this, true);
     }
 
-    public void setPlace(PlaceModel place) {
+    public void setPlace(Place place) {
         //binding.placeLatLng.setText(String.valueOf(latLng));
         binding.placeLatLng.setText(R.string.place_detail_show_on_map);
     }
-
 }

@@ -14,17 +14,17 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.databinding.ListItemPlaceBinding;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Place;
 
-public class PlacesAdapter extends BaseRecyclerArrayAdapter<PlaceModel, BindableViewHolder> {
+public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewHolder> {
 
     private String selectedPlaceId;
     private Location location;
 
-    private Func2<PlaceModel, PlaceModel, Integer> placeDistanceComparator
-            = new Func2<PlaceModel, PlaceModel, Integer>() {
+    private Func2<Place, Place, Integer> placeDistanceComparator
+            = new Func2<Place, Place, Integer>() {
         @Override
-        public Integer call(PlaceModel place1, PlaceModel place2) {
+        public Integer call(Place place1, Place place2) {
             if (location != null) {
                 Location location1 = new Location("");
                 location1.setLatitude(place1.getLatitude());
@@ -42,7 +42,7 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<PlaceModel, Bindable
         }
     };
 
-    public void setData(Location location, Collection<PlaceModel> data) {
+    public void setData(Location location, Collection<Place> data) {
         this.location = location;
         if (location != null && data != null) {
             super.setData(Observable.from(data)
@@ -63,7 +63,7 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<PlaceModel, Bindable
     @Override
     public void onBindViewHolder(BindableViewHolder holder, int position) {
         ListItemPlaceBinding binding = (ListItemPlaceBinding) holder.getBindings();
-        PlaceModel place = getItem(position);
+        Place place = getItem(position);
         binding.item.setPlace(place, location, place.getId().equals(selectedPlaceId));
     }
 
@@ -71,5 +71,4 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<PlaceModel, Bindable
         this.selectedPlaceId = selectedPlaceId;
         notifyDataSetChanged();
     }
-
 }

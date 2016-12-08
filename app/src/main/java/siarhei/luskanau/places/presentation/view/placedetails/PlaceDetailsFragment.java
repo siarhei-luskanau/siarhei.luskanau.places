@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.places;
+package siarhei.luskanau.places.presentation.view.placedetails;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,27 +9,22 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
 import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
-import siarhei.luskanau.places.abstracts.GoogleApiInterface;
 import siarhei.luskanau.places.adapter.PlaceDetailsAdapter;
-import siarhei.luskanau.places.api.GoogleApi;
-import siarhei.luskanau.places.model.PhotoModel;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Photo;
+import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
 import siarhei.luskanau.places.presentation.presenter.PlaceDetailsPresenter;
-import siarhei.luskanau.places.presentation.view.PlaceDetailsView;
-import siarhei.luskanau.places.rx.SimpleObserver;
+import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceDetailsView {
@@ -39,9 +34,8 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
     @Inject
     protected PlaceDetailsPresenter placeDetailsPresenter;
 
-    private Subscription subscription;
     private PlaceDetailsAdapter adapter;
-    private PlaceModel place;
+    private Place place;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -49,13 +43,13 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
         getSwipeRefreshLayout().setEnabled(false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.getComponent(PlaceComponent.class).inject(this);
-        this.placeDetailsPresenter.setView(this);
-        this.placeDetailsPresenter.resume();
-   }
+    private PlaceDetailsPresenter getPlaceDetailsPresenter() {
+        if (placeDetailsPresenter == null) {
+            this.getComponent(PlaceComponent.class).inject(this);
+            this.placeDetailsPresenter.setView(this);
+        }
+        return placeDetailsPresenter;
+    }
 
     @Override
     protected void setupRecyclerView(RecyclerView recyclerView) {
@@ -79,7 +73,7 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
                     navigator.startActivityWithAnimations(getActivity(),
                             navigator.getWebIntent(context, uri, place.getName()));
                 } else if (item instanceof PlaceDetailsAdapter.PlaceMapAdapterItem) {
-                    PlaceModel place = ((PlaceDetailsAdapter.PlaceMapAdapterItem) item).getPlace();
+                    Place place = ((PlaceDetailsAdapter.PlaceMapAdapterItem) item).getPlace();
                     String url = AppUtils.buildMapUrl(place.getLatitude(), place.getLongitude());
                     navigator.startActivityWithAnimations(getActivity(),
                             navigator.getWebIntent(context, url, place.getName()));
@@ -93,49 +87,10 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        releaseSubscription(subscription);
-        subscription = null;
-    }
-
-    private GoogleApi getGoogleApi() {
-        return AppUtils.getParentInterface(GoogleApiInterface.class, getActivity()).getGoogleApi();
-    }
-
     public void onPlaceIdUpdated(String placeId) {
+        getPlaceDetailsPresenter().setPlaceId(placeId);
         updateAdapter();
-
         setRefreshing(true);
-        releaseSubscription(subscription);
-        subscription = getGoogleApi().getPlace(placeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<PlaceModel>() {
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onNext(PlaceModel data) {
-                        setRefreshing(false);
-                        onPlaceUpdated(data);
-                    }
-                });
-    }
-
-    public void onPlaceUpdated(PlaceModel place) {
-        this.place = place;
-        if (place != null) {
-            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
-                    .onToolbarTitle(!TextUtils.isEmpty(place.getName()) ? place.getName() : place.getAddress());
-        } else {
-            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity()).onToolbarTitle(null);
-        }
-        updateAdapter();
     }
 
     private void updateAdapter() {
@@ -151,7 +106,7 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
             adapterItems.add(new PlaceDetailsAdapter.PlaceMapAdapterItem(place));
             if (place.getPhotos() != null) {
                 for (int i = 0; i < place.getPhotos().size(); i++) {
-                    PhotoModel photo = place.getPhotos().get(i);
+                    Photo photo = place.getPhotos().get(i);
                     adapterItems.add(new PlaceDetailsAdapter.PlacePhotoAdapterItem(photo, i));
                 }
             }
@@ -160,7 +115,44 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
     }
 
     @Override
-    public void renderPlace(PlaceModel placeModel) {
-        onPlaceUpdated(place);
+    public void onResume() {
+        super.onResume();
+        getPlaceDetailsPresenter().resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPlaceDetailsPresenter().pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getPlaceDetailsPresenter().destroy();
+    }
+
+    @Override
+    public Context context() {
+        return getContext();
+    }
+
+    @Override
+    public void showError(String message) {
+        setRefreshing(false);
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void renderPlace(Place place) {
+        setRefreshing(false);
+        this.place = place;
+        if (place != null) {
+            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
+                    .onToolbarTitle(!TextUtils.isEmpty(place.getName()) ? place.getName() : place.getAddress());
+        } else {
+            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity()).onToolbarTitle(null);
+        }
+        updateAdapter();
     }
 }

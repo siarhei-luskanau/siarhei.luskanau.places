@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.databinding.ViewPlaceBinding;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Place;
 
 public class PlaceView extends LinearLayout {
 
@@ -39,7 +39,7 @@ public class PlaceView extends LinearLayout {
         grayColor = ContextCompat.getColor(getContext(), R.color.app_gray);
     }
 
-    public void setPlace(PlaceModel place, Location location, boolean isSelected) {
+    public void setPlace(Place place, Location location, boolean isSelected) {
         binding.placeName.setText(place.getName());
         binding.placeAddress.setText(place.getAddress());
         binding.placePhone.setVisibility(TextUtils.isEmpty(place.getPhoneNumber()) ? GONE : VISIBLE);
@@ -57,5 +57,4 @@ public class PlaceView extends LinearLayout {
             binding.placeDistance.setText(null);
         }
     }
-
 }

@@ -1,5 +1,7 @@
 package siarhei.luskanau.places.domain;
 
+import java.util.List;
+
 public class Place {
 
     private final String id;
@@ -9,6 +11,7 @@ public class Place {
     private String websiteUri;
     private double latitude;
     private double longitude;
+    private List<Photo> photos;
 
     public Place(String id) {
         this.id = id;
@@ -66,6 +69,14 @@ public class Place {
         this.longitude = longitude;
     }
 
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder(80)
@@ -74,5 +85,4 @@ public class Place {
                 .append(" address=").append(this.getAddress())
                 .toString();
     }
-
 }

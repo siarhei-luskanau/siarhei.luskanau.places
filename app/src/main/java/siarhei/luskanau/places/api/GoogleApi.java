@@ -9,11 +9,9 @@ import java.util.List;
 import rx.Observable;
 import siarhei.luskanau.places.api.android.GooglePlayServicesApi;
 import siarhei.luskanau.places.api.web.MapsGoogleApi;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Place;
 
 public class GoogleApi {
-
-    private static final boolean IS_USE_WEB = true;
 
     private GooglePlayServicesApi googlePlayServicesApi;
     private MapsGoogleApi mapsGoogleApi;
@@ -27,20 +25,12 @@ public class GoogleApi {
         return googlePlayServicesApi.getLastLocation();
     }
 
-    public Observable<List<PlaceModel>> getPlaces(Location location) {
-        if (IS_USE_WEB) {
-            return WebApiAdapter.getPlaces(mapsGoogleApi, location);
-        } else {
-            return AndroidApiAdapter.getCurrentPlace(googlePlayServicesApi);
-        }
+    public Observable<List<Place>> getPlaces(Location location) {
+        return WebApiAdapter.getPlaces(mapsGoogleApi, location);
+
     }
 
-    public Observable<PlaceModel> getPlace(String placeId) {
-        if (IS_USE_WEB) {
-            return WebApiAdapter.getPlace(mapsGoogleApi, placeId);
-        } else {
-            return AndroidApiAdapter.getPlace(googlePlayServicesApi, placeId);
-        }
+    public Observable<Place> getPlace(String placeId) {
+        return WebApiAdapter.getPlace(mapsGoogleApi, placeId);
     }
-
 }

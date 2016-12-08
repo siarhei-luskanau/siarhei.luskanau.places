@@ -33,13 +33,7 @@ import siarhei.luskanau.places.presentation.internal.di.PerActivity;
 @Module
 public class PlaceModule {
 
-    private String placeId;
-
     public PlaceModule() {
-    }
-
-    public PlaceModule(String placeId) {
-        this.placeId = placeId;
     }
 
     @Provides
@@ -55,6 +49,6 @@ public class PlaceModule {
     UseCase provideGetPlaceDetailsUseCase(
             PlaceRepository placeRepository, ThreadExecutor threadExecutor,
             PostExecutionThread postExecutionThread) {
-        return new GetPlaceDetails(placeId, placeRepository, threadExecutor, postExecutionThread);
+        return new GetPlaceDetails(placeRepository, threadExecutor, postExecutionThread);
     }
 }

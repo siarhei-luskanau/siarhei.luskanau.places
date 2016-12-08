@@ -28,14 +28,13 @@ import siarhei.luskanau.places.domain.repository.PlaceRepository;
  */
 public class GetPlaceDetails extends UseCase {
 
-    private final String placeId;
     private final PlaceRepository placeRepository;
+    private String placeId;
 
     @Inject
-    public GetPlaceDetails(String placeId, PlaceRepository placeRepository,
+    public GetPlaceDetails(PlaceRepository placeRepository,
                            ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        this.placeId = placeId;
         this.placeRepository = placeRepository;
     }
 
@@ -44,4 +43,7 @@ public class GetPlaceDetails extends UseCase {
         return this.placeRepository.place(this.placeId);
     }
 
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
 }

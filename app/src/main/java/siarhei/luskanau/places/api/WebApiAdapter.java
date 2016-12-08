@@ -8,22 +8,21 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 import siarhei.luskanau.places.api.web.MapsGoogleApi;
-import siarhei.luskanau.places.data.entity.Photo;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
-import siarhei.luskanau.places.model.PhotoModel;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Photo;
+import siarhei.luskanau.places.domain.Place;
 
 public final class WebApiAdapter {
 
     private WebApiAdapter() {
     }
 
-    public static Observable<List<PlaceModel>> getPlaces(final MapsGoogleApi mapsGoogleApi, Location location) {
+    public static Observable<List<Place>> getPlaces(final MapsGoogleApi mapsGoogleApi, Location location) {
         return mapsGoogleApi.getPlaces(location)
-                .flatMap(new Func1<List<PlaceEntity>, Observable<PlaceModel>>() {
+                .flatMap(new Func1<List<PlaceEntity>, Observable<Place>>() {
                     @Override
-                    public Observable<PlaceModel> call(List<PlaceEntity> places) {
-                        List<Observable<PlaceModel>> list = new ArrayList<>();
+                    public Observable<Place> call(List<PlaceEntity> places) {
+                        List<Observable<Place>> list = new ArrayList<>();
                         for (PlaceEntity place : places) {
                             list.add(getPlace(mapsGoogleApi, place.getPlaceId()));
                         }
@@ -33,34 +32,33 @@ public final class WebApiAdapter {
                 .toList();
     }
 
-    public static Observable<PlaceModel> getPlace(final MapsGoogleApi mapsGoogleApi, String placeId) {
+    public static Observable<Place> getPlace(final MapsGoogleApi mapsGoogleApi, String placeId) {
         return mapsGoogleApi.getPlaceDetails(placeId)
-                .map(new Func1<PlaceEntity, PlaceModel>() {
+                .map(new Func1<PlaceEntity, Place>() {
                     @Override
-                    public PlaceModel call(PlaceEntity place) {
-                        return toPlaceModel(mapsGoogleApi, place);
+                    public Place call(PlaceEntity place) {
+                        return toPlace(mapsGoogleApi, place);
                     }
                 });
     }
 
-    private static PlaceModel toPlaceModel(MapsGoogleApi mapsGoogleApi, PlaceEntity place) {
-        PlaceModel placeModel = new PlaceModel(place.getPlaceId());
-        placeModel.setName(place.getName());
-        placeModel.setAddress(place.getVicinity());
-        placeModel.setPhoneNumber(place.getInternationalPhoneNumber());
-        placeModel.setWebsiteUri(place.getWebsite());
-        if (place.getGeometry() != null && place.getGeometry().getLocation() != null) {
-            placeModel.setLatitude(place.getGeometry().getLocation().getLat());
-            placeModel.setLongitude(place.getGeometry().getLocation().getLng());
+    private static Place toPlace(MapsGoogleApi mapsGoogleApi, PlaceEntity placeEntity) {
+        Place placeModel = new Place(placeEntity.getPlaceId());
+        placeModel.setName(placeEntity.getName());
+        placeModel.setAddress(placeEntity.getVicinity());
+        placeModel.setPhoneNumber(placeEntity.getInternationalPhoneNumber());
+        placeModel.setWebsiteUri(placeEntity.getWebsite());
+        if (placeEntity.getGeometry() != null && placeEntity.getGeometry().getLocation() != null) {
+            placeModel.setLatitude(placeEntity.getGeometry().getLocation().getLat());
+            placeModel.setLongitude(placeEntity.getGeometry().getLocation().getLng());
         }
-        if (place.getPhotos() != null) {
-            List<PhotoModel> photos = new ArrayList<>();
-            for (Photo photo : place.getPhotos()) {
-                photos.add(new PhotoModel(mapsGoogleApi.getPlacePhotoUrl(photo)));
+        if (placeEntity.getPhotos() != null) {
+            List<Photo> photos = new ArrayList<>();
+            for (siarhei.luskanau.places.data.entity.Photo photo : placeEntity.getPhotos()) {
+                photos.add(new Photo(mapsGoogleApi.getPlacePhotoUrl(photo)));
             }
             placeModel.setPhotos(photos);
         }
         return placeModel;
     }
-
 }

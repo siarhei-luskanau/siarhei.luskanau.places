@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.databinding.ViewPlaceDetailHeaderBinding;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Place;
 
 public class PlaceDetailHeaderView extends LinearLayout {
 
@@ -31,9 +31,8 @@ public class PlaceDetailHeaderView extends LinearLayout {
                 R.layout.view_place_detail_header, this, true);
     }
 
-    public void setPlace(PlaceModel place) {
+    public void setPlace(Place place) {
         binding.placeName.setText(place.getName());
         binding.placeAddress.setText(place.getAddress());
     }
-
 }

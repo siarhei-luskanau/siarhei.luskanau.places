@@ -21,12 +21,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import siarhei.luskanau.places.domain.Place;
+import siarhei.luskanau.places.domain.exception.DefaultErrorBundle;
+import siarhei.luskanau.places.domain.exception.ErrorBundle;
 import siarhei.luskanau.places.domain.interactor.DefaultSubscriber;
+import siarhei.luskanau.places.domain.interactor.GetPlaceDetails;
 import siarhei.luskanau.places.domain.interactor.UseCase;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
 import siarhei.luskanau.places.presentation.internal.di.PerActivity;
-import siarhei.luskanau.places.presentation.mapper.PlaceModelDataMapper;
-import siarhei.luskanau.places.presentation.view.PlaceDetailsView;
+import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsView;
 
 /**
  * {@link Presenter} that controls communication between views and models of the presentation
@@ -37,14 +39,11 @@ public class PlaceDetailsPresenter implements Presenter {
 
     private PlaceDetailsView viewDetailsView;
 
-    private final UseCase getPlaceDetailsUseCase;
-    private final PlaceModelDataMapper placeModelDataMapper;
+    private final GetPlaceDetails getPlaceDetailsUseCase;
 
     @Inject
-    public PlaceDetailsPresenter(@Named("placeDetails") UseCase getPlaceDetailsUseCase,
-                                 PlaceModelDataMapper placeModelDataMapper) {
-        this.getPlaceDetailsUseCase = getPlaceDetailsUseCase;
-        this.placeModelDataMapper = placeModelDataMapper;
+    public PlaceDetailsPresenter(@Named("placeDetails") UseCase getPlaceDetailsUseCase) {
+        this.getPlaceDetailsUseCase = (GetPlaceDetails) getPlaceDetailsUseCase;
     }
 
     public void setView(@NonNull PlaceDetailsView view) {
@@ -53,7 +52,6 @@ public class PlaceDetailsPresenter implements Presenter {
 
     @Override
     public void resume() {
-        getPlaceDetailsUseCase.execute(new PlaceDetailsSubscriber());
     }
 
     @Override
@@ -66,31 +64,27 @@ public class PlaceDetailsPresenter implements Presenter {
         this.viewDetailsView = null;
     }
 
-    /**
-     * Initializes the presenter by start retrieving place details.
-     */
-    public void initialize() {
-        this.loadPlaceDetails();
-    }
-
-    /**
-     * Loads place details.
-     */
-    private void loadPlaceDetails() {
-        this.getPlaceDetails();
-    }
-
-    private void showPlaceDetailsInView(Place place) {
-        final PlaceModel placeModel = this.placeModelDataMapper.transform(place);
-        this.viewDetailsView.renderPlace(placeModel);
-    }
-
-    private void getPlaceDetails() {
+    public void setPlaceId(String placeId) {
+        this.getPlaceDetailsUseCase.setPlaceId(placeId);
         this.getPlaceDetailsUseCase.execute(new PlaceDetailsSubscriber());
     }
 
-    //  @RxLogSubscriber
+    private void showErrorMessage(ErrorBundle errorBundle) {
+        String errorMessage = ErrorMessageFactory.create(this.viewDetailsView.context(), errorBundle.getException());
+        this.viewDetailsView.showError(errorMessage);
+    }
+
+    private void showPlaceDetailsInView(Place place) {
+        this.viewDetailsView.renderPlace(place);
+    }
+
     private final class PlaceDetailsSubscriber extends DefaultSubscriber<Place> {
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            PlaceDetailsPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
+        }
+
         @Override
         public void onNext(Place place) {
             PlaceDetailsPresenter.this.showPlaceDetailsInView(place);

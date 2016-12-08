@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.List;
@@ -37,7 +36,7 @@ import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.abstracts.GoogleApiInterface;
 import siarhei.luskanau.places.adapter.PlacesAdapter;
 import siarhei.luskanau.places.api.GoogleApi;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppUtils;
 
@@ -115,7 +114,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                Place place = PlacePicker.getPlace(getContext(), data);
+                com.google.android.gms.location.places.Place place = PlacePicker.getPlace(getContext(), data);
                 Snackbar.make(getView(), place.getName() + "\n" + place.getAddress(), Snackbar.LENGTH_LONG).show();
                 onPlaceSelected(place.getId());
             }
@@ -161,24 +160,24 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                                 });
                     }
                 })
-                .flatMap(new Func1<Location, Observable<Pair<Location, List<PlaceModel>>>>() {
+                .flatMap(new Func1<Location, Observable<Pair<Location, List<Place>>>>() {
                     @Override
-                    public Observable<Pair<Location, List<PlaceModel>>> call(Location location) {
+                    public Observable<Pair<Location, List<Place>>> call(Location location) {
                         if (location == null) {
                             return Observable.empty();
                         }
                         return Observable.just(location)
                                 .zipWith(getGoogleApi().getPlaces(location)
-                                        .onErrorReturn(new Func1<Throwable, List<PlaceModel>>() {
+                                        .onErrorReturn(new Func1<Throwable, List<Place>>() {
                                             @Override
-                                            public List<PlaceModel> call(Throwable e) {
+                                            public List<Place> call(Throwable e) {
                                                 Log.e(TAG, e.getMessage(), e);
                                                 return null;
                                             }
-                                        }), new Func2<Location, List<PlaceModel>, Pair<Location, List<PlaceModel>>>() {
+                                        }), new Func2<Location, List<Place>, Pair<Location, List<Place>>>() {
                                     @Override
-                                    public Pair<Location, List<PlaceModel>> call(Location location,
-                                                                                 List<PlaceModel> places) {
+                                    public Pair<Location, List<Place>> call(Location location,
+                                                                            List<Place> places) {
                                         return new Pair<>(location, places);
                                     }
                                 });
@@ -186,7 +185,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Pair<Location, List<PlaceModel>>>() {
+                .subscribe(new SimpleObserver<Pair<Location, List<Place>>>() {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
@@ -194,7 +193,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                     }
 
                     @Override
-                    public void onNext(Pair<Location, List<PlaceModel>> pair) {
+                    public void onNext(Pair<Location, List<Place>> pair) {
                         setRefreshing(false);
                         lastLocation = pair.first;
                         Log.d(TAG, String.valueOf(lastLocation));
@@ -203,7 +202,7 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                 });
     }
 
-    private void onDataLoaded(List<PlaceModel> places) {
+    private void onDataLoaded(List<Place> places) {
         adapter.setData(lastLocation, places);
     }
 
@@ -217,5 +216,4 @@ public class PlaceListFragment extends BaseRecyclerFragment {
     public void onPlaceHighlighted(String placeId) {
         adapter.setSelectedPlaceId(placeId);
     }
-
 }

@@ -13,4 +13,9 @@
     <string name="place_detail_show_on_map">Show on map</string>
     <string name="place_distance">%d m</string>
 
+    //Exception messages
+    <string name="exception_message_generic">There was an application error</string>
+    <string name="exception_message_no_connection">There is no internet connection</string>
+    <string name="exception_message_place_not_found">Cannot retrieve place data. Check your internet connection</string>
+
 </resources>

@@ -6,12 +6,11 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.databinding.ViewPlaceDetailPhotoBinding;
-import siarhei.luskanau.places.model.PhotoModel;
+import siarhei.luskanau.places.domain.Photo;
 
 public class PlaceDetailPhotoView extends LinearLayout {
 
@@ -34,13 +33,9 @@ public class PlaceDetailPhotoView extends LinearLayout {
                 R.layout.view_place_detail_photo, this, true);
     }
 
-    public void setPhotoModel(PhotoModel photoModel) {
-        if (photoModel != null) {
-            DrawableTypeRequest drawableTypeRequest = photoModel.getPlacePhotoId() != null
-                    ? Glide.with(getContext()).load(photoModel.getPlacePhotoId())
-                    : Glide.with(getContext()).load(photoModel.getPhotoUrl());
-            drawableTypeRequest.fitCenter().placeholder(null).into(binding.placePhoto);
+    public void setPhotoModel(Photo photo) {
+        if (photo != null) {
+            Glide.with(getContext()).load(photo.getPhotoUrl()).fitCenter().placeholder(null).into(binding.placePhoto);
         }
     }
-
 }

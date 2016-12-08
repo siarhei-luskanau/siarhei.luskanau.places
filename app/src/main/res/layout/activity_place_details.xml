@@ -2,7 +2,7 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/placeDetailsFragment"
-    android:name="siarhei.luskanau.places.ui.places.PlaceDetailsFragment"
+    android:name="siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.places.PlaceDetailsActivity" />
+    tools:context=".presentation.view.placedetails.PlaceDetailsActivity" />

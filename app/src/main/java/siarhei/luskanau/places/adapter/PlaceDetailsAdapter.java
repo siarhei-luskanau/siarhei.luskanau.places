@@ -13,8 +13,8 @@ import siarhei.luskanau.places.databinding.ListItemPlaceDetailsMapBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhoneBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsPhotoBinding;
 import siarhei.luskanau.places.databinding.ListItemPlaceDetailsWebsiteBinding;
-import siarhei.luskanau.places.model.PhotoModel;
-import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.domain.Photo;
+import siarhei.luskanau.places.domain.Place;
 
 public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, BindableViewHolder> {
 
@@ -112,9 +112,9 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
     }
 
     public static class PlaceHeaderAdapterItem {
-        private PlaceModel place;
+        private Place place;
 
-        public PlaceHeaderAdapterItem(PlaceModel place) {
+        public PlaceHeaderAdapterItem(Place place) {
             this.place = place;
         }
     }
@@ -144,22 +144,22 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
     }
 
     public static class PlaceMapAdapterItem {
-        private PlaceModel place;
+        private Place place;
 
-        public PlaceMapAdapterItem(PlaceModel place) {
+        public PlaceMapAdapterItem(Place place) {
             this.place = place;
         }
 
-        public PlaceModel getPlace() {
+        public Place getPlace() {
             return place;
         }
     }
 
     public static class PlacePhotoAdapterItem {
-        private PhotoModel photo;
+        private Photo photo;
         private int position;
 
-        public PlacePhotoAdapterItem(PhotoModel photo, int position) {
+        public PlacePhotoAdapterItem(Photo photo, int position) {
             this.photo = photo;
             this.position = position;
         }
@@ -168,5 +168,4 @@ public class PlaceDetailsAdapter extends BaseRecyclerArrayAdapter<Object, Bindab
             return position;
         }
     }
-
 }

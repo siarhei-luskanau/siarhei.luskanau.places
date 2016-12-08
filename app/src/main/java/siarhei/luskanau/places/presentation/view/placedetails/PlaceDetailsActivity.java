@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.places;
+package siarhei.luskanau.places.presentation.view.placedetails;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import siarhei.luskanau.places.presentation.internal.di.HasComponent;
 import siarhei.luskanau.places.presentation.internal.di.components.DaggerPlaceComponent;
 import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
 import siarhei.luskanau.places.presentation.internal.di.modules.PlaceModule;
+import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 
 public class PlaceDetailsActivity extends GoogleApiClientActivity
         implements PlaceDetailsPresenterInterface, HasComponent<PlaceComponent> {
@@ -40,7 +41,7 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeDetailsFragment);
         if (fragment instanceof PlaceDetailsFragment) {
             PlaceDetailsFragment placeDetailsFragment = (PlaceDetailsFragment) fragment;
-            placeDetailsFragment.onPlaceIdUpdated(getPlaceId());
+            placeDetailsFragment.onPlaceIdUpdated(getIntent().getStringExtra(EXTRA_PLACE_ID));
         }
     }
 
@@ -63,15 +64,11 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
         }
     }
 
-    private String getPlaceId() {
-        return getIntent().getStringExtra(EXTRA_PLACE_ID);
-    }
-
     private void initializeInjector() {
         this.placeComponent = DaggerPlaceComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(getActivityModule())
-                .placeModule(new PlaceModule(getPlaceId()))
+                .placeModule(new PlaceModule())
                 .build();
     }
 
@@ -79,5 +76,4 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
     public PlaceComponent getComponent() {
         return placeComponent;
     }
-
 }

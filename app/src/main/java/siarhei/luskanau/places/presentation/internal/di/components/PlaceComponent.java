@@ -19,7 +19,7 @@ import dagger.Component;
 import siarhei.luskanau.places.presentation.internal.di.PerActivity;
 import siarhei.luskanau.places.presentation.internal.di.modules.ActivityModule;
 import siarhei.luskanau.places.presentation.internal.di.modules.PlaceModule;
-import siarhei.luskanau.places.ui.places.PlaceDetailsFragment;
+import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsFragment;
 import siarhei.luskanau.places.ui.places.PlaceListFragment;
 
 /**
