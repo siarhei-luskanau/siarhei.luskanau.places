@@ -26,8 +26,8 @@ import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.BuildConfig;
 import siarhei.luskanau.places.data.entity.BaseResponse;
 import siarhei.luskanau.places.data.entity.Photo;
-import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.data.entity.PlaceDetailsResponse;
+import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.data.entity.PlacesResponse;
 
 public class MapsGoogleApi {
@@ -60,6 +60,14 @@ public class MapsGoogleApi {
                     PlaceDetailsResponse response = GSON.fromJson(json, PlaceDetailsResponse.class);
                     checkResponse(response);
                     return response.getResult();
+                })
+                .map(placeEntity -> {
+                    if (placeEntity.getPhotos() != null) {
+                        for (Photo photo : placeEntity.getPhotos()) {
+                            photo.setPhotoUrl(getPlacePhotoUrl(photo));
+                        }
+                    }
+                    return placeEntity;
                 });
     }
 

@@ -14,6 +14,7 @@ public class Photo {
     private int height;
     @SerializedName("html_attributions")
     private List<Object> htmlAttributions;
+    private String photoUrl;
 
     public String getPhotoReference() {
         return photoReference;
@@ -47,4 +48,11 @@ public class Photo {
         this.htmlAttributions = htmlAttributions;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 }

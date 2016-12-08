@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import siarhei.luskanau.places.data.entity.PlaceEntity;
+import siarhei.luskanau.places.domain.Photo;
 import siarhei.luskanau.places.domain.Place;
 
 /**
@@ -54,6 +55,13 @@ public class PlaceEntityDataMapper {
                 place.setLatitude(placeEntity.getGeometry().getLocation().getLat());
                 place.setLongitude(placeEntity.getGeometry().getLocation().getLng());
             }
+        }
+        if (placeEntity.getPhotos() != null) {
+            List<Photo> photos = new ArrayList<>();
+            for (siarhei.luskanau.places.data.entity.Photo photo : placeEntity.getPhotos()) {
+                photos.add(new Photo(photo.getPhotoUrl()));
+            }
+            place.setPhotos(photos);
         }
 
         return place;
