@@ -19,9 +19,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import siarhei.luskanau.places.api.web.model.Geometry;
-import siarhei.luskanau.places.api.web.model.Photo;
-
 /**
  * Place Entity used in the data layer.
  */

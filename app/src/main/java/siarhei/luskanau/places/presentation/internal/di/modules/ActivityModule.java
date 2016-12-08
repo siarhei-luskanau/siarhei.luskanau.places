@@ -13,28 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package siarhei.luskanau.places.domain.interactor;
+package siarhei.luskanau.places.presentation.internal.di.modules;
 
-import android.util.Log;
+import android.app.Activity;
+
+import dagger.Module;
+import dagger.Provides;
+import siarhei.luskanau.places.presentation.internal.di.PerActivity;
 
 /**
- * Default subscriber base class to be used whenever you want default error handling.
+ * A module to wrap the Activity state and expose it to the graph.
  */
-public class DefaultSubscriber<T> extends rx.Subscriber<T> {
-    @Override
-    public void onCompleted() {
-        // no-op by default.
+@Module
+public class ActivityModule {
+    private final Activity activity;
+
+    public ActivityModule(Activity activity) {
+        this.activity = activity;
     }
 
-    @Override
-    public void onError(Throwable e) {
-        Log.e(getClass().getSimpleName(), e.getMessage(), e);
-        // no-op by default.
+    /**
+     * Expose the activity to dependents in the graph.
+     */
+    @Provides
+    @PerActivity
+    Activity provideActivity() {
+        return this.activity;
     }
-
-    @Override
-    public void onNext(T t) {
-        // no-op by default.
-    }
-
 }

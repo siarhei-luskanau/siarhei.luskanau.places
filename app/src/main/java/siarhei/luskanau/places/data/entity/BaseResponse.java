@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.api.web.model;
+package siarhei.luskanau.places.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 

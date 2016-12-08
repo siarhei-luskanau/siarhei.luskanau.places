@@ -22,6 +22,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import siarhei.luskanau.places.AppApplication;
+import siarhei.luskanau.places.data.cache.PlaceCache;
+import siarhei.luskanau.places.data.cache.PlaceCacheImpl;
 import siarhei.luskanau.places.data.executor.JobExecutor;
 import siarhei.luskanau.places.data.repository.PlaceDataRepository;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
@@ -58,11 +60,11 @@ public class ApplicationModule {
         return uiThread;
     }
 
-//    @Provides
-//    @Singleton
-//    PlaceCache providePlaceCache(PlaceCacheImpl placeCache) {
-//        return placeCache;
-//    }
+    @Provides
+    @Singleton
+    PlaceCache providePlaceCache(PlaceCacheImpl placeCache) {
+        return placeCache;
+    }
 
     @Provides
     @Singleton

@@ -52,8 +52,7 @@ public final class AndroidApiAdapter {
     }
 
     private static PlaceModel toPlaceModel(Place place) {
-        PlaceModel placeModel = new PlaceModel();
-        placeModel.setId(place.getId());
+        PlaceModel placeModel = new PlaceModel(place.getId());
         placeModel.setName(place.getName());
         placeModel.setAddress(place.getAddress());
         placeModel.setPhoneNumber(place.getPhoneNumber());

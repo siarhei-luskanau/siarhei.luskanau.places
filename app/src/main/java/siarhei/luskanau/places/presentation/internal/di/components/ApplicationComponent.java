@@ -21,9 +21,9 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import siarhei.luskanau.places.abstracts.BaseActivity;
-import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
+import siarhei.luskanau.places.domain.repository.PlaceRepository;
 import siarhei.luskanau.places.presentation.internal.di.modules.ApplicationModule;
 
 /**
@@ -35,8 +35,6 @@ public interface ApplicationComponent {
 
     void inject(BaseActivity baseActivity);
 
-    void inject(BaseFragment baseFragment);
-
     //Exposed to sub-graphs.
     Context context();
 
@@ -44,6 +42,5 @@ public interface ApplicationComponent {
 
     PostExecutionThread postExecutionThread();
 
-    //PlaceRepository placeRepository();
-
+    PlaceRepository placeRepository();
 }

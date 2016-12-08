@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import siarhei.luskanau.places.AppApplication;
 import siarhei.luskanau.places.presentation.internal.di.components.ApplicationComponent;
+import siarhei.luskanau.places.presentation.internal.di.modules.ActivityModule;
 import siarhei.luskanau.places.presentation.navigation.Navigator;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -28,6 +29,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected ApplicationComponent getApplicationComponent() {
         return ((AppApplication) getApplication()).getApplicationComponent();
+    }
+
+    /**
+     * Get an Activity module for dependency injection.
+     *
+     * @return {@link ActivityModule}
+     */
+    protected ActivityModule getActivityModule() {
+        return new ActivityModule(this);
     }
 
     public void releaseSubscription(Subscription subscription) {

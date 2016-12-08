@@ -19,13 +19,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import java.net.MalformedURLException;
 import java.util.List;
 
 import rx.Observable;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
-import siarhei.luskanau.places.data.entity.mapper.PlaceEntityJsonMapper;
 import siarhei.luskanau.places.data.exception.NetworkConnectionException;
+import siarhei.luskanau.places.data.net.retrofit.MapsGoogleApi;
 
 /**
  * {@link RestApi} implementation for retrieving data from the network.
@@ -33,72 +32,34 @@ import siarhei.luskanau.places.data.exception.NetworkConnectionException;
 public class RestApiImpl implements RestApi {
 
     private final Context context;
-    private final PlaceEntityJsonMapper placeEntityJsonMapper;
+    private final MapsGoogleApi mapsGoogleApi;
 
     /**
      * Constructor of the class
      *
-     * @param context               {@link android.content.Context}.
-     * @param placeEntityJsonMapper {@link PlaceEntityJsonMapper}.
+     * @param context       {@link android.content.Context}.
+     * @param mapsGoogleApi {@link MapsGoogleApi}.
      */
-    public RestApiImpl(Context context, PlaceEntityJsonMapper placeEntityJsonMapper) {
-        if (context == null || placeEntityJsonMapper == null) {
+    public RestApiImpl(Context context, MapsGoogleApi mapsGoogleApi) {
+        if (context == null || mapsGoogleApi == null) {
             throw new IllegalArgumentException("The constructor parameters cannot be null!!!");
         }
         this.context = context.getApplicationContext();
-        this.placeEntityJsonMapper = placeEntityJsonMapper;
+        this.mapsGoogleApi = mapsGoogleApi;
     }
 
     @Override
     public Observable<List<PlaceEntity>> placeEntityList() {
-        return Observable.create(subscriber -> {
-            if (isThereInternetConnection()) {
-                try {
-                    String responsePlaceEntities = getPlaceEntitiesFromApi();
-                    if (responsePlaceEntities != null) {
-                        subscriber.onNext(placeEntityJsonMapper.transformPlaceEntityCollection(
-                                responsePlaceEntities));
-                        subscriber.onCompleted();
-                    } else {
-                        subscriber.onError(new NetworkConnectionException());
-                    }
-                } catch (Exception e) {
-                    subscriber.onError(new NetworkConnectionException(e.getCause()));
-                }
-            } else {
-                subscriber.onError(new NetworkConnectionException());
-            }
-        });
+        return isThereInternetConnection()
+                ? mapsGoogleApi.getPlaces(null)
+                : Observable.create(subscriber -> subscriber.onError(new NetworkConnectionException()));
     }
 
     @Override
     public Observable<PlaceEntity> placeEntityById(final String placeId) {
-        return Observable.create(subscriber -> {
-            if (isThereInternetConnection()) {
-                try {
-                    String responsePlaceDetails = getPlaceDetailsFromApi(placeId);
-                    if (responsePlaceDetails != null) {
-                        subscriber.onNext(placeEntityJsonMapper.transformPlaceEntity(responsePlaceDetails));
-                        subscriber.onCompleted();
-                    } else {
-                        subscriber.onError(new NetworkConnectionException());
-                    }
-                } catch (Exception e) {
-                    subscriber.onError(new NetworkConnectionException(e.getCause()));
-                }
-            } else {
-                subscriber.onError(new NetworkConnectionException());
-            }
-        });
-    }
-
-    private String getPlaceEntitiesFromApi() throws MalformedURLException {
-        return ApiConnection.createGET(API_URL_GET_USER_LIST).requestSyncCall();
-    }
-
-    private String getPlaceDetailsFromApi(String placeId) throws MalformedURLException {
-        String apiUrl = API_URL_GET_USER_DETAILS + placeId + ".json";
-        return ApiConnection.createGET(apiUrl).requestSyncCall();
+        return isThereInternetConnection()
+                ? mapsGoogleApi.getPlaceDetails(placeId)
+                : Observable.create(subscriber -> subscriber.onError(new NetworkConnectionException()));
     }
 
     /**

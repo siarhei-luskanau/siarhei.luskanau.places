@@ -13,6 +13,8 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -24,12 +26,19 @@ import siarhei.luskanau.places.adapter.PlaceDetailsAdapter;
 import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.model.PhotoModel;
 import siarhei.luskanau.places.model.PlaceModel;
+import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
+import siarhei.luskanau.places.presentation.presenter.PlaceDetailsPresenter;
+import siarhei.luskanau.places.presentation.view.PlaceDetailsView;
 import siarhei.luskanau.places.rx.SimpleObserver;
 import siarhei.luskanau.places.utils.AppUtils;
 
-public class PlaceDetailsFragment extends BaseRecyclerFragment {
+public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceDetailsView {
 
     private static final String TAG = "PlaceDetailsFragment";
+
+    @Inject
+    protected PlaceDetailsPresenter placeDetailsPresenter;
+
     private Subscription subscription;
     private PlaceDetailsAdapter adapter;
     private PlaceModel place;
@@ -39,6 +48,14 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
         super.onViewCreated(view, savedInstanceState);
         getSwipeRefreshLayout().setEnabled(false);
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.getComponent(PlaceComponent.class).inject(this);
+        this.placeDetailsPresenter.setView(this);
+        this.placeDetailsPresenter.resume();
+   }
 
     @Override
     protected void setupRecyclerView(RecyclerView recyclerView) {
@@ -142,4 +159,8 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment {
         adapter.setData(adapterItems);
     }
 
+    @Override
+    public void renderPlace(PlaceModel placeModel) {
+        onPlaceUpdated(place);
+    }
 }

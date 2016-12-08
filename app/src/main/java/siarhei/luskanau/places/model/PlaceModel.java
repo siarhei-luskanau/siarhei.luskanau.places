@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PlaceModel {
 
-    private String id;
+    private final String id;
 
     private CharSequence name;
 
@@ -20,12 +20,12 @@ public class PlaceModel {
 
     private List<PhotoModel> photos;
 
-    public String getId() {
-        return id;
+    public PlaceModel(String id) {
+        this.id = id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
     public CharSequence getName() {
@@ -83,5 +83,4 @@ public class PlaceModel {
     public void setPhotos(List<PhotoModel> photos) {
         this.photos = photos;
     }
-
 }

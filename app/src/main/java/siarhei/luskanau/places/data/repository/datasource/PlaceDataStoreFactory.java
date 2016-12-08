@@ -22,9 +22,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import siarhei.luskanau.places.data.cache.PlaceCache;
-import siarhei.luskanau.places.data.entity.mapper.PlaceEntityJsonMapper;
 import siarhei.luskanau.places.data.net.RestApi;
 import siarhei.luskanau.places.data.net.RestApiImpl;
+import siarhei.luskanau.places.data.net.retrofit.MapsGoogleApi;
+import siarhei.luskanau.places.utils.AppUtils;
 
 /**
  * Factory that creates different implementations of {@link PlaceDataStore}.
@@ -60,9 +61,9 @@ public class PlaceDataStoreFactory {
      * Create {@link PlaceDataStore} to retrieve data from the Cloud.
      */
     public PlaceDataStore createCloudDataStore() {
-        PlaceEntityJsonMapper placeEntityJsonMapper = new PlaceEntityJsonMapper();
-        RestApi restApi = new RestApiImpl(this.context, placeEntityJsonMapper);
-
+        String geoApiKey = AppUtils.getGeoApiKey(this.context);
+        MapsGoogleApi mapsGoogleApi = new MapsGoogleApi(geoApiKey);
+        RestApi restApi = new RestApiImpl(this.context, mapsGoogleApi);
         return new CloudPlaceDataStore(restApi, this.placeCache);
     }
 

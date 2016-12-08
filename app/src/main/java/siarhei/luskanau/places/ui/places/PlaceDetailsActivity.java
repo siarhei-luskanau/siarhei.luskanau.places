@@ -8,11 +8,17 @@ import android.text.TextUtils;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.GoogleApiClientActivity;
+import siarhei.luskanau.places.presentation.internal.di.HasComponent;
+import siarhei.luskanau.places.presentation.internal.di.components.DaggerPlaceComponent;
+import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
+import siarhei.luskanau.places.presentation.internal.di.modules.PlaceModule;
 
 public class PlaceDetailsActivity extends GoogleApiClientActivity
-        implements PlaceDetailsPresenterInterface {
+        implements PlaceDetailsPresenterInterface, HasComponent<PlaceComponent> {
 
     private static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
+
+    private PlaceComponent placeComponent;
 
     public static Intent getCallingIntent(Context context, String placeId) {
         return new Intent(context, PlaceDetailsActivity.class)
@@ -28,11 +34,13 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.initializeInjector();
+
         onToolbarTitle(null);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeDetailsFragment);
         if (fragment instanceof PlaceDetailsFragment) {
             PlaceDetailsFragment placeDetailsFragment = (PlaceDetailsFragment) fragment;
-            placeDetailsFragment.onPlaceIdUpdated(getIntent().getStringExtra(EXTRA_PLACE_ID));
+            placeDetailsFragment.onPlaceIdUpdated(getPlaceId());
         }
     }
 
@@ -53,6 +61,23 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
         } else {
             getSupportActionBar().setTitle(placeTitle);
         }
+    }
+
+    private String getPlaceId() {
+        return getIntent().getStringExtra(EXTRA_PLACE_ID);
+    }
+
+    private void initializeInjector() {
+        this.placeComponent = DaggerPlaceComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(getActivityModule())
+                .placeModule(new PlaceModule(getPlaceId()))
+                .build();
+    }
+
+    @Override
+    public PlaceComponent getComponent() {
+        return placeComponent;
     }
 
 }

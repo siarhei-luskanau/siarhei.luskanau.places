@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.api.web;
+package siarhei.luskanau.places.data.net.retrofit;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

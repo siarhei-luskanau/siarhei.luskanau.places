@@ -16,23 +16,23 @@
 package siarhei.luskanau.places.data.exception;
 
 /**
- * Exception throw by the application when a User search can't return a valid result.
+ * Exception throw by the application when a Place search can't return a valid result.
  */
-public class UserNotFoundException extends Exception {
+public class PlaceNotFoundException extends Exception {
 
-    public UserNotFoundException() {
+    public PlaceNotFoundException() {
         super();
     }
 
-    public UserNotFoundException(final String message) {
+    public PlaceNotFoundException(final String message) {
         super(message);
     }
 
-    public UserNotFoundException(final String message, final Throwable cause) {
+    public PlaceNotFoundException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public UserNotFoundException(final Throwable cause) {
+    public PlaceNotFoundException(final Throwable cause) {
         super(cause);
     }
 

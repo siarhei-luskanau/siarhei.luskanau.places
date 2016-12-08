@@ -4,31 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import javax.inject.Inject;
-
 import rx.Subscription;
-import siarhei.luskanau.places.AppApplication;
-import siarhei.luskanau.places.presentation.internal.di.components.ApplicationComponent;
+import siarhei.luskanau.places.presentation.internal.di.HasComponent;
 import siarhei.luskanau.places.presentation.navigation.Navigator;
 
 public class BaseFragment extends Fragment {
 
-    @Inject
     protected Navigator navigator;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.getApplicationComponent().inject(this);
-    }
-
-    /**
-     * Get the Main Application component for dependency injection.
-     *
-     * @return {@link ApplicationComponent}
-     */
-    protected ApplicationComponent getApplicationComponent() {
-        return ((AppApplication) getActivity().getApplication()).getApplicationComponent();
+        navigator = ((BaseActivity) getActivity()).navigator;
     }
 
     public void releaseSubscription(Subscription subscription) {
@@ -37,4 +24,11 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * Gets a component for dependency injection by its type.
+     */
+    @SuppressWarnings("unchecked")
+    protected <C> C getComponent(Class<C> componentType) {
+        return componentType.cast(((HasComponent<C>) getActivity()).getComponent());
+    }
 }

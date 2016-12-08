@@ -1,6 +1,5 @@
-package siarhei.luskanau.places.api.web;
+package siarhei.luskanau.places.data.net.retrofit;
 
-import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
@@ -23,7 +22,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.BuildConfig;
 import siarhei.luskanau.places.data.entity.BaseResponse;
@@ -31,61 +29,37 @@ import siarhei.luskanau.places.data.entity.Photo;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.data.entity.PlaceDetailsResponse;
 import siarhei.luskanau.places.data.entity.PlacesResponse;
-import siarhei.luskanau.places.data.net.retrofit.MapsGoogleApiService;
-import siarhei.luskanau.places.utils.AppUtils;
 
-public final class MapsGoogleApi {
+public class MapsGoogleApi {
 
     private static final String TAG = "MapsGoogleApi";
     private static final Gson GSON = new GsonBuilder().create();
-    private static MapsGoogleApi instance;
     private MapsGoogleApiService mapsGoogleApiService;
     private String geoApiKey;
 
-    private MapsGoogleApi(Context context) {
-        geoApiKey = AppUtils.getGeoApiKey(context);
-    }
-
-    public static void init(Context context) {
-        if (instance != null) {
-            throw new IllegalStateException("Instance isn't null. "
-                    + "It means init method is called multiple times.");
-        }
-        instance = new MapsGoogleApi(context);
-    }
-
-    public static MapsGoogleApi get() {
-        if (instance == null) {
-            throw new IllegalStateException("Instance is null. Call init before use this method.");
-        }
-        return instance;
+    public MapsGoogleApi(String geoApiKey) {
+        this.geoApiKey = geoApiKey;
     }
 
     public Observable<List<PlaceEntity>> getPlaces(Location location) {
         String locationString = String.format(Locale.ENGLISH, "%f,%f",
                 location.getLatitude(), location.getLongitude());
         return getService().placeNearbySearch(locationString)
-                .map(new Func1<String, List<PlaceEntity>>() {
-                    @Override
-                    public List<PlaceEntity> call(String json) {
-                        Log.d(TAG, "placeNearbySearch");
-                        PlacesResponse response = GSON.fromJson(json, PlacesResponse.class);
-                        checkResponse(response);
-                        return response.getResults();
-                    }
+                .map(json -> {
+                    Log.d(TAG, "placeNearbySearch");
+                    PlacesResponse response = GSON.fromJson(json, PlacesResponse.class);
+                    checkResponse(response);
+                    return response.getResults();
                 });
     }
 
     public Observable<PlaceEntity> getPlaceDetails(String placeId) {
         return getService().placeDetails(placeId)
-                .map(new Func1<String, PlaceEntity>() {
-                    @Override
-                    public PlaceEntity call(String json) {
-                        Log.d(TAG, "placeDetails");
-                        PlaceDetailsResponse response = GSON.fromJson(json, PlaceDetailsResponse.class);
-                        checkResponse(response);
-                        return response.getResult();
-                    }
+                .map(json -> {
+                    Log.d(TAG, "placeDetails");
+                    PlaceDetailsResponse response = GSON.fromJson(json, PlaceDetailsResponse.class);
+                    checkResponse(response);
+                    return response.getResult();
                 });
     }
 
@@ -176,5 +150,4 @@ public final class MapsGoogleApi {
             return result;
         }
     }
-
 }
