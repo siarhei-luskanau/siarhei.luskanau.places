@@ -36,7 +36,7 @@
         <activity android:name=".ui.web.WebActivity" />
         <activity android:name=".ui.places.PlacesActivity" />
         <activity android:name=".presentation.view.placedetails.PlaceDetailsActivity" />
-        <activity android:name=".ui.photo.PlacePhotosActivity" />
+        <activity android:name=".presentation.view.photos.PlacePhotosActivity" />
 
     </application>
 

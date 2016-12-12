@@ -61,26 +61,18 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
             public void onClick(Context context, BindableViewHolder holder, int position) {
                 Object item = adapter.getItem(position);
                 if (item instanceof PlaceDetailsAdapter.PlacePhoneAdapterItem) {
-                    try {
-                        CharSequence phoneNumber = ((PlaceDetailsAdapter.PlacePhoneAdapterItem) item).getPhoneNumber();
-                        Intent intent = new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:" + phoneNumber));
-                        navigator.startActivityWithAnimations(getActivity(), intent);
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage(), e);
-                    }
+                    CharSequence phoneNumber = ((PlaceDetailsAdapter.PlacePhoneAdapterItem) item).getPhoneNumber();
+                    getPlaceDetailsPresenter().onPlacePhoneClicked(phoneNumber);
                 } else if (item instanceof PlaceDetailsAdapter.PlaceWebsiteAdapterItem) {
-                    String uri = ((PlaceDetailsAdapter.PlaceWebsiteAdapterItem) item).getUri();
-                    navigator.startActivityWithAnimations(getActivity(),
-                            navigator.getWebIntent(context, uri, place.getName()));
+                    String url = ((PlaceDetailsAdapter.PlaceWebsiteAdapterItem) item).getUri();
+                    getPlaceDetailsPresenter().onPlaceWebsiteClicked(url);
                 } else if (item instanceof PlaceDetailsAdapter.PlaceMapAdapterItem) {
                     Place place = ((PlaceDetailsAdapter.PlaceMapAdapterItem) item).getPlace();
                     String url = AppUtils.buildMapUrl(place.getLatitude(), place.getLongitude());
-                    navigator.startActivityWithAnimations(getActivity(),
-                            navigator.getWebIntent(context, url, place.getName()));
+                    getPlaceDetailsPresenter().onPlaceMapClicked(url);
                 } else if (item instanceof PlaceDetailsAdapter.PlacePhotoAdapterItem) {
                     int photoPosition = ((PlaceDetailsAdapter.PlacePhotoAdapterItem) item).getPosition();
-                    navigator.startActivityWithAnimations(getActivity(),
-                            navigator.getPlacePhotosIntent(context, place.getId(), photoPosition));
+                    getPlaceDetailsPresenter().onPlacePhotoClicked(place.getId(), photoPosition);
                 }
             }
         });
@@ -154,5 +146,33 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
             AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity()).onToolbarTitle(null);
         }
         updateAdapter();
+    }
+
+    @Override
+    public void viewPlacePhone(CharSequence phoneNumber) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:" + phoneNumber));
+            navigator.startActivityWithAnimations(getActivity(), intent);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void viewPlaceWebsite(String url) {
+        navigator.startActivityWithAnimations(getActivity(),
+                navigator.getWebIntent(getContext(), url, place.getName()));
+    }
+
+    @Override
+    public void viewPlaceMap(String url) {
+        navigator.startActivityWithAnimations(getActivity(),
+                navigator.getWebIntent(getContext(), url, place.getName()));
+    }
+
+    @Override
+    public void viewPlacePhoto(String placeId, int photoPosition) {
+        navigator.startActivityWithAnimations(getActivity(),
+                navigator.getPlacePhotosIntent(getContext(), place.getId(), photoPosition));
     }
 }

@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.photo;
+package siarhei.luskanau.places.presentation.view.photos;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

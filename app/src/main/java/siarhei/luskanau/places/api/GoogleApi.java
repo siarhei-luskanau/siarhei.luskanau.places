@@ -29,8 +29,4 @@ public class GoogleApi {
         return WebApiAdapter.getPlaces(mapsGoogleApi, location);
 
     }
-
-    public Observable<Place> getPlace(String placeId) {
-        return WebApiAdapter.getPlace(mapsGoogleApi, placeId);
-    }
 }

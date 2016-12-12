@@ -37,9 +37,8 @@ import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsView;
 @PerActivity
 public class PlaceDetailsPresenter implements Presenter {
 
-    private PlaceDetailsView viewDetailsView;
-
     private final GetPlaceDetails getPlaceDetailsUseCase;
+    private PlaceDetailsView placeDetailsView;
 
     @Inject
     public PlaceDetailsPresenter(@Named("placeDetails") UseCase getPlaceDetailsUseCase) {
@@ -47,7 +46,7 @@ public class PlaceDetailsPresenter implements Presenter {
     }
 
     public void setView(@NonNull PlaceDetailsView view) {
-        this.viewDetailsView = view;
+        this.placeDetailsView = view;
     }
 
     @Override
@@ -61,7 +60,7 @@ public class PlaceDetailsPresenter implements Presenter {
     @Override
     public void destroy() {
         this.getPlaceDetailsUseCase.unsubscribe();
-        this.viewDetailsView = null;
+        this.placeDetailsView = null;
     }
 
     public void setPlaceId(String placeId) {
@@ -69,13 +68,29 @@ public class PlaceDetailsPresenter implements Presenter {
         this.getPlaceDetailsUseCase.execute(new PlaceDetailsSubscriber());
     }
 
+    public void onPlacePhoneClicked(CharSequence phoneNumber) {
+        this.placeDetailsView.viewPlacePhone(phoneNumber);
+    }
+
+    public void onPlaceWebsiteClicked(String url) {
+        this.placeDetailsView.viewPlaceWebsite(url);
+    }
+
+    public void onPlaceMapClicked(String url) {
+        this.placeDetailsView.viewPlaceMap(url);
+    }
+
+    public void onPlacePhotoClicked(String placeId, int photoPosition) {
+        this.placeDetailsView.viewPlacePhoto(placeId, photoPosition);
+    }
+
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.viewDetailsView.context(), errorBundle.getException());
-        this.viewDetailsView.showError(errorMessage);
+        String errorMessage = ErrorMessageFactory.create(this.placeDetailsView.context(), errorBundle.getException());
+        this.placeDetailsView.showError(errorMessage);
     }
 
     private void showPlaceDetailsInView(Place place) {
-        this.viewDetailsView.renderPlace(place);
+        this.placeDetailsView.renderPlace(place);
     }
 
     private final class PlaceDetailsSubscriber extends DefaultSubscriber<Place> {

@@ -1,5 +1,6 @@
-package siarhei.luskanau.places.ui.photo;
+package siarhei.luskanau.places.presentation.view.photos;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,27 +11,29 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import javax.inject.Inject;
+
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
-import siarhei.luskanau.places.abstracts.GoogleApiInterface;
-import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.domain.Photo;
 import siarhei.luskanau.places.domain.Place;
-import siarhei.luskanau.places.rx.SimpleObserver;
+import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
+import siarhei.luskanau.places.presentation.presenter.PhotosPresenter;
 import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
 
-public class PlacePhotosFragment extends BaseFragment {
+public class PlacePhotosFragment extends BaseFragment implements PhotosView {
 
     private static final String POSITION = "POSITION";
-    private Subscription subscription;
+
+    @Inject
+    protected PhotosPresenter photosPresenter;
+
     private ViewPager viewPager;
     private PhotosPagerAdapter adapter;
     private int position;
@@ -57,64 +60,77 @@ public class PlacePhotosFragment extends BaseFragment {
         }
     }
 
+    private PhotosPresenter getPhotosPresenter() {
+        if (photosPresenter == null) {
+            this.getComponent(PlaceComponent.class).inject(this);
+            this.photosPresenter.setView(this);
+        }
+        return photosPresenter;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPhotosPresenter().resume();
+
+        String placeId = AppUtils.getParentInterface(PlacePhotosPresenterInterface.class, getActivity()).getPlaceId();
+        getPhotosPresenter().setPlaceId(placeId);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPhotosPresenter().pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getPhotosPresenter().destroy();
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(POSITION, viewPager.getCurrentItem());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        loadData();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        releaseSubscription(subscription);
-        subscription = null;
-    }
-
-    private GoogleApi getGoogleApi() {
-        return AppUtils.getParentInterface(GoogleApiInterface.class, getActivity()).getGoogleApi();
-    }
-
-    private void loadData() {
-        String placeId = AppUtils.getParentInterface(PlacePhotosPresenterInterface.class, getActivity()).getPlaceId();
-        releaseSubscription(subscription);
-        subscription = getGoogleApi().getPlace(placeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Place>() {
-                    @Override
-                    public void onNext(Place place) {
-                        if (place != null) {
-                            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
-                                    .onToolbarTitle(!TextUtils.isEmpty(place.getName())
-                                            ? place.getName() : place.getAddress());
-                        } else {
-                            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
-                                    .onToolbarTitle(null);
-                        }
-
-                        adapter.setData(place != null ? place.getPhotos() : null);
-                        viewPager.setCurrentItem(position);
-                        List<Fragment> fragments = getChildFragmentManager().getFragments();
-                        if (fragments != null) {
-                            for (Fragment fragment : fragments) {
-                                if (fragment instanceof PhotoItemFragment) {
-                                    PhotoItemFragment photoItemFragment = (PhotoItemFragment) fragment;
-                                    photoItemFragment.updatePhoto();
-                                }
-                            }
-                        }
-                    }
-                });
-    }
-
     public Photo getPhoto(int position) {
         return adapter.getPhoto(position);
+    }
+
+    @Override
+    public Context context() {
+        return getContext();
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void renderPlace(Place place) {
+        if (place != null) {
+            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
+                    .onToolbarTitle(!TextUtils.isEmpty(place.getName())
+                            ? place.getName() : place.getAddress());
+        } else {
+            AppUtils.getParentInterface(PlaceDetailsPresenterInterface.class, getActivity())
+                    .onToolbarTitle(null);
+        }
+
+        adapter.setData(place != null ? place.getPhotos() : null);
+        viewPager.setCurrentItem(position);
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment instanceof PhotoItemFragment) {
+                    PhotoItemFragment photoItemFragment = (PhotoItemFragment) fragment;
+                    photoItemFragment.updatePhoto();
+                }
+            }
+        }
     }
 
     private static class PhotosPagerAdapter extends FragmentPagerAdapter {

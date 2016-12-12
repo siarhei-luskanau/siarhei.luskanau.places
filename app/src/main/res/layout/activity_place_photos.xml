@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/placePhotosFragment"
-    android:name="siarhei.luskanau.places.ui.photo.PlacePhotosFragment"
+    android:name="siarhei.luskanau.places.presentation.view.photos.PlacePhotosFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

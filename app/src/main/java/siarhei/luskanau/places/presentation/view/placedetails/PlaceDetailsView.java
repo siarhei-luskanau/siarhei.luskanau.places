@@ -33,4 +33,33 @@ public interface PlaceDetailsView {
      * @param place The {@link Place} that will be shown.
      */
     void renderPlace(Place place);
+
+    /**
+     * View a {@link Place} phone number.
+     *
+     * @param phoneNumber The place phone number that will be shown.
+     */
+    void viewPlacePhone(CharSequence phoneNumber);
+
+    /**
+     * View a {@link Place} website.
+     *
+     * @param url The place website that will be shown.
+     */
+    void viewPlaceWebsite(String url);
+
+    /**
+     * View a {@link Place} map.
+     *
+     * @param url The place map that will be shown.
+     */
+    void viewPlaceMap(String url);
+
+    /**
+     * View a {@link Place} photo.
+     *
+     * @param placeId The place id that will be shown.
+     * @param photoPosition The place position that will be shown.
+     */
+    void viewPlacePhoto(String placeId, int photoPosition);
 }
