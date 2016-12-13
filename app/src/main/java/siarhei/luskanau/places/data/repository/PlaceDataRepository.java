@@ -20,7 +20,6 @@ import android.location.Location;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.Observable;
 import siarhei.luskanau.places.data.entity.mapper.PlaceEntityDataMapper;
@@ -32,7 +31,6 @@ import siarhei.luskanau.places.domain.repository.PlaceRepository;
 /**
  * {@link PlaceRepository} for retrieving place data.
  */
-@Singleton
 public class PlaceDataRepository implements PlaceRepository {
 
     private final PlaceDataStoreFactory placeDataStoreFactory;
@@ -63,5 +61,4 @@ public class PlaceDataRepository implements PlaceRepository {
         final PlaceDataStore placeDataStore = this.placeDataStoreFactory.create(placeId);
         return placeDataStore.placeEntityDetails(placeId).map(this.placeEntityDataMapper::transform);
     }
-
 }

@@ -23,7 +23,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
 
 import siarhei.luskanau.places.presentation.view.photos.PlacePhotosActivity;
 import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsActivity;
@@ -33,7 +33,6 @@ import siarhei.luskanau.places.ui.web.WebActivity;
 /**
  * Class used to navigate through the application.
  */
-@Singleton
 public class Navigator {
 
     @Inject
@@ -63,5 +62,4 @@ public class Navigator {
                 .toBundle();
         ActivityCompat.startActivity(activity, intent, options);
     }
-
 }

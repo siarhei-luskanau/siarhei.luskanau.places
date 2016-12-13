@@ -20,7 +20,6 @@ import android.content.Context;
 import java.io.File;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.Observable;
 import siarhei.luskanau.places.data.cache.serializer.JsonSerializer;
@@ -31,7 +30,6 @@ import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 /**
  * {@link PlaceCache} implementation.
  */
-@Singleton
 public class PlaceCacheImpl implements PlaceCache {
 
     private static final String SETTINGS_FILE_NAME = "siarhei.luskanau.places.SETTINGS";
@@ -199,5 +197,4 @@ public class PlaceCacheImpl implements PlaceCache {
             this.fileManager.clearDirectory(this.cacheDir);
         }
     }
-
 }

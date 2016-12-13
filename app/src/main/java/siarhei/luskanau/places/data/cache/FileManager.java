@@ -27,12 +27,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Helper class to do operations on regular files/directories.
  */
-@Singleton
 public class FileManager {
 
     @Inject
@@ -144,5 +142,4 @@ public class FileManager {
                 Context.MODE_PRIVATE);
         return sharedPreferences.getLong(key, 0);
     }
-
 }

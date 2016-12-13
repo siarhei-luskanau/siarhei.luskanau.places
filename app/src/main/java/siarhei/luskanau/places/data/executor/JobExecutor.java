@@ -22,14 +22,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 
 /**
  * Decorated {@link java.util.concurrent.ThreadPoolExecutor}
  */
-@Singleton
 public class JobExecutor implements ThreadExecutor {
 
     private static final int INITIAL_POOL_SIZE = 3;
@@ -72,5 +70,4 @@ public class JobExecutor implements ThreadExecutor {
             return new Thread(runnable, THREAD_NAME + counter++);
         }
     }
-
 }

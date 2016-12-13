@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import rx.Observable;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
+import siarhei.luskanau.places.domain.repository.LocationRepository;
 
 /**
  * This class is an implementation of {@link UseCase} that represents a use case for
@@ -27,14 +28,17 @@ import siarhei.luskanau.places.domain.executor.ThreadExecutor;
  */
 public class GetLocations extends UseCase {
 
+    private final LocationRepository locationRepository;
+
     @Inject
-    public GetLocations(ThreadExecutor threadExecutor,
+    public GetLocations(LocationRepository locationRepository, ThreadExecutor threadExecutor,
                         PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
+        this.locationRepository = locationRepository;
     }
 
     @Override
     public Observable buildUseCaseObservable() {
-        return Observable.empty();
+        return locationRepository.location();
     }
 }

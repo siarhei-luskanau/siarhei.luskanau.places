@@ -16,7 +16,6 @@
 package siarhei.luskanau.places.presentation;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
@@ -26,7 +25,6 @@ import siarhei.luskanau.places.domain.executor.PostExecutionThread;
  * MainThread (UI Thread) implementation based on a {@link rx.Scheduler}
  * which will execute actions on the Android UI thread
  */
-@Singleton
 public class UIThread implements PostExecutionThread {
 
     @Inject
@@ -37,5 +35,4 @@ public class UIThread implements PostExecutionThread {
     public Scheduler getScheduler() {
         return AndroidSchedulers.mainThread();
     }
-
 }

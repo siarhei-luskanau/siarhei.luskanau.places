@@ -19,12 +19,14 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
+import siarhei.luskanau.places.data.repository.LocationRepositoryImpl;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 import siarhei.luskanau.places.domain.interactor.GetLocations;
 import siarhei.luskanau.places.domain.interactor.GetPlaceDetails;
 import siarhei.luskanau.places.domain.interactor.GetPlaceList;
 import siarhei.luskanau.places.domain.interactor.UseCase;
+import siarhei.luskanau.places.domain.repository.LocationRepository;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
 
 /**
@@ -44,14 +46,21 @@ public class PlaceModule {
 
     @Provides
     @Named("placeDetails")
-    UseCase provideGetPlaceDetailsUseCase(
-            PlaceRepository placeRepository, ThreadExecutor threadExecutor,
-            PostExecutionThread postExecutionThread) {
+    UseCase provideGetPlaceDetailsUseCase(PlaceRepository placeRepository,
+                                          ThreadExecutor threadExecutor,
+                                          PostExecutionThread postExecutionThread) {
         return new GetPlaceDetails(placeRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides
-    GetLocations provideGetLocationsUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        return new GetLocations(threadExecutor, postExecutionThread);
+    GetLocations provideGetLocationsUseCase(LocationRepository locationRepository,
+                                            ThreadExecutor threadExecutor,
+                                            PostExecutionThread postExecutionThread) {
+        return new GetLocations(locationRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    LocationRepository provideLocationRepository(LocationRepositoryImpl locationRepository) {
+        return locationRepository;
     }
 }

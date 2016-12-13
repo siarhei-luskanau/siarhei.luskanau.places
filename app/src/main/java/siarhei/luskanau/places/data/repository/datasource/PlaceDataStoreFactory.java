@@ -19,7 +19,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import siarhei.luskanau.places.data.cache.PlaceCache;
 import siarhei.luskanau.places.data.net.RestApi;
@@ -30,7 +29,6 @@ import siarhei.luskanau.places.utils.AppUtils;
 /**
  * Factory that creates different implementations of {@link PlaceDataStore}.
  */
-@Singleton
 public class PlaceDataStoreFactory {
 
     private final Context context;
@@ -66,5 +64,4 @@ public class PlaceDataStoreFactory {
         RestApi restApi = new RestApiImpl(this.context, mapsGoogleApi);
         return new CloudPlaceDataStore(restApi, this.placeCache);
     }
-
 }

@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.domain.Photo;
@@ -30,7 +29,6 @@ import siarhei.luskanau.places.domain.Place;
  * Mapper class used to transform {@link PlaceEntity} (in the data layer) to {@link Place} in the
  * domain layer.
  */
-@Singleton
 public class PlaceEntityDataMapper {
 
     @Inject
@@ -85,5 +83,4 @@ public class PlaceEntityDataMapper {
 
         return placeList;
     }
-
 }

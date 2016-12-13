@@ -18,14 +18,12 @@ package siarhei.luskanau.places.data.cache.serializer;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 
 /**
  * Class place as Serializer/Deserializer for place entities.
  */
-@Singleton
 public class JsonSerializer {
 
     private final Gson gson = new Gson();
@@ -54,5 +52,4 @@ public class JsonSerializer {
         PlaceEntity placeEntity = gson.fromJson(jsonString, PlaceEntity.class);
         return placeEntity;
     }
-
 }
