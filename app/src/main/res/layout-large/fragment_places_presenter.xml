@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/placeListFragment"
-        android:name="siarhei.luskanau.places.ui.places.PlaceListFragment"
+        android:name="siarhei.luskanau.places.presentation.view.placelist.PlaceListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2" />

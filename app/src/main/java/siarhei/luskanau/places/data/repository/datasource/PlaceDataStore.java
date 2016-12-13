@@ -15,6 +15,8 @@
  */
 package siarhei.luskanau.places.data.repository.datasource;
 
+import android.location.Location;
+
 import java.util.List;
 
 import rx.Observable;
@@ -27,7 +29,7 @@ public interface PlaceDataStore {
     /**
      * Get an {@link rx.Observable} which will emit a List of {@link PlaceEntity}.
      */
-    Observable<List<PlaceEntity>> placeEntityList();
+    Observable<List<PlaceEntity>> placeEntityList(Location location);
 
     /**
      * Get an {@link rx.Observable} which will emit a {@link PlaceEntity} by its id.

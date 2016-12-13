@@ -1,5 +1,7 @@
 package siarhei.luskanau.places.domain.repository;
 
+import android.location.Location;
+
 import java.util.List;
 
 import rx.Observable;
@@ -10,7 +12,7 @@ public interface PlaceRepository {
     /**
      * Get an {@link rx.Observable} which will emit a List of {@link Place}.
      */
-    Observable<List<Place>> places();
+    Observable<List<Place>> places(Location location);
 
     /**
      * Get an {@link rx.Observable} which will emit a {@link Place}.

@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.places;
+package siarhei.luskanau.places.presentation.view.placelist;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -23,28 +24,33 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
-import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.abstracts.BaseRecyclerAdapter;
 import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
-import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.abstracts.GoogleApiInterface;
 import siarhei.luskanau.places.adapter.PlacesAdapter;
 import siarhei.luskanau.places.api.GoogleApi;
 import siarhei.luskanau.places.domain.Place;
+import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
+import siarhei.luskanau.places.presentation.presenter.PlaceListPresenter;
 import siarhei.luskanau.places.rx.SimpleObserver;
+import siarhei.luskanau.places.ui.places.PlacesPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
 
-public class PlaceListFragment extends BaseRecyclerFragment {
+public class PlaceListFragment extends BaseRecyclerFragment implements PlaceListView {
 
     private static final String TAG = "PlaceListFragment";
     private static final int DISTANCE_IN_METERS = 100;
     private static final int PLACE_PICKER_REQUEST = 1;
+
+    @Inject
+    protected PlaceListPresenter placeListPresenter;
 
     private Subscription subscription;
     private PlacesAdapter adapter;
@@ -57,26 +63,31 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         return inflater.inflate(R.layout.fragment_place_list, container, false);
     }
 
+    private PlaceListPresenter getPlaceListPresenter() {
+        if (placeListPresenter == null) {
+            this.getComponent(PlaceComponent.class).inject(this);
+            this.placeListPresenter.setView(this);
+        }
+        return placeListPresenter;
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.place_picker_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    startActivityForResult(new PlacePicker.IntentBuilder().build(getActivity()),
-                            PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                    GooglePlayServicesUtil.showErrorDialogFragment(e.getConnectionStatusCode(),
-                            getActivity(), PlaceListFragment.this, 100, null);
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                    GooglePlayServicesUtil.showErrorDialogFragment(e.errorCode,
-                            getActivity(), PlaceListFragment.this, 100, null);
-                }
+        fab.setOnClickListener(view1 -> {
+            try {
+                startActivityForResult(new PlacePicker.IntentBuilder().build(getActivity()),
+                        PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException e) {
+                Log.e(TAG, e.getMessage(), e);
+                GooglePlayServicesUtil.showErrorDialogFragment(e.getConnectionStatusCode(),
+                        getActivity(), PlaceListFragment.this, 100, null);
+            } catch (GooglePlayServicesNotAvailableException e) {
+                Log.e(TAG, e.getMessage(), e);
+                GooglePlayServicesUtil.showErrorDialogFragment(e.errorCode,
+                        getActivity(), PlaceListFragment.this, 100, null);
             }
         });
     }
@@ -86,13 +97,44 @@ public class PlaceListFragment extends BaseRecyclerFragment {
         super.setupRecyclerView(recyclerView);
 
         adapter = new PlacesAdapter();
-        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener<BindableViewHolder>() {
-            @Override
-            public void onClick(Context context, BindableViewHolder holder, int position) {
-                onPlaceSelected(adapter.getItem(position).getId());
-            }
-        });
+        adapter.setOnItemClickListener((context, holder, position) ->
+                onPlaceSelected(adapter.getItem(position).getId())
+        );
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPlaceListPresenter().resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPlaceListPresenter().pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getPlaceListPresenter().destroy();
+    }
+
+    @Override
+    public Context context() {
+        return getContext();
+    }
+
+    @Override
+    public void showError(String message) {
+        setRefreshing(false);
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void renderPlaceList(List<Place> places) {
+        adapter.setData(lastLocation, places);
     }
 
     @Override
@@ -134,29 +176,20 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                     @Override
                     public Observable<Location> call(Long aLong) {
                         return getGoogleApi().getLastLocation()
-                                .onErrorReturn(new Func1<Throwable, Location>() {
-                                    @Override
-                                    public Location call(Throwable e) {
-                                        Log.e(TAG, e.getMessage(), e);
-                                        return null;
-                                    }
+                                .onErrorReturn(e -> {
+                                    Log.e(TAG, e.getMessage(), e);
+                                    return null;
                                 })
-                                .filter(new Func1<Location, Boolean>() {
-                                    @Override
-                                    public Boolean call(Location location) {
-                                        if (lastLocation != null && location != null) {
-                                            if (lastLocation.distanceTo(location) < DISTANCE_IN_METERS) {
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        setRefreshing(false);
-                                                    }
-                                                });
-                                                return false;
-                                            }
+                                .filter(location -> {
+                                    if (lastLocation != null && location != null) {
+                                        if (lastLocation.distanceTo(location) < DISTANCE_IN_METERS) {
+                                            getActivity().runOnUiThread(() ->
+                                                    setRefreshing(false)
+                                            );
+                                            return false;
                                         }
-                                        return true;
                                     }
+                                    return true;
                                 });
                     }
                 })
@@ -167,20 +200,14 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                             return Observable.empty();
                         }
                         return Observable.just(location)
-                                .zipWith(getGoogleApi().getPlaces(location)
-                                        .onErrorReturn(new Func1<Throwable, List<Place>>() {
-                                            @Override
-                                            public List<Place> call(Throwable e) {
-                                                Log.e(TAG, e.getMessage(), e);
-                                                return null;
-                                            }
-                                        }), new Func2<Location, List<Place>, Pair<Location, List<Place>>>() {
-                                    @Override
-                                    public Pair<Location, List<Place>> call(Location location,
-                                                                            List<Place> places) {
-                                        return new Pair<>(location, places);
-                                    }
-                                });
+                                .zipWith(getGoogleApi().getPlaces(location).onErrorReturn(e -> {
+                                            Log.e(TAG, e.getMessage(), e);
+                                            return null;
+                                        }),
+                                        (location1, places) -> {
+                                            return new Pair<>(location1, places);
+                                        }
+                                );
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -197,13 +224,9 @@ public class PlaceListFragment extends BaseRecyclerFragment {
                         setRefreshing(false);
                         lastLocation = pair.first;
                         Log.d(TAG, String.valueOf(lastLocation));
-                        onDataLoaded(pair.second);
+                        renderPlaceList(pair.second);
                     }
                 });
-    }
-
-    private void onDataLoaded(List<Place> places) {
-        adapter.setData(lastLocation, places);
     }
 
     private void onPlaceSelected(String placeId) {

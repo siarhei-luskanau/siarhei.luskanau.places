@@ -15,37 +15,26 @@
  */
 package siarhei.luskanau.places.domain.interactor;
 
-import android.location.Location;
-
 import javax.inject.Inject;
 
 import rx.Observable;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
-import siarhei.luskanau.places.domain.repository.PlaceRepository;
 
 /**
  * This class is an implementation of {@link UseCase} that represents a use case for
- * retrieving a collection of all {@link siarhei.luskanau.places.domain.Place}.
+ * retrieving a {@link android.location.Location}.
  */
-public class GetPlaceList extends UseCase {
-
-    private final PlaceRepository placeRepository;
-    private Location location;
+public class GetLocations extends UseCase {
 
     @Inject
-    public GetPlaceList(PlaceRepository placeRepository, ThreadExecutor threadExecutor,
+    public GetLocations(ThreadExecutor threadExecutor,
                         PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        this.placeRepository = placeRepository;
     }
 
     @Override
     public Observable buildUseCaseObservable() {
-        return this.placeRepository.places(location);
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
+        return Observable.empty();
     }
 }

@@ -11,6 +11,7 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseFragment;
 import siarhei.luskanau.places.abstracts.GoogleApiInterface;
 import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsFragment;
+import siarhei.luskanau.places.presentation.view.placelist.PlaceListFragment;
 import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlacesPresenterFragment extends BaseFragment implements PlacesPresenterInterface {

@@ -16,6 +16,7 @@
 package siarhei.luskanau.places.data.net;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -49,9 +50,9 @@ public class RestApiImpl implements RestApi {
     }
 
     @Override
-    public Observable<List<PlaceEntity>> placeEntityList() {
+    public Observable<List<PlaceEntity>> placeEntityList(Location location) {
         return isThereInternetConnection()
-                ? mapsGoogleApi.getPlaces(null)
+                ? mapsGoogleApi.getPlaces(location)
                 : Observable.create(subscriber -> subscriber.onError(new NetworkConnectionException()));
     }
 

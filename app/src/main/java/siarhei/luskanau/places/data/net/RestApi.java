@@ -15,6 +15,8 @@
  */
 package siarhei.luskanau.places.data.net;
 
+import android.location.Location;
+
 import java.util.List;
 
 import rx.Observable;
@@ -25,21 +27,10 @@ import siarhei.luskanau.places.data.entity.PlaceEntity;
  */
 public interface RestApi {
 
-    String API_BASE_URL = "http://www.android10.org/myapi/";
-
-    /**
-     * Api url for getting all places
-     */
-    String API_URL_GET_USER_LIST = API_BASE_URL + "users.json";
-    /**
-     * Api url for getting a place profile: Remember to concatenate id + 'json'
-     */
-    String API_URL_GET_USER_DETAILS = API_BASE_URL + "user_";
-
     /**
      * Retrieves an {@link rx.Observable} which will emit a List of {@link PlaceEntity}.
      */
-    Observable<List<PlaceEntity>> placeEntityList();
+    Observable<List<PlaceEntity>> placeEntityList(Location location);
 
     /**
      * Retrieves an {@link rx.Observable} which will emit a {@link PlaceEntity}.
@@ -47,5 +38,4 @@ public interface RestApi {
      * @param placeId The place id used to get place data.
      */
     Observable<PlaceEntity> placeEntityById(final String placeId);
-
 }

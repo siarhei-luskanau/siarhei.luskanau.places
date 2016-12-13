@@ -21,7 +21,7 @@ import siarhei.luskanau.places.presentation.internal.di.modules.ActivityModule;
 import siarhei.luskanau.places.presentation.internal.di.modules.PlaceModule;
 import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsFragment;
 import siarhei.luskanau.places.presentation.view.photos.PlacePhotosFragment;
-import siarhei.luskanau.places.ui.places.PlaceListFragment;
+import siarhei.luskanau.places.presentation.view.placelist.PlaceListFragment;
 
 /**
  * A scope {@link PerActivity} component.

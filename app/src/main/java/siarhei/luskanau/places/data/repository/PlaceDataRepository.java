@@ -15,6 +15,8 @@
  */
 package siarhei.luskanau.places.data.repository;
 
+import android.location.Location;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,10 +52,10 @@ public class PlaceDataRepository implements PlaceRepository {
     }
 
     @Override
-    public Observable<List<Place>> places() {
+    public Observable<List<Place>> places(Location location) {
         //we always get all places from the cloud
         final PlaceDataStore placeDataStore = this.placeDataStoreFactory.createCloudDataStore();
-        return placeDataStore.placeEntityList().map(this.placeEntityDataMapper::transform);
+        return placeDataStore.placeEntityList(location).map(this.placeEntityDataMapper::transform);
     }
 
     @Override

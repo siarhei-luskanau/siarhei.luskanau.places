@@ -15,6 +15,8 @@
  */
 package siarhei.luskanau.places.data.repository.datasource;
 
+import android.location.Location;
+
 import java.util.List;
 
 import rx.Observable;
@@ -49,8 +51,8 @@ class CloudPlaceDataStore implements PlaceDataStore {
     }
 
     @Override
-    public Observable<List<PlaceEntity>> placeEntityList() {
-        return this.restApi.placeEntityList();
+    public Observable<List<PlaceEntity>> placeEntityList(Location location) {
+        return this.restApi.placeEntityList(location);
     }
 
     @Override

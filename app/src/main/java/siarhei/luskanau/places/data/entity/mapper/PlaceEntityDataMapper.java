@@ -70,20 +70,20 @@ public class PlaceEntityDataMapper {
     /**
      * Transform a List of {@link PlaceEntity} into a Collection of {@link Place}.
      *
-     * @param userEntityCollection Object Collection to be transformed.
+     * @param placeEntityCollection Object Collection to be transformed.
      * @return {@link Place} if valid {@link PlaceEntity} otherwise null.
      */
-    public List<Place> transform(Collection<PlaceEntity> userEntityCollection) {
-        List<Place> userList = new ArrayList<>(20);
-        Place user;
-        for (PlaceEntity userEntity : userEntityCollection) {
-            user = transform(userEntity);
-            if (user != null) {
-                userList.add(user);
+    public List<Place> transform(Collection<PlaceEntity> placeEntityCollection) {
+        List<Place> placeList = new ArrayList<>(20);
+        Place place;
+        for (PlaceEntity placeEntity : placeEntityCollection) {
+            place = transform(placeEntity);
+            if (place != null) {
+                placeList.add(place);
             }
         }
 
-        return userList;
+        return placeList;
     }
 
 }
