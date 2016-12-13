@@ -26,7 +26,6 @@ import siarhei.luskanau.places.domain.interactor.GetPlaceDetails;
 import siarhei.luskanau.places.domain.interactor.GetPlaceList;
 import siarhei.luskanau.places.domain.interactor.UseCase;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
-import siarhei.luskanau.places.presentation.internal.di.PerActivity;
 
 /**
  * Dagger module that provides place related collaborators.
@@ -38,14 +37,12 @@ public class PlaceModule {
     }
 
     @Provides
-    @PerActivity
     @Named("placeList")
     UseCase provideGetPlaceListUseCase(GetPlaceList getPlaceList) {
         return getPlaceList;
     }
 
     @Provides
-    @PerActivity
     @Named("placeDetails")
     UseCase provideGetPlaceDetailsUseCase(
             PlaceRepository placeRepository, ThreadExecutor threadExecutor,
@@ -54,7 +51,6 @@ public class PlaceModule {
     }
 
     @Provides
-    @PerActivity
     GetLocations provideGetLocationsUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetLocations(threadExecutor, postExecutionThread);
     }
