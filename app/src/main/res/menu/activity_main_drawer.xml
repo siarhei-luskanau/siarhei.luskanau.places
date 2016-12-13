@@ -6,10 +6,6 @@
             android:icon="@drawable/ic_map"
             android:title="@string/nav_places" />
         <item
-            android:id="@+id/nav_attachment"
-            android:icon="@drawable/ic_attachment"
-            android:title="@string/nav_task_description" />
-        <item
             android:id="@+id/nav_github"
             android:icon="@drawable/ic_github_box"
             android:title="@string/nav_source_code" />

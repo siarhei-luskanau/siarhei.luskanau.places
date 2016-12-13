@@ -39,9 +39,7 @@ public class WebActivity extends DrawerWithToolbarActivity implements WebPresent
     @Override
     public int getDrawerMenuItemId() {
         String url = getWebUrl();
-        if (AppConstants.TEST_TASK_URL.equals(url)) {
-            return R.id.nav_attachment;
-        } else if (AppConstants.GITHUB_URL.equals(url)) {
+        if (AppConstants.GITHUB_URL.equals(url)) {
             return R.id.nav_github;
         } else if (AppConstants.LINKEDIN_URL.equals(url)) {
             return R.id.nav_linkedin;

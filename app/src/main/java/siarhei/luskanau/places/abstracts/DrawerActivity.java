@@ -75,10 +75,6 @@ public abstract class DrawerActivity extends BaseActivity
                 }
                 break;
 
-            case R.id.nav_attachment:
-                intent = navigator.getWebIntent(this, AppConstants.TEST_TASK_URL, item.getTitle());
-                break;
-
             case R.id.nav_github:
                 intent = navigator.getWebIntent(this, AppConstants.GITHUB_URL, item.getTitle());
                 break;
