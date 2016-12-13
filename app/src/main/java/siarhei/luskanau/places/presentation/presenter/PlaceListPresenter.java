@@ -1,6 +1,5 @@
 package siarhei.luskanau.places.presentation.presenter;
 
-import android.location.Location;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.exception.DefaultErrorBundle;
 import siarhei.luskanau.places.domain.exception.ErrorBundle;
 import siarhei.luskanau.places.domain.interactor.DefaultSubscriber;
-import siarhei.luskanau.places.domain.interactor.GetLocations;
 import siarhei.luskanau.places.domain.interactor.GetPlaceList;
 import siarhei.luskanau.places.domain.interactor.UseCase;
 import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
@@ -23,13 +21,11 @@ import siarhei.luskanau.places.presentation.view.placelist.PlaceListView;
  */
 public class PlaceListPresenter implements Presenter {
 
-    private final GetLocations getLocationsUseCase;
     private final GetPlaceList getPlaceListUseCase;
     private PlaceListView placeListView;
 
     @Inject
-    public PlaceListPresenter(GetLocations getLocationsUseCase, @Named("placeList") UseCase getPlaceListUseCase) {
-        this.getLocationsUseCase = getLocationsUseCase;
+    public PlaceListPresenter(@Named("placeList") UseCase getPlaceListUseCase) {
         this.getPlaceListUseCase = (GetPlaceList) getPlaceListUseCase;
     }
 
@@ -54,10 +50,6 @@ public class PlaceListPresenter implements Presenter {
 
     public void updatePlaceList() {
         this.getPlaceListUseCase.unsubscribe();
-        Location location = new Location("");
-        location.setLatitude(52.4217741);
-        location.setLongitude(31.0047937);
-        getPlaceListUseCase.setLocation(location);
         this.getPlaceListUseCase.execute(new PlaceListSubscriber());
     }
 

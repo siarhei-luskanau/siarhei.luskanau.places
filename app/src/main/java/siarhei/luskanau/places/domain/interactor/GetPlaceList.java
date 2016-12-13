@@ -15,13 +15,12 @@
  */
 package siarhei.luskanau.places.domain.interactor;
 
-import android.location.Location;
-
 import javax.inject.Inject;
 
 import rx.Observable;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
+import siarhei.luskanau.places.domain.repository.LocationRepository;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
 
 /**
@@ -30,22 +29,20 @@ import siarhei.luskanau.places.domain.repository.PlaceRepository;
  */
 public class GetPlaceList extends UseCase {
 
+    private final LocationRepository locationRepository;
     private final PlaceRepository placeRepository;
-    private Location location;
 
     @Inject
-    public GetPlaceList(PlaceRepository placeRepository, ThreadExecutor threadExecutor,
-                        PostExecutionThread postExecutionThread) {
+    public GetPlaceList(LocationRepository locationRepository, PlaceRepository placeRepository,
+                        ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
+        this.locationRepository = locationRepository;
         this.placeRepository = placeRepository;
     }
 
     @Override
     public Observable buildUseCaseObservable() {
-        return this.placeRepository.places(location);
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
+        return this.locationRepository.location()
+                .flatMap(location -> this.placeRepository.places(location));
     }
 }
