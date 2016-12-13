@@ -6,20 +6,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.abstracts.GoogleApiClientActivity;
-import siarhei.luskanau.places.presentation.internal.di.HasComponent;
-import siarhei.luskanau.places.presentation.internal.di.components.DaggerPlaceComponent;
-import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
-import siarhei.luskanau.places.presentation.internal.di.modules.PlaceModule;
+import siarhei.luskanau.places.presentation.view.PlaceComponentActivity;
 import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 
-public class PlacePhotosActivity extends GoogleApiClientActivity
-        implements PlaceDetailsPresenterInterface, PlacePhotosPresenterInterface, HasComponent<PlaceComponent> {
+public class PlacePhotosActivity extends PlaceComponentActivity
+        implements PlaceDetailsPresenterInterface, PlacePhotosPresenterInterface {
 
     private static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
-
-    private PlaceComponent placeComponent;
 
     public static Intent buildIntent(Context context, String placeId, int position) {
         return new Intent(context, PlacePhotosActivity.class)
@@ -36,11 +30,8 @@ public class PlacePhotosActivity extends GoogleApiClientActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.initializeInjector();
-
         getSupportActionBar().setTitle(R.string.nav_place_details);
     }
-
 
     @Override
     public int getDrawerMenuItemId() {
@@ -69,18 +60,5 @@ public class PlacePhotosActivity extends GoogleApiClientActivity
     @Override
     public int getPosition() {
         return getIntent().getIntExtra(EXTRA_POSITION, 0);
-    }
-
-    private void initializeInjector() {
-        this.placeComponent = DaggerPlaceComponent.builder()
-                .applicationComponent(getApplicationComponent())
-                .activityModule(getActivityModule())
-                .placeModule(new PlaceModule())
-                .build();
-    }
-
-    @Override
-    public PlaceComponent getComponent() {
-        return placeComponent;
     }
 }

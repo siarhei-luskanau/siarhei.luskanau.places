@@ -7,19 +7,13 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.abstracts.GoogleApiClientActivity;
-import siarhei.luskanau.places.presentation.internal.di.HasComponent;
-import siarhei.luskanau.places.presentation.internal.di.components.DaggerPlaceComponent;
-import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
-import siarhei.luskanau.places.presentation.internal.di.modules.PlaceModule;
+import siarhei.luskanau.places.presentation.view.PlaceComponentActivity;
 import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
 
-public class PlaceDetailsActivity extends GoogleApiClientActivity
-        implements PlaceDetailsPresenterInterface, HasComponent<PlaceComponent> {
+public class PlaceDetailsActivity extends PlaceComponentActivity
+        implements PlaceDetailsPresenterInterface {
 
     private static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
-
-    private PlaceComponent placeComponent;
 
     public static Intent getCallingIntent(Context context, String placeId) {
         return new Intent(context, PlaceDetailsActivity.class)
@@ -34,8 +28,6 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        this.initializeInjector();
 
         onToolbarTitle(null);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeDetailsFragment);
@@ -62,18 +54,5 @@ public class PlaceDetailsActivity extends GoogleApiClientActivity
         } else {
             getSupportActionBar().setTitle(placeTitle);
         }
-    }
-
-    private void initializeInjector() {
-        this.placeComponent = DaggerPlaceComponent.builder()
-                .applicationComponent(getApplicationComponent())
-                .activityModule(getActivityModule())
-                .placeModule(new PlaceModule())
-                .build();
-    }
-
-    @Override
-    public PlaceComponent getComponent() {
-        return placeComponent;
     }
 }

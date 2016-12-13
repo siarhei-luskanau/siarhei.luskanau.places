@@ -7,9 +7,9 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.abstracts.GoogleApiClientActivity;
+import siarhei.luskanau.places.presentation.view.PlaceComponentActivity;
 
-public class PlacesActivity extends GoogleApiClientActivity
+public class PlacesActivity extends PlaceComponentActivity
         implements PlaceDetailsPresenterInterface {
 
     public static Intent getCallingIntent(Context context) {
@@ -52,5 +52,4 @@ public class PlacesActivity extends GoogleApiClientActivity
             placesPresenterFragment.loadData();
         }
     }
-
 }
