@@ -1,6 +1,6 @@
 package siarhei.luskanau.places.abstracts;
 
-import siarhei.luskanau.places.api.GoogleApi;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 public interface GoogleApiInterface {
 
@@ -8,6 +8,5 @@ public interface GoogleApiInterface {
 
     void requestPermissions();
 
-    GoogleApi getGoogleApi();
-
+    GoogleApiClient getGoogleApiClient();
 }

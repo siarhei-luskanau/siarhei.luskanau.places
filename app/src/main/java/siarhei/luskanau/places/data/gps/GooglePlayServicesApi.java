@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.api.android;
+package siarhei.luskanau.places.data.gps;
 
 import android.graphics.Bitmap;
 import android.location.Location;

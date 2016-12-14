@@ -1,6 +1,8 @@
 package siarhei.luskanau.places.presentation.presenter;
 
+import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import java.util.List;
 
@@ -35,7 +37,6 @@ public class PlaceListPresenter implements Presenter {
 
     @Override
     public void resume() {
-        updatePlaceList();
     }
 
     @Override
@@ -58,20 +59,20 @@ public class PlaceListPresenter implements Presenter {
         this.placeListView.showError(errorMessage);
     }
 
-    private void showPlaceListInView(List<Place> places) {
-        this.placeListView.renderPlaceList(places);
-    }
-
-    private final class PlaceListSubscriber extends DefaultSubscriber<List<Place>> {
+    private final class PlaceListSubscriber extends DefaultSubscriber<Pair<Location, List<Place>>> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            PlaceListPresenter.this.placeListView.showRefreshing(false);
             PlaceListPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
         }
 
         @Override
-        public void onNext(List<Place> places) {
-            PlaceListPresenter.this.showPlaceListInView(places);
+        public void onNext(Pair<Location, List<Place>> pair) {
+            PlaceListPresenter.this.placeListView.showRefreshing(false);
+            if (pair != null && pair.first != null) {
+                PlaceListPresenter.this.placeListView.renderPlaceList(pair.first, pair.second);
+            }
         }
     }
 }

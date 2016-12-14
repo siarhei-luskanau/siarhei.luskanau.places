@@ -1,6 +1,7 @@
 package siarhei.luskanau.places.presentation.view.placelist;
 
 import android.content.Context;
+import android.location.Location;
 
 import java.util.List;
 
@@ -25,9 +26,16 @@ public interface PlaceListView {
     void showError(String message);
 
     /**
+     * Show refreshing progress
+     *
+     * @param refreshing is refreshing.
+     */
+    void showRefreshing(boolean refreshing);
+
+    /**
      * Render a place in the UI.
      *
      * @param places The list of {@link Place} that will be shown.
      */
-    void renderPlaceList(List<Place> places);
+    void renderPlaceList(Location location, List<Place> places);
 }

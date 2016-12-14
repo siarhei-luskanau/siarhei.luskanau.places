@@ -15,6 +15,12 @@
  */
 package siarhei.luskanau.places.domain.interactor;
 
+import android.location.Location;
+import android.support.v4.util.Pair;
+import android.util.Log;
+
+import java.util.Collections;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -29,8 +35,11 @@ import siarhei.luskanau.places.domain.repository.PlaceRepository;
  */
 public class GetPlaceList extends UseCase {
 
+    private static final String TAG = "GetPlaceList";
+    private static final int DISTANCE_IN_METERS = 100;
     private final LocationRepository locationRepository;
     private final PlaceRepository placeRepository;
+    private Location lastLocation;
 
     @Inject
     public GetPlaceList(LocationRepository locationRepository, PlaceRepository placeRepository,
@@ -42,7 +51,21 @@ public class GetPlaceList extends UseCase {
 
     @Override
     public Observable buildUseCaseObservable() {
+        lastLocation = null;
         return this.locationRepository.location()
-                .flatMap(location -> this.placeRepository.places(location));
+                .onErrorReturn(throwable -> {
+                    Log.e(TAG, throwable.getMessage(), throwable);
+                    return null;
+                })
+                .flatMap(location -> {
+                    if (location != null) {
+                        if (lastLocation == null || lastLocation.distanceTo(location) >= DISTANCE_IN_METERS) {
+                            lastLocation = location;
+                            return this.placeRepository.places(location)
+                                    .flatMap(places -> Observable.just(new Pair<>(location, places)));
+                        }
+                    }
+                    return Observable.just(new Pair<>(null, Collections.EMPTY_LIST));
+                });
     }
 }

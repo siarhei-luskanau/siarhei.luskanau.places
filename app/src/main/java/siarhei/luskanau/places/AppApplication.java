@@ -7,7 +7,6 @@ import com.squareup.leakcanary.LeakCanary;
 
 import java.io.InputStream;
 
-import siarhei.luskanau.places.api.web.MapsGoogleApi;
 import siarhei.luskanau.places.presentation.internal.di.components.ApplicationComponent;
 import siarhei.luskanau.places.presentation.internal.di.components.DaggerApplicationComponent;
 import siarhei.luskanau.places.presentation.internal.di.modules.ApplicationModule;
@@ -25,7 +24,6 @@ public class AppApplication extends Application {
         initializeInjector();
         initializeLeakDetection();
 
-        MapsGoogleApi.init(this);
         Glide.get(this).register(PlacePhotoId.class, InputStream.class, new PlacePhotoIdModelLoader.Factory());
     }
 
@@ -46,5 +44,4 @@ public class AppApplication extends Application {
             }
         }
     }
-
 }

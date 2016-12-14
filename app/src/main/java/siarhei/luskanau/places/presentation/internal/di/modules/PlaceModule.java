@@ -22,7 +22,6 @@ import dagger.Provides;
 import siarhei.luskanau.places.data.repository.LocationRepositoryImpl;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
-import siarhei.luskanau.places.domain.interactor.GetLocations;
 import siarhei.luskanau.places.domain.interactor.GetPlaceDetails;
 import siarhei.luskanau.places.domain.interactor.GetPlaceList;
 import siarhei.luskanau.places.domain.interactor.UseCase;
@@ -50,13 +49,6 @@ public class PlaceModule {
                                           ThreadExecutor threadExecutor,
                                           PostExecutionThread postExecutionThread) {
         return new GetPlaceDetails(placeRepository, threadExecutor, postExecutionThread);
-    }
-
-    @Provides
-    GetLocations provideGetLocationsUseCase(LocationRepository locationRepository,
-                                            ThreadExecutor threadExecutor,
-                                            PostExecutionThread postExecutionThread) {
-        return new GetLocations(locationRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides

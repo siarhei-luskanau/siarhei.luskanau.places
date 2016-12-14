@@ -2,7 +2,7 @@ package siarhei.luskanau.places.utils.glide;
 
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 
-import siarhei.luskanau.places.api.android.GooglePlayServicesApi;
+import siarhei.luskanau.places.data.gps.GooglePlayServicesApi;
 
 public class PlacePhotoId {
 
