@@ -59,9 +59,18 @@ public class GetPlaceList extends UseCase {
                 })
                 .flatMap(location -> {
                     if (location != null) {
-                        if (lastLocation == null || lastLocation.distanceTo(location) >= DISTANCE_IN_METERS) {
+                        float distanceTo = -1;
+                        if (lastLocation != null) {
+                            distanceTo = lastLocation.distanceTo(location);
+                        }
+                        if (distanceTo < 0 || distanceTo >= DISTANCE_IN_METERS) {
                             lastLocation = location;
+                            Log.d(TAG, "newLocation: " + distanceTo + "m " + location);
                             return this.placeRepository.places(location)
+                                    .onErrorReturn(throwable -> {
+                                        Log.e(TAG, throwable.getMessage(), throwable);
+                                        return Collections.EMPTY_LIST;
+                                    })
                                     .flatMap(places -> Observable.just(new Pair<>(location, places)));
                         }
                     }

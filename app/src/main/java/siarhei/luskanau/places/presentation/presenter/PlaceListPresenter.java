@@ -41,6 +41,7 @@ public class PlaceListPresenter implements Presenter {
 
     @Override
     public void pause() {
+        this.getPlaceListUseCase.unsubscribe();
     }
 
     @Override
