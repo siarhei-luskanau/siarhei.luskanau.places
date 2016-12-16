@@ -14,5 +14,9 @@
             android:icon="@drawable/ic_linkedin_box"
             android:title="@string/nav_my_linkedIn"
             android:visible="false" />
+        <item
+            android:id="@+id/nav_screen_size"
+            android:icon="@drawable/ic_aspect_ratio"
+            android:title="Screen Size" />
     </group>
 </menu>

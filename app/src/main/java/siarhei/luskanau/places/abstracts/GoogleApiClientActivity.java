@@ -11,20 +11,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 
-public abstract class GoogleApiClientActivity extends DrawerWithToolbarActivity implements GoogleApiInterface {
+public abstract class GoogleApiClientActivity extends DrawerWithToolbarActivity {
 
     private static final String TAG = "GoogleApiClientActivity";
     private static final int CONNECTION_RESOLUTION_REQUEST_CODE = 100;
     private static final int PERMISSIONS_REQUEST = 200;
     private GoogleApiClient googleApiClient;
 
-    @Override
     public boolean isPermissionsGranted() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
-    @Override
     public void requestPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 PERMISSIONS_REQUEST);
@@ -52,7 +50,6 @@ public abstract class GoogleApiClientActivity extends DrawerWithToolbarActivity 
         finish();
     }
 
-    @Override
     public GoogleApiClient getGoogleApiClient() {
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)

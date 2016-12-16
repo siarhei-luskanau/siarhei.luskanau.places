@@ -3,6 +3,7 @@ package siarhei.luskanau.places.utils;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -91,4 +93,27 @@ public final class AppUtils {
         return null;
     }
 
+    public static int getScreenLayoutSize(Context context) {
+        return context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+    }
+
+    public static void checkScreenSize(Context context) {
+        switch (getScreenLayoutSize(context)) {
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                Toast.makeText(context, "Small sized screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                Toast.makeText(context, "Normal sized screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                Toast.makeText(context, "Large screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                Toast.makeText(context, "Xlarge screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+            default:
+                Toast.makeText(context, "Screen size is undefined", Toast.LENGTH_LONG).show();
+        }
+    }
 }

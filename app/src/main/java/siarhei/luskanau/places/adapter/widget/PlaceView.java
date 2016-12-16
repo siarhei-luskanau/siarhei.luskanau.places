@@ -3,7 +3,6 @@ package siarhei.luskanau.places.adapter.widget;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -16,8 +15,6 @@ import siarhei.luskanau.places.domain.Place;
 public class PlaceView extends LinearLayout {
 
     private ViewPlaceBinding binding;
-    private int whiteColor;
-    private int grayColor;
 
     public PlaceView(Context context) {
         super(context);
@@ -34,18 +31,14 @@ public class PlaceView extends LinearLayout {
     {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.view_place, this, true);
-
-        whiteColor = ContextCompat.getColor(getContext(), R.color.app_white);
-        grayColor = ContextCompat.getColor(getContext(), R.color.app_gray);
     }
 
-    public void setPlace(Place place, Location location, boolean isSelected) {
+    public void setPlace(Place place, Location location) {
         binding.placeName.setText(place.getName());
         binding.placeAddress.setText(place.getAddress());
         binding.placePhone.setVisibility(TextUtils.isEmpty(place.getPhoneNumber()) ? GONE : VISIBLE);
         binding.placeWebsite.setVisibility(TextUtils.isEmpty(place.getWebsiteUri()) ? GONE : VISIBLE);
         binding.placePhotos.setVisibility(place.getPhotos() != null && !place.getPhotos().isEmpty() ? VISIBLE : GONE);
-        binding.selectedContainer.setBackgroundColor(isSelected ? grayColor : whiteColor);
 
         if (location != null) {
             Location placeLocation = new Location("");

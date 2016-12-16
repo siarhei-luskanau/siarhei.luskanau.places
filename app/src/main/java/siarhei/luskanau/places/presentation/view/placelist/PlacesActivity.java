@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.places;
+package siarhei.luskanau.places.presentation.view.placelist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,10 +46,18 @@ public class PlacesActivity extends PlaceComponentActivity
     protected void onPermissionsGranted() {
         super.onPermissionsGranted();
 
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placesPresenterFragment);
-        if (fragment instanceof PlacesPresenterFragment) {
-            PlacesPresenterFragment placesPresenterFragment = (PlacesPresenterFragment) fragment;
-            placesPresenterFragment.loadData();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeListFragment);
+        if (fragment instanceof PlaceListFragment) {
+            PlaceListFragment placeListFragment = (PlaceListFragment) fragment;
+            placeListFragment.loadData();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!isPermissionsGranted()) {
+            requestPermissions();
         }
     }
 }

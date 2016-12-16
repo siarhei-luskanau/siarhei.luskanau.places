@@ -24,7 +24,7 @@ import siarhei.luskanau.places.domain.Photo;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
 import siarhei.luskanau.places.presentation.presenter.PhotosPresenter;
-import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
+import siarhei.luskanau.places.presentation.view.placelist.PlaceDetailsPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlacePhotosFragment extends BaseFragment implements PhotosView {
@@ -69,18 +69,11 @@ public class PlacePhotosFragment extends BaseFragment implements PhotosView {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getPhotosPresenter().resume();
+    public void onStart() {
+        super.onStart();
 
         String placeId = AppUtils.getParentInterface(PlacePhotosPresenterInterface.class, getActivity()).getPlaceId();
         getPhotosPresenter().setPlaceId(placeId);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getPhotosPresenter().pause();
     }
 
     @Override

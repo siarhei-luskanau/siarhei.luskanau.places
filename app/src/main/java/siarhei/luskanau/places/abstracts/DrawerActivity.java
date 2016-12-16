@@ -15,7 +15,8 @@ import com.bumptech.glide.Glide;
 
 import siarhei.luskanau.places.AppConstants;
 import siarhei.luskanau.places.R;
-import siarhei.luskanau.places.ui.places.PlacesActivity;
+import siarhei.luskanau.places.presentation.view.placelist.PlacesActivity;
+import siarhei.luskanau.places.utils.AppUtils;
 import siarhei.luskanau.places.utils.RoundedBitmapImageViewTarget;
 
 public abstract class DrawerActivity extends BaseActivity
@@ -83,6 +84,10 @@ public abstract class DrawerActivity extends BaseActivity
                 intent = navigator.getWebIntent(this, AppConstants.LINKEDIN_URL, item.getTitle());
                 break;
 
+            case R.id.nav_screen_size:
+                AppUtils.checkScreenSize(this);
+                break;
+
             default:
                 Toast.makeText(this, "Item clicked: " + item.getTitle(), Toast.LENGTH_SHORT).show();
         }
@@ -96,5 +101,4 @@ public abstract class DrawerActivity extends BaseActivity
 
         return false;
     }
-
 }

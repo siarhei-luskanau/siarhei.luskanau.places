@@ -30,8 +30,6 @@ import siarhei.luskanau.places.adapter.PlacesAdapter;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
 import siarhei.luskanau.places.presentation.presenter.PlaceListPresenter;
-import siarhei.luskanau.places.ui.places.PlacesPresenterInterface;
-import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlaceListFragment extends BaseRecyclerFragment implements PlaceListView {
 
@@ -91,15 +89,9 @@ public class PlaceListFragment extends BaseRecyclerFragment implements PlaceList
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getPlaceListPresenter().resume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getPlaceListPresenter().pause();
+    public void onStart() {
+        super.onStart();
+        loadData();
     }
 
     @Override
@@ -153,13 +145,7 @@ public class PlaceListFragment extends BaseRecyclerFragment implements PlaceList
     }
 
     private void onPlaceSelected(String placeId) {
-        PlacesPresenterInterface placesPresenterInterface = AppUtils.getParentInterface(
-                PlacesPresenterInterface.class,
-                getActivity(), getParentFragment(), getTargetFragment());
-        placesPresenterInterface.onPlaceSelected(placeId);
-    }
-
-    public void onPlaceHighlighted(String placeId) {
-        adapter.setSelectedPlaceId(placeId);
+        navigator.startActivityWithAnimations(getActivity(),
+                navigator.getPlaceDetailsIntent(getContext(), placeId));
     }
 }

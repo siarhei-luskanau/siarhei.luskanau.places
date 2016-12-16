@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/placesPresenterFragment"
-    android:name="siarhei.luskanau.places.ui.places.PlacesPresenterFragment"
+    android:id="@+id/placeListFragment"
+    android:name="siarhei.luskanau.places.presentation.view.placelist.PlaceListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.places.PlacesActivity" />
+    tools:context=".presentation.view.placelist.PlacesActivity" />

@@ -18,7 +18,6 @@ import siarhei.luskanau.places.domain.Place;
 
 public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewHolder> {
 
-    private String selectedPlaceId;
     private Location location;
 
     private Func2<Place, Place, Integer> placeDistanceComparator
@@ -64,11 +63,6 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewH
     public void onBindViewHolder(BindableViewHolder holder, int position) {
         ListItemPlaceBinding binding = (ListItemPlaceBinding) holder.getBindings();
         Place place = getItem(position);
-        binding.item.setPlace(place, location, place.getId().equals(selectedPlaceId));
-    }
-
-    public void setSelectedPlaceId(String selectedPlaceId) {
-        this.selectedPlaceId = selectedPlaceId;
-        notifyDataSetChanged();
+        binding.item.setPlace(place, location);
     }
 }

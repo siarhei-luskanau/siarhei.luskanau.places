@@ -1,4 +1,4 @@
-package siarhei.luskanau.places.ui.places;
+package siarhei.luskanau.places.presentation.view.placelist;
 
 public interface PlaceDetailsPresenterInterface {
 

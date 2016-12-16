@@ -50,14 +50,6 @@ public class PlaceDetailsPresenter implements Presenter {
     }
 
     @Override
-    public void resume() {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
     public void destroy() {
         this.getPlaceDetailsUseCase.unsubscribe();
         this.placeDetailsView = null;

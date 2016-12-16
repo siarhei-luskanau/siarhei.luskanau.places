@@ -24,7 +24,7 @@ import siarhei.luskanau.places.domain.Photo;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
 import siarhei.luskanau.places.presentation.presenter.PlaceDetailsPresenter;
-import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
+import siarhei.luskanau.places.presentation.view.placelist.PlaceDetailsPresenterInterface;
 import siarhei.luskanau.places.utils.AppUtils;
 
 public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceDetailsView {
@@ -104,18 +104,6 @@ public class PlaceDetailsFragment extends BaseRecyclerFragment implements PlaceD
             }
         }
         adapter.setData(adapterItems);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPlaceDetailsPresenter().resume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getPlaceDetailsPresenter().pause();
     }
 
     @Override

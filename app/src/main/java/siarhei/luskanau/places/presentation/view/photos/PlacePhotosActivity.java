@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.presentation.view.PlaceComponentActivity;
-import siarhei.luskanau.places.ui.places.PlaceDetailsPresenterInterface;
+import siarhei.luskanau.places.presentation.view.placelist.PlaceDetailsPresenterInterface;
 
 public class PlacePhotosActivity extends PlaceComponentActivity
         implements PlaceDetailsPresenterInterface, PlacePhotosPresenterInterface {

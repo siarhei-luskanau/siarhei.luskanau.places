@@ -36,22 +36,12 @@ public class PlaceListPresenter implements Presenter {
     }
 
     @Override
-    public void resume() {
-    }
-
-    @Override
-    public void pause() {
-        this.getPlaceListUseCase.unsubscribe();
-    }
-
-    @Override
     public void destroy() {
         this.getPlaceListUseCase.unsubscribe();
         this.placeListView = null;
     }
 
     public void updatePlaceList() {
-        this.getPlaceListUseCase.unsubscribe();
         this.getPlaceListUseCase.execute(new PlaceListSubscriber());
     }
 
