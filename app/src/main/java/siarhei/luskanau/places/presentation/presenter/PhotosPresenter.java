@@ -23,11 +23,14 @@ import siarhei.luskanau.places.presentation.view.photos.PhotosView;
 public class PhotosPresenter implements Presenter {
 
     private final GetPlaceDetails getPlaceDetailsUseCase;
+    private final ErrorMessageFactory errorMessageFactory;
     private PhotosView photosView;
 
     @Inject
-    public PhotosPresenter(@Named("placeDetails") UseCase getPlaceDetailsUseCase) {
+    public PhotosPresenter(@Named("placeDetails") UseCase getPlaceDetailsUseCase,
+                           ErrorMessageFactory errorMessageFactory) {
         this.getPlaceDetailsUseCase = (GetPlaceDetails) getPlaceDetailsUseCase;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void setView(@NonNull PhotosView view) {
@@ -46,7 +49,7 @@ public class PhotosPresenter implements Presenter {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.photosView.context(), errorBundle.getException());
+        String errorMessage = errorMessageFactory.create(this.photosView.context(), errorBundle.getException());
         this.photosView.showError(errorMessage);
     }
 

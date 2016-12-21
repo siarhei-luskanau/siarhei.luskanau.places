@@ -24,11 +24,14 @@ import siarhei.luskanau.places.presentation.view.placelist.PlaceListView;
 public class PlaceListPresenter implements Presenter {
 
     private final GetPlaceList getPlaceListUseCase;
+    private final ErrorMessageFactory errorMessageFactory;
     private PlaceListView placeListView;
 
     @Inject
-    public PlaceListPresenter(@Named("placeList") UseCase getPlaceListUseCase) {
+    public PlaceListPresenter(@Named("placeList") UseCase getPlaceListUseCase,
+                              ErrorMessageFactory errorMessageFactory) {
         this.getPlaceListUseCase = (GetPlaceList) getPlaceListUseCase;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void setView(@NonNull PlaceListView view) {
@@ -46,7 +49,7 @@ public class PlaceListPresenter implements Presenter {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.placeListView.context(), errorBundle.getException());
+        String errorMessage = errorMessageFactory.create(this.placeListView.context(), errorBundle.getException());
         this.placeListView.showError(errorMessage);
     }
 
