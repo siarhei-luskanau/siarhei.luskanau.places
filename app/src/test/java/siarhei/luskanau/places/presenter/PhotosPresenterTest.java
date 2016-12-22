@@ -28,8 +28,8 @@ import static org.mockito.Mockito.verify;
 @PrepareForTest({Log.class})
 public class PhotosPresenterTest {
 
-    private static final String PLACE_ID = "place_id";
-    private static Place PLACE = new Place(PLACE_ID);
+    private static final String FAKE_PLACE_ID = "place_id";
+    private static Place PLACE = new Place(FAKE_PLACE_ID);
 
     @Mock
     private GetPlaceDetails getPlaceDetails;
@@ -39,7 +39,7 @@ public class PhotosPresenterTest {
     private PhotosView photosView;
 
     @Captor
-    private ArgumentCaptor<Subscriber> subscriberArgumentCaptor;
+    private ArgumentCaptor<Subscriber<Place>> subscriberArgumentCaptor;
 
     private PhotosPresenter photosPresenter;
 
@@ -60,8 +60,8 @@ public class PhotosPresenterTest {
 
     @Test
     public void loadPlaceFromRepositoryAndLoadIntoView() {
-        photosPresenter.setPlaceId(PLACE_ID);
-        verify(getPlaceDetails).setPlaceId(PLACE_ID);
+        photosPresenter.setPlaceId(FAKE_PLACE_ID);
+        verify(getPlaceDetails).setPlaceId(FAKE_PLACE_ID);
         verify(getPlaceDetails).execute(subscriberArgumentCaptor.capture());
 
         subscriberArgumentCaptor.getValue().onNext(PLACE);
@@ -70,8 +70,8 @@ public class PhotosPresenterTest {
 
     @Test
     public void loadPlaceFromRepositoryAndShowErrorMessage() {
-        photosPresenter.setPlaceId(PLACE_ID);
-        verify(getPlaceDetails).setPlaceId(PLACE_ID);
+        photosPresenter.setPlaceId(FAKE_PLACE_ID);
+        verify(getPlaceDetails).setPlaceId(FAKE_PLACE_ID);
         verify(getPlaceDetails).execute(subscriberArgumentCaptor.capture());
 
         subscriberArgumentCaptor.getValue().onError(new NetworkConnectionException());

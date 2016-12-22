@@ -52,7 +52,11 @@ public class GetPlaceList extends UseCase {
     @Override
     public Observable buildUseCaseObservable() {
         lastLocation = null;
-        return this.locationRepository.location()
+        Observable<Location> locationObservable = this.locationRepository.location();
+        if (locationObservable == null) {
+            return Observable.empty();
+        }
+        return locationObservable
                 .onErrorReturn(throwable -> {
                     Log.e(TAG, throwable.getMessage(), throwable);
                     return null;
