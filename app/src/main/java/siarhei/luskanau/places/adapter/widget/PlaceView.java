@@ -16,6 +16,11 @@ public class PlaceView extends LinearLayout {
 
     private ViewPlaceBinding binding;
 
+    {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.view_place, this, true);
+    }
+
     public PlaceView(Context context) {
         super(context);
     }
@@ -26,11 +31,6 @@ public class PlaceView extends LinearLayout {
 
     public PlaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.view_place, this, true);
     }
 
     public void setPlace(Place place, Location location) {

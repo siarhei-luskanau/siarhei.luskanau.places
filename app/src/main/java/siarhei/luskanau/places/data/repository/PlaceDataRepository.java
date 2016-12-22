@@ -39,7 +39,7 @@ public class PlaceDataRepository implements PlaceRepository {
     /**
      * Constructs a {@link PlaceRepository}.
      *
-     * @param dataStoreFactory A factory to construct different data source implementations.
+     * @param dataStoreFactory      A factory to construct different data source implementations.
      * @param placeEntityDataMapper {@link PlaceEntityDataMapper}.
      */
     @Inject

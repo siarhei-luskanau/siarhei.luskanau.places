@@ -17,15 +17,6 @@ public abstract class BaseRecyclerArrayAdapter<T, V extends RecyclerView.ViewHol
         super(listener);
     }
 
-    public void setData(Collection<? extends T> data) {
-        mData.clear();
-        if (data != null) {
-            mData.addAll(data);
-        }
-
-        notifyDataSetChanged();
-    }
-
     public void addItem(T item) {
         mData.add(item);
         notifyItemInserted(mData.size() - 1);
@@ -58,6 +49,15 @@ public abstract class BaseRecyclerArrayAdapter<T, V extends RecyclerView.ViewHol
 
     public List<T> getData() {
         return mData;
+    }
+
+    public void setData(Collection<? extends T> data) {
+        mData.clear();
+        if (data != null) {
+            mData.addAll(data);
+        }
+
+        notifyDataSetChanged();
     }
 
     @Override

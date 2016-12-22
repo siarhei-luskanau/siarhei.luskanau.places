@@ -24,7 +24,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 
 import javax.inject.Inject;
 
-
 import siarhei.luskanau.places.presentation.view.photos.PlacePhotosActivity;
 import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsActivity;
 import siarhei.luskanau.places.presentation.view.placelist.PlacesActivity;

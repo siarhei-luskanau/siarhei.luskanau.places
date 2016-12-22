@@ -42,7 +42,7 @@ class CloudPlaceDataStore implements PlaceDataStore {
     /**
      * Construct a {@link PlaceDataStore} based on connections to the api (Cloud).
      *
-     * @param restApi The {@link RestApi} implementation to use.
+     * @param restApi    The {@link RestApi} implementation to use.
      * @param placeCache A {@link PlaceCache} to cache data retrieved from the api.
      */
     CloudPlaceDataStore(RestApi restApi, PlaceCache placeCache) {

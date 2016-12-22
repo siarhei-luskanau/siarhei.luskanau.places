@@ -16,6 +16,11 @@ public class PlaceDetailPhotoView extends LinearLayout {
 
     private ViewPlaceDetailPhotoBinding binding;
 
+    {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.view_place_detail_photo, this, true);
+    }
+
     public PlaceDetailPhotoView(Context context) {
         super(context);
     }
@@ -26,11 +31,6 @@ public class PlaceDetailPhotoView extends LinearLayout {
 
     public PlaceDetailPhotoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.view_place_detail_photo, this, true);
     }
 
     public void setPhotoModel(Photo photo) {

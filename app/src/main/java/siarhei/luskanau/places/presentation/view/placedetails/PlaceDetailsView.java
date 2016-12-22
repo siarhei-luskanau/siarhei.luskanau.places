@@ -58,7 +58,7 @@ public interface PlaceDetailsView {
     /**
      * View a {@link Place} photo.
      *
-     * @param placeId The place id that will be shown.
+     * @param placeId       The place id that will be shown.
      * @param photoPosition The place position that will be shown.
      */
     void viewPlacePhoto(String placeId, int photoPosition);

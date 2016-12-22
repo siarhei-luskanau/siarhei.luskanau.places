@@ -13,6 +13,11 @@ public class PlaceDetailWebsiteView extends LinearLayout {
 
     private ViewPlaceDetailWebsiteBinding binding;
 
+    {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.view_place_detail_website, this, true);
+    }
+
     public PlaceDetailWebsiteView(Context context) {
         super(context);
     }
@@ -23,11 +28,6 @@ public class PlaceDetailWebsiteView extends LinearLayout {
 
     public PlaceDetailWebsiteView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.view_place_detail_website, this, true);
     }
 
     public void setUri(String uri) {

@@ -14,6 +14,11 @@ public class PlaceDetailMapView extends LinearLayout {
 
     private ViewPlaceDetailMapBinding binding;
 
+    {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.view_place_detail_map, this, true);
+    }
+
     public PlaceDetailMapView(Context context) {
         super(context);
     }
@@ -24,11 +29,6 @@ public class PlaceDetailMapView extends LinearLayout {
 
     public PlaceDetailMapView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.view_place_detail_map, this, true);
     }
 
     public void setPlace(Place place) {

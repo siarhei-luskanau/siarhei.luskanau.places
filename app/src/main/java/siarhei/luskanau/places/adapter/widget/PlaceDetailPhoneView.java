@@ -13,6 +13,11 @@ public class PlaceDetailPhoneView extends LinearLayout {
 
     private ViewPlaceDetailPhoneBinding binding;
 
+    {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.view_place_detail_phone, this, true);
+    }
+
     public PlaceDetailPhoneView(Context context) {
         super(context);
     }
@@ -23,11 +28,6 @@ public class PlaceDetailPhoneView extends LinearLayout {
 
     public PlaceDetailPhoneView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.view_place_detail_phone, this, true);
     }
 
     public void setPhoneNumber(CharSequence phoneNumber) {

@@ -14,6 +14,11 @@ public class PlaceDetailHeaderView extends LinearLayout {
 
     private ViewPlaceDetailHeaderBinding binding;
 
+    {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.view_place_detail_header, this, true);
+    }
+
     public PlaceDetailHeaderView(Context context) {
         super(context);
     }
@@ -24,11 +29,6 @@ public class PlaceDetailHeaderView extends LinearLayout {
 
     public PlaceDetailHeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                R.layout.view_place_detail_header, this, true);
     }
 
     public void setPlace(Place place) {
