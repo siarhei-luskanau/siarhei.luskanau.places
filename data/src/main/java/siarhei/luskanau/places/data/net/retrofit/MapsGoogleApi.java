@@ -22,7 +22,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
 import rx.schedulers.Schedulers;
-import siarhei.luskanau.places.BuildConfig;
+import siarhei.luskanau.places.data.BuildConfig;
 import siarhei.luskanau.places.data.entity.BaseResponse;
 import siarhei.luskanau.places.data.entity.Photo;
 import siarhei.luskanau.places.data.entity.PlaceDetailsResponse;

@@ -19,12 +19,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import siarhei.luskanau.places.data.cache.PlaceCache;
 import siarhei.luskanau.places.data.net.RestApi;
 import siarhei.luskanau.places.data.net.RestApiImpl;
 import siarhei.luskanau.places.data.net.retrofit.MapsGoogleApi;
-import siarhei.luskanau.places.utils.AppUtils;
 
 /**
  * Factory that creates different implementations of {@link PlaceDataStore}.
@@ -33,11 +33,14 @@ public class PlaceDataStoreFactory {
 
     private final Context context;
     private final PlaceCache placeCache;
+    private final String geoApiKey;
 
     @Inject
-    public PlaceDataStoreFactory(@NonNull Context context, @NonNull PlaceCache placeCache) {
+    public PlaceDataStoreFactory(@NonNull Context context, @NonNull PlaceCache placeCache,
+                                 @Named("geoApiKey") String geoApiKey) {
         this.context = context.getApplicationContext();
         this.placeCache = placeCache;
+        this.geoApiKey = geoApiKey;
     }
 
     /**
@@ -59,7 +62,6 @@ public class PlaceDataStoreFactory {
      * Create {@link PlaceDataStore} to retrieve data from the Cloud.
      */
     public PlaceDataStore createCloudDataStore() {
-        String geoApiKey = AppUtils.getGeoApiKey(this.context);
         MapsGoogleApi mapsGoogleApi = new MapsGoogleApi(geoApiKey);
         RestApi restApi = new RestApiImpl(this.context, mapsGoogleApi);
         return new CloudPlaceDataStore(restApi, this.placeCache);

@@ -17,6 +17,8 @@ package siarhei.luskanau.places.presentation.internal.di.modules;
 
 import android.content.Context;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import siarhei.luskanau.places.AppApplication;
@@ -28,6 +30,7 @@ import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
 import siarhei.luskanau.places.presentation.UIThread;
+import siarhei.luskanau.places.utils.AppUtils;
 
 /**
  * Dagger module that provides objects which will live during the application lifecycle.
@@ -58,6 +61,12 @@ public class ApplicationModule {
     @Provides
     PlaceCache providePlaceCache(PlaceCacheImpl placeCache) {
         return placeCache;
+    }
+
+    @Provides
+    @Named("geoApiKey")
+    String provideGeoApiKey() {
+        return AppUtils.getGeoApiKey(this.application);
     }
 
     @Provides
