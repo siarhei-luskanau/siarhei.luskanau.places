@@ -39,11 +39,11 @@ public class GetPlaceListTest {
         MockitoAnnotations.initMocks(this);
         getPlaceList = new GetPlaceList(mockLocationRepository, mockPlaceRepository,
                 mockThreadExecutor, mockPostExecutionThread);
+        given(mockLocationRepository.location()).willReturn(Observable.just(FAKE_LAT_LNG));
     }
 
     @Test
     public void testGetUserListUseCaseObservableHappyCase() {
-        given(mockLocationRepository.location()).willReturn(Observable.just(FAKE_LAT_LNG));
         getPlaceList.buildUseCaseObservable();
 
         verify(mockLocationRepository).location();
