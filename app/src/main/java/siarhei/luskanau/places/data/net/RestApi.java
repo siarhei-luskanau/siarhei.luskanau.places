@@ -15,12 +15,11 @@
  */
 package siarhei.luskanau.places.data.net;
 
-import android.location.Location;
-
 import java.util.List;
 
 import rx.Observable;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
+import siarhei.luskanau.places.domain.LatLng;
 
 /**
  * RestApi for retrieving data from the network.
@@ -30,7 +29,7 @@ public interface RestApi {
     /**
      * Retrieves an {@link rx.Observable} which will emit a List of {@link PlaceEntity}.
      */
-    Observable<List<PlaceEntity>> placeEntityList(Location location);
+    Observable<List<PlaceEntity>> placeEntityList(LatLng location);
 
     /**
      * Retrieves an {@link rx.Observable} which will emit a {@link PlaceEntity}.

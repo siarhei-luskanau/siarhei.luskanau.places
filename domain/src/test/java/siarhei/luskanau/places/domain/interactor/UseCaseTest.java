@@ -18,7 +18,7 @@ import static org.mockito.BDDMockito.given;
 
 public class UseCaseTest {
 
-    private UseCase useCase;
+    private UseCase<Integer> useCase;
 
     @Mock
     private ThreadExecutor mockThreadExecutor;
@@ -52,20 +52,20 @@ public class UseCaseTest {
         assertThat(testSubscriber.isUnsubscribed(), is(true));
     }
 
-    private static class UseCaseTestClass extends UseCase {
+    private static class UseCaseTestClass extends UseCase<Integer> {
 
-        protected UseCaseTestClass(ThreadExecutor threadExecutor,
-                                   PostExecutionThread postExecutionThread) {
+        UseCaseTestClass(ThreadExecutor threadExecutor,
+                         PostExecutionThread postExecutionThread) {
             super(threadExecutor, postExecutionThread);
         }
 
         @Override
-        protected Observable buildUseCaseObservable() {
+        protected Observable<Integer> buildUseCaseObservable() {
             return Observable.empty();
         }
 
         @Override
-        public void execute(Subscriber UseCaseSubscriber) {
+        public void execute(Subscriber<Integer> UseCaseSubscriber) {
             super.execute(UseCaseSubscriber);
         }
     }

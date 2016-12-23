@@ -3,7 +3,6 @@ package siarhei.luskanau.places.presentation.view.placelist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +26,7 @@ import javax.inject.Inject;
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerFragment;
 import siarhei.luskanau.places.adapter.PlacesAdapter;
+import siarhei.luskanau.places.domain.LatLng;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.presentation.internal.di.components.PlaceComponent;
 import siarhei.luskanau.places.presentation.presenter.PlaceListPresenter;
@@ -117,7 +117,7 @@ public class PlaceListFragment extends BaseRecyclerFragment implements PlaceList
     }
 
     @Override
-    public void renderPlaceList(Location location, List<Place> places) {
+    public void renderPlaceList(LatLng location, List<Place> places) {
         adapter.setData(location, places);
     }
 

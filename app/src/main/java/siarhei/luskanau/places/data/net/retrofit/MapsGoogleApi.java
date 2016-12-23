@@ -1,6 +1,5 @@
 package siarhei.luskanau.places.data.net.retrofit;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -29,6 +28,7 @@ import siarhei.luskanau.places.data.entity.Photo;
 import siarhei.luskanau.places.data.entity.PlaceDetailsResponse;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.data.entity.PlacesResponse;
+import siarhei.luskanau.places.domain.LatLng;
 
 public class MapsGoogleApi {
 
@@ -41,7 +41,7 @@ public class MapsGoogleApi {
         this.geoApiKey = geoApiKey;
     }
 
-    public Observable<List<PlaceEntity>> getPlaces(Location location) {
+    public Observable<List<PlaceEntity>> getPlaces(LatLng location) {
         String locationString = String.format(Locale.ENGLISH, "%f,%f",
                 location.getLatitude(), location.getLongitude());
         return getService().placeNearbySearch(locationString)

@@ -1,15 +1,11 @@
 package siarhei.luskanau.places.presentation.presenter;
 
-import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import siarhei.luskanau.places.domain.Place;
+import siarhei.luskanau.places.domain.PlaceListBundle;
 import siarhei.luskanau.places.domain.exception.DefaultErrorBundle;
 import siarhei.luskanau.places.domain.exception.ErrorBundle;
 import siarhei.luskanau.places.domain.interactor.DefaultSubscriber;
@@ -53,7 +49,7 @@ public class PlaceListPresenter implements Presenter {
         this.placeListView.showError(errorMessage);
     }
 
-    private final class PlaceListSubscriber extends DefaultSubscriber<Pair<Location, List<Place>>> {
+    private final class PlaceListSubscriber extends DefaultSubscriber<PlaceListBundle> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
@@ -62,11 +58,10 @@ public class PlaceListPresenter implements Presenter {
         }
 
         @Override
-        public void onNext(Pair<Location, List<Place>> pair) {
+        public void onNext(PlaceListBundle placeListBundle) {
             PlaceListPresenter.this.placeListView.showRefreshing(false);
-            if (pair != null && pair.first != null) {
-                PlaceListPresenter.this.placeListView.renderPlaceList(pair.first, pair.second);
-            }
+            PlaceListPresenter.this.placeListView
+                    .renderPlaceList(placeListBundle.getLatLng(), placeListBundle.getPlaces());
         }
     }
 }

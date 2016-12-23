@@ -14,6 +14,7 @@ import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.abstracts.BaseRecyclerArrayAdapter;
 import siarhei.luskanau.places.abstracts.BindableViewHolder;
 import siarhei.luskanau.places.databinding.ListItemPlaceBinding;
+import siarhei.luskanau.places.domain.LatLng;
 import siarhei.luskanau.places.domain.Place;
 
 public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewHolder> {
@@ -41,8 +42,11 @@ public class PlacesAdapter extends BaseRecyclerArrayAdapter<Place, BindableViewH
         }
     };
 
-    public void setData(Location location, Collection<Place> data) {
-        this.location = location;
+    public void setData(LatLng location, Collection<Place> data) {
+        this.location = new Location("");
+        this.location.setLatitude(location.getLatitude());
+        this.location.setLongitude(location.getLongitude());
+
         if (location != null && data != null) {
             super.setData(Observable.from(data)
                     .toSortedList(placeDistanceComparator)

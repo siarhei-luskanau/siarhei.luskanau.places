@@ -12,12 +12,15 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import siarhei.luskanau.places.domain.LatLng;
 import siarhei.luskanau.places.domain.repository.LocationRepository;
 
 public class LocationRepositoryImpl implements LocationRepository {
 
     private static final String TAG = "LocationRepositoryImpl";
+    private static final int DISTANCE_IN_METERS = 100;
     private final Context context;
+    private Location lastLocation;
 
     @Inject
     public LocationRepositoryImpl(Context context) {
@@ -25,7 +28,8 @@ public class LocationRepositoryImpl implements LocationRepository {
     }
 
     @Override
-    public Observable<Location> location() {
+    public Observable<LatLng> location() {
+        lastLocation = null;
         Observable<Location> observable = Observable.create(subscriber -> {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             for (String provider : locationManager.getAllProviders()) {
@@ -85,6 +89,25 @@ public class LocationRepositoryImpl implements LocationRepository {
             }
         });
 
-        return observable.subscribeOn(AndroidSchedulers.mainThread());
+        return observable
+                .filter(location -> {
+                    float distanceTo = -1;
+                    if (lastLocation != null) {
+                        distanceTo = lastLocation.distanceTo(location);
+                    }
+                    if (distanceTo < 0 || distanceTo >= DISTANCE_IN_METERS) {
+                        lastLocation = location;
+                        Log.d(TAG, "newLocation: " + distanceTo + "m " + location);
+                        return true;
+                    }
+                    return false;
+                })
+                .map(location -> {
+                    if (location != null) {
+                        return new LatLng(location.getLatitude(), location.getLongitude());
+                    }
+                    return null;
+                })
+                .subscribeOn(AndroidSchedulers.mainThread());
     }
 }

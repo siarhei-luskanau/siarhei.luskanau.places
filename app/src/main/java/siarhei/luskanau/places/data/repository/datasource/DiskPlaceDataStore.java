@@ -15,13 +15,12 @@
  */
 package siarhei.luskanau.places.data.repository.datasource;
 
-import android.location.Location;
-
 import java.util.List;
 
 import rx.Observable;
 import siarhei.luskanau.places.data.cache.PlaceCache;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
+import siarhei.luskanau.places.domain.LatLng;
 
 /**
  * {@link PlaceDataStore} implementation based on file system data store.
@@ -40,7 +39,7 @@ class DiskPlaceDataStore implements PlaceDataStore {
     }
 
     @Override
-    public Observable<List<PlaceEntity>> placeEntityList(Location location) {
+    public Observable<List<PlaceEntity>> placeEntityList(LatLng location) {
         //TODO: implement simple cache for storing/retrieving collections of places.
         throw new UnsupportedOperationException("Operation is not available!!!");
     }

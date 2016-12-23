@@ -15,8 +15,6 @@
  */
 package siarhei.luskanau.places.domain.interactor;
 
-import android.util.Log;
-
 /**
  * Default subscriber base class to be used whenever you want default error handling.
  */
@@ -28,7 +26,6 @@ public class DefaultSubscriber<T> extends rx.Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
-        Log.e(getClass().getSimpleName(), e.getMessage(), e);
         // no-op by default.
     }
 

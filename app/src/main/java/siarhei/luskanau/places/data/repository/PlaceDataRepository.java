@@ -15,8 +15,6 @@
  */
 package siarhei.luskanau.places.data.repository;
 
-import android.location.Location;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,6 +23,7 @@ import rx.Observable;
 import siarhei.luskanau.places.data.entity.mapper.PlaceEntityDataMapper;
 import siarhei.luskanau.places.data.repository.datasource.PlaceDataStore;
 import siarhei.luskanau.places.data.repository.datasource.PlaceDataStoreFactory;
+import siarhei.luskanau.places.domain.LatLng;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
 
@@ -50,7 +49,7 @@ public class PlaceDataRepository implements PlaceRepository {
     }
 
     @Override
-    public Observable<List<Place>> places(Location location) {
+    public Observable<List<Place>> places(LatLng location) {
         //we always get all places from the cloud
         final PlaceDataStore placeDataStore = this.placeDataStoreFactory.createCloudDataStore();
         return placeDataStore.placeEntityList(location).map(this.placeEntityDataMapper::transform);
