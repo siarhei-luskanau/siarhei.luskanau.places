@@ -19,7 +19,7 @@ public class LatLngTest {
     }
 
     @Test
-    public void testUserConstructorHappyCase() {
+    public void testConstructorHappyCase() {
         assertThat(latLng.getLatitude(), is(FAKE_LAT));
         assertThat(latLng.getLongitude(), is(FAKE_LNG));
     }

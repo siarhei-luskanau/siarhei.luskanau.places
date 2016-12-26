@@ -40,6 +40,8 @@ public class UseCaseTest {
         useCase.execute(testSubscriber);
 
         assertThat(testSubscriber.getOnNextEvents().size(), is(0));
+        testSubscriber.assertNoValues();
+        testSubscriber.assertNotCompleted();
     }
 
     @Test
@@ -49,7 +51,7 @@ public class UseCaseTest {
         useCase.execute(testSubscriber);
         useCase.unsubscribe();
 
-        assertThat(testSubscriber.isUnsubscribed(), is(true));
+        testSubscriber.assertUnsubscribed();
     }
 
     private static class UseCaseTestClass extends UseCase<Integer> {
