@@ -38,3 +38,8 @@ captures/
 
 # Keystore files
 *.jks
+
+# floobits
+.floo
+.flooignore
+FLOOBITS_README.md
