@@ -1,14 +1,36 @@
-apply plugin: 'java'
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
 
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = JavaVersion.VERSION_1_7
-//noinspection GroovyUnusedAssignment
-targetCompatibility = JavaVersion.VERSION_1_7
+apply from: '../config/quality.gradle'
+build.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint', 'test'
+
+android {
+
+    compileSdkVersion project.ANDROID_BUILD_SDK_VERSION
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion project.ANDROID_BUILD_MIN_SDK_VERSION
+        targetSdkVersion project.ANDROID_BUILD_TARGET_SDK_VERSION
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
 
 dependencies {
-    compile "io.reactivex:rxjava:1.2.4"
-    compile "javax.inject:javax.inject:1"
+    def domainDependencies = rootProject.ext.domainDependencies
+    def domainTestDependencies = rootProject.ext.domainTestDependencies
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.4.1'
+    compile domainDependencies.rxJava
+    compile domainDependencies.javaxInject
+
+    testCompile domainTestDependencies.junit
+    testCompile domainTestDependencies.mockito
 }

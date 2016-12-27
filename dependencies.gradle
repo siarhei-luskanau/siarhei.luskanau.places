@@ -1,0 +1,87 @@
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+ext {
+    //Android
+    ANDROID_BUILD_SDK_VERSION = 25
+    ANDROID_BUILD_TARGET_SDK_VERSION = ANDROID_BUILD_SDK_VERSION
+    ANDROID_BUILD_TOOLS_VERSION = "25.0.2"
+    ANDROID_BUILD_MIN_SDK_VERSION = 15
+    SUPPORT_LIBRARY_VERSION = "25.1.0"
+    PLAY_SERVICES_VERSION = "10.0.1"
+
+    //Libraries
+    daggerVersion = '2.8'
+    retrofitVersion = '2.1.0'
+    okHttpVersion = '3.4.2'
+    gsonVersion = '2.7'
+    glideVersion = '3.7.0'
+    javaxInjectVersion = '1'
+    rxJavaVersion = '1.2.4'
+    rxAndroidVersion = '1.2.1'
+//    rxJavaVersion = '2.0.2'
+//    rxAndroidVersion = '2.0.1'
+
+    //Testing
+    jUnitVersion = '4.12'
+    mockitoVersion = '2.4.1'
+    mockitoAllVersion = '1.10.19'
+    powermockVersion = '1.6.6'
+    supportTestRunnerVersion = '0.5'
+    supportTestRunnerVersion = '0.5'
+
+    //Development
+    leakCanaryVersion = '1.5'
+
+    presentationDependencies = [
+            daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger        : "com.google.dagger:dagger:${daggerVersion}",
+            supportDesign        : "com.android.support:design:${SUPPORT_LIBRARY_VERSION}",
+            supportCardview        : "com.android.support:cardview-v7:${SUPPORT_LIBRARY_VERSION}",
+            glide        : "com.github.bumptech.glide:glide:${glideVersion}",
+    ]
+
+    presentationTestDependencies = [
+            junit           : "junit:junit:${jUnitVersion}",
+            mockitoAll         : "org.mockito:mockito-all:${mockitoAllVersion}",
+            powermockJunit  : "org.powermock:powermock-module-junit4:${powermockVersion}",
+            powermockMockito: "org.powermock:powermock-api-mockito:${powermockVersion}",
+            supportAnnotations: "com.android.support:support-annotations:${SUPPORT_LIBRARY_VERSION}",
+            supportTestRunner: "com.android.support.test:runner:${supportTestRunnerVersion}",
+    ]
+
+    dataDependencies = [
+            rxAndroid               : "io.reactivex:rxandroid:${rxAndroidVersion}",
+            gson                    : "com.google.code.gson:gson:${gsonVersion}",
+            retrofit                : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitAdapterRxJava   : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+            retrofitConverterScalars: "com.squareup.retrofit2:converter-scalars:${retrofitVersion}",
+            okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
+            playServicesLocation    : "com.google.android.gms:play-services-location:${PLAY_SERVICES_VERSION}",
+            playServicesPlaces      : "com.google.android.gms:play-services-places:${PLAY_SERVICES_VERSION}",
+    ]
+
+    dataTestDependencies = [
+            junit  : "junit:junit:${jUnitVersion}",
+            mockito: "org.mockito:mockito-core:${mockitoVersion}",
+    ]
+
+    domainDependencies = [
+            rxJava     : "io.reactivex:rxjava:${rxJavaVersion}",
+//            rxJava:"io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            javaxInject: "javax.inject:javax.inject:${javaxInjectVersion}",
+    ]
+
+    domainTestDependencies = [
+            junit  : "junit:junit:${jUnitVersion}",
+            mockito: "org.mockito:mockito-core:${mockitoVersion}",
+    ]
+
+    developmentDependencies = [
+            leakCanary    : "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
+            leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
+    ]
+}

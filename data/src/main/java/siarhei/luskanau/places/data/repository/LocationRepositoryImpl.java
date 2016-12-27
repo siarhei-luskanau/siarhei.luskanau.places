@@ -29,7 +29,6 @@ public class LocationRepositoryImpl implements LocationRepository {
 
     @Override
     public Observable<LatLng> location() {
-        lastLocation = null;
         Observable<Location> observable = Observable.create(subscriber -> {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             for (String provider : locationManager.getAllProviders()) {
@@ -89,6 +88,12 @@ public class LocationRepositoryImpl implements LocationRepository {
             }
         });
 
+        observable = observable.subscribeOn(AndroidSchedulers.mainThread());
+        return filterLocations(observable);
+    }
+
+    public Observable<LatLng> filterLocations(Observable<Location> observable) {
+        lastLocation = null;
         return observable
                 .filter(location -> {
                     float distanceTo = -1;
@@ -107,7 +112,6 @@ public class LocationRepositoryImpl implements LocationRepository {
                         return new LatLng(location.getLatitude(), location.getLongitude());
                     }
                     return null;
-                })
-                .subscribeOn(AndroidSchedulers.mainThread());
+                });
     }
 }
