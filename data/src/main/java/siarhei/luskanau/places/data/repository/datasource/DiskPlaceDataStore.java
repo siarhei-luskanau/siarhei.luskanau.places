@@ -17,7 +17,7 @@ package siarhei.luskanau.places.data.repository.datasource;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.cache.PlaceCache;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.domain.LatLng;
@@ -48,5 +48,4 @@ class DiskPlaceDataStore implements PlaceDataStore {
     public Observable<PlaceEntity> placeEntityDetails(final String placeId) {
         return this.placeCache.get(placeId);
     }
-
 }

@@ -15,11 +15,11 @@
  */
 package siarhei.luskanau.places.domain.interactor;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 
@@ -28,48 +28,53 @@ import siarhei.luskanau.places.domain.executor.ThreadExecutor;
  * This interface represents a execution unit for different use cases (this means any use case
  * in the application should implement this contract).
  * <p>
- * By convention each UseCase implementation will return the result using a {@link rx.Subscriber}
+ * By convention each UseCase implementation will return the result using a {@link DisposableObserver}
  * that will execute its job in a background thread and will post the result in the UI thread.
  */
-public abstract class UseCase<T> {
+public abstract class UseCase<T, P> {
 
     private final ThreadExecutor threadExecutor;
     private final PostExecutionThread postExecutionThread;
+    private final CompositeDisposable disposables;
 
-    private Subscription subscription = Subscriptions.empty();
-
-    protected UseCase(ThreadExecutor threadExecutor,
-                      PostExecutionThread postExecutionThread) {
+    UseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
+        this.disposables = new CompositeDisposable();
     }
 
     /**
-     * Builds an {@link rx.Observable} which will be used when executing the current {@link UseCase}.
+     * Builds an {@link Observable} which will be used when executing the current {@link UseCase}.
      */
-    protected abstract Observable<T> buildUseCaseObservable();
+    abstract Observable<T> buildUseCaseObservable(P params);
 
     /**
      * Executes the current use case.
      *
-     * @param useCaseSubscriber The guy who will be listen to the observable build
-     *                          with {@link #buildUseCaseObservable()}.
+     * @param observer {@link DisposableObserver} which will be listening to the observable build
+     *                 by {@link #buildUseCaseObservable(P)} ()} method.
+     * @param params   Parameters (Optional) used to build/execute this use case.
      */
-    public void execute(Subscriber<T> useCaseSubscriber) {
-        unsubscribe();
-        this.subscription = this.buildUseCaseObservable()
+    public void execute(DisposableObserver<T> observer, P params) {
+        final Observable<T> observable = this.buildUseCaseObservable(params)
                 .subscribeOn(Schedulers.from(threadExecutor))
-                .observeOn(postExecutionThread.getScheduler())
-                .subscribe(useCaseSubscriber);
+                .observeOn(postExecutionThread.getScheduler());
+        addDisposable(observable.subscribeWith(observer));
     }
 
     /**
-     * Unsubscribes from current {@link rx.Subscription}.
+     * Dispose from current {@link CompositeDisposable}.
      */
-    public void unsubscribe() {
-        if (!subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+    public void dispose() {
+        if (!disposables.isDisposed()) {
+            disposables.dispose();
         }
     }
 
+    /**
+     * Dispose from current {@link CompositeDisposable}.
+     */
+    private void addDisposable(Disposable disposable) {
+        disposables.add(disposable);
+    }
 }

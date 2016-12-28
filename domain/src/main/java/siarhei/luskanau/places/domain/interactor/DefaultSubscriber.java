@@ -15,12 +15,14 @@
  */
 package siarhei.luskanau.places.domain.interactor;
 
+import io.reactivex.observers.DisposableObserver;
+
 /**
- * Default subscriber base class to be used whenever you want default error handling.
+ * Default {@link DisposableObserver} base class to be used whenever you want default error handling.
  */
-public class DefaultSubscriber<T> extends rx.Subscriber<T> {
+public class DefaultSubscriber<T> extends DisposableObserver<T> {
     @Override
-    public void onCompleted() {
+    public void onComplete() {
         // no-op by default.
     }
 
@@ -33,5 +35,4 @@ public class DefaultSubscriber<T> extends rx.Subscriber<T> {
     public void onNext(T t) {
         // no-op by default.
     }
-
 }

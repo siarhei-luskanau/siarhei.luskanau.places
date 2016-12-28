@@ -36,12 +36,12 @@ public class PlaceListPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        this.getPlaceListUseCase.unsubscribe();
+        this.getPlaceListUseCase.dispose();
         this.placeListView = null;
     }
 
     public void updatePlaceList() {
-        this.getPlaceListUseCase.execute(new PlaceListSubscriber());
+        this.getPlaceListUseCase.execute(new PlaceListSubscriber(), null);
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {

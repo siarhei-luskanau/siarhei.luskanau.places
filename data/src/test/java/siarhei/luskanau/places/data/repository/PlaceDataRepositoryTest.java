@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.data.entity.mapper.PlaceEntityDataMapper;
 import siarhei.luskanau.places.data.repository.datasource.PlaceDataStore;

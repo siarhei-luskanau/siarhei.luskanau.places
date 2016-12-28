@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.entity.mapper.PlaceEntityDataMapper;
 import siarhei.luskanau.places.data.repository.datasource.PlaceDataStore;
 import siarhei.luskanau.places.data.repository.datasource.PlaceDataStoreFactory;

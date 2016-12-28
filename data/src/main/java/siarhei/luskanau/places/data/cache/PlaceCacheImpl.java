@@ -21,7 +21,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.cache.serializer.JsonSerializer;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.data.exception.PlaceNotFoundException;
@@ -73,7 +73,7 @@ public class PlaceCacheImpl implements PlaceCache {
 
             if (placeEntity != null) {
                 subscriber.onNext(placeEntity);
-                subscriber.onCompleted();
+                subscriber.onComplete();
             } else {
                 subscriber.onError(new PlaceNotFoundException());
             }

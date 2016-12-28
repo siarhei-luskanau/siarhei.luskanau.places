@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import rx.Subscription;
+import org.reactivestreams.Subscription;
+
 import siarhei.luskanau.places.presentation.internal.di.HasComponent;
 import siarhei.luskanau.places.presentation.navigation.Navigator;
 
@@ -19,8 +20,8 @@ public class BaseFragment extends Fragment {
     }
 
     public void releaseSubscription(Subscription subscription) {
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+        if (subscription != null) {
+            subscription.cancel();
         }
     }
 

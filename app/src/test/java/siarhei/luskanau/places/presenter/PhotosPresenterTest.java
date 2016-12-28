@@ -13,7 +13,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
 import siarhei.luskanau.places.data.exception.NetworkConnectionException;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.interactor.GetPlaceDetails;
@@ -39,7 +39,9 @@ public class PhotosPresenterTest {
     private PhotosView photosView;
 
     @Captor
-    private ArgumentCaptor<Subscriber<Place>> subscriberArgumentCaptor;
+    private ArgumentCaptor<DisposableObserver<Place>> subscriberArgumentCaptor;
+    @Captor
+    private ArgumentCaptor<GetPlaceDetails.Params> paramsArgumentCaptor;
 
     private PhotosPresenter photosPresenter;
 
@@ -55,14 +57,13 @@ public class PhotosPresenterTest {
     @Test
     public void destroyPresenter() {
         photosPresenter.destroy();
-        verify(getPlaceDetails).unsubscribe();
+        verify(getPlaceDetails).dispose();
     }
 
     @Test
     public void loadPlaceFromRepositoryAndLoadIntoView() {
         photosPresenter.setPlaceId(FAKE_PLACE_ID);
-        verify(getPlaceDetails).setPlaceId(FAKE_PLACE_ID);
-        verify(getPlaceDetails).execute(subscriberArgumentCaptor.capture());
+        verify(getPlaceDetails).execute(subscriberArgumentCaptor.capture(), paramsArgumentCaptor.capture());
 
         subscriberArgumentCaptor.getValue().onNext(PLACE);
         verify(photosView).renderPlace(PLACE);
@@ -71,8 +72,7 @@ public class PhotosPresenterTest {
     @Test
     public void loadPlaceFromRepositoryAndShowErrorMessage() {
         photosPresenter.setPlaceId(FAKE_PLACE_ID);
-        verify(getPlaceDetails).setPlaceId(FAKE_PLACE_ID);
-        verify(getPlaceDetails).execute(subscriberArgumentCaptor.capture());
+        verify(getPlaceDetails).execute(subscriberArgumentCaptor.capture(), paramsArgumentCaptor.capture());
 
         subscriberArgumentCaptor.getValue().onError(new NetworkConnectionException());
         verify(photosView).showError(any(String.class));

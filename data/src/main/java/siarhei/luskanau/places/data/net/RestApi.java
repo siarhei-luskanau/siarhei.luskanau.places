@@ -17,7 +17,7 @@ package siarhei.luskanau.places.data.net;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.domain.LatLng;
 
@@ -27,12 +27,12 @@ import siarhei.luskanau.places.domain.LatLng;
 public interface RestApi {
 
     /**
-     * Retrieves an {@link rx.Observable} which will emit a List of {@link PlaceEntity}.
+     * Retrieves an {@link Observable} which will emit a List of {@link PlaceEntity}.
      */
     Observable<List<PlaceEntity>> placeEntityList(LatLng location);
 
     /**
-     * Retrieves an {@link rx.Observable} which will emit a {@link PlaceEntity}.
+     * Retrieves an {@link Observable} which will emit a {@link PlaceEntity}.
      *
      * @param placeId The place id used to get place data.
      */

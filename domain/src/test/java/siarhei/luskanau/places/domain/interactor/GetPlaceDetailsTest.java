@@ -31,12 +31,11 @@ public class GetPlaceDetailsTest {
         MockitoAnnotations.initMocks(this);
         getPlaceDetails = new GetPlaceDetails(mockPlaceRepository,
                 mockThreadExecutor, mockPostExecutionThread);
-        getPlaceDetails.setPlaceId(FAKE_PLACE_ID);
     }
 
     @Test
     public void testGetPlaceDetailsUseCaseObservableHappyCase() {
-        getPlaceDetails.buildUseCaseObservable();
+        getPlaceDetails.buildUseCaseObservable(GetPlaceDetails.Params.forPlace(FAKE_PLACE_ID));
 
         verify(mockPlaceRepository).place(FAKE_PLACE_ID);
         verifyNoMoreInteractions(mockPlaceRepository);

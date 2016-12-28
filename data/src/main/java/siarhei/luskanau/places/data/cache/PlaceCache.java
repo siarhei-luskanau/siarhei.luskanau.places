@@ -15,7 +15,7 @@
  */
 package siarhei.luskanau.places.data.cache;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 
 /**
@@ -23,7 +23,7 @@ import siarhei.luskanau.places.data.entity.PlaceEntity;
  */
 public interface PlaceCache {
     /**
-     * Gets an {@link rx.Observable} which will emit a {@link String}.
+     * Gets an {@link Observable} which will emit a {@link String}.
      *
      * @param placeId The place id to retrieve data.
      */
@@ -55,5 +55,4 @@ public interface PlaceCache {
      * Evict all elements of the cache.
      */
     void evictAll();
-
 }

@@ -7,10 +7,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 import siarhei.luskanau.places.domain.LatLng;
-import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.PlaceListBundle;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
@@ -47,8 +46,8 @@ public class GetPlaceListTest {
 
     @Test
     public void testGetUserListUseCaseObservableHappyCase() {
-        given(mockLocationRepository.location()).willReturn(Observable.<LatLng>empty());
-        getPlaceList.buildUseCaseObservable();
+        given(mockLocationRepository.location()).willReturn(Observable.empty());
+        getPlaceList.buildUseCaseObservable(null);
 
         verify(mockLocationRepository).location();
         verifyNoMoreInteractions(mockLocationRepository);
@@ -61,10 +60,10 @@ public class GetPlaceListTest {
         given(mockLocationRepository.location())
                 .willReturn(Observable.just(FAKE_LAT_LNG));
         given(mockPlaceRepository.places(any(LatLng.class)))
-                .willReturn(Observable.just(Collections.<Place>emptyList()));
-        TestSubscriber<PlaceListBundle> testSubscriber = new TestSubscriber<>();
+                .willReturn(Observable.just(Collections.emptyList()));
+        TestObserver<PlaceListBundle> testSubscriber = new TestObserver<>();
 
-        getPlaceList.buildUseCaseObservable().subscribe(testSubscriber);
+        getPlaceList.buildUseCaseObservable(null).subscribe(testSubscriber);
 
         testSubscriber.assertValueCount(1);
         testSubscriber.assertNoErrors();

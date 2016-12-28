@@ -25,7 +25,7 @@ public class PlacePhotoIdDataFetcher implements DataFetcher<InputStream> {
         Log.d(TAG, getId());
         Bitmap bitmap = model.getGooglePlayServicesApi()
                 .getPlacePhotoBitmap(model.getPlacePhotoMetadata(), 0, 0)
-                .toBlocking().first();
+                .blockingFirst();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream);
@@ -44,5 +44,4 @@ public class PlacePhotoIdDataFetcher implements DataFetcher<InputStream> {
     @Override
     public void cancel() {
     }
-
 }

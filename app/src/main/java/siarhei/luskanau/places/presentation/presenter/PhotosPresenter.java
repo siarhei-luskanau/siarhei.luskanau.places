@@ -39,13 +39,13 @@ public class PhotosPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        this.getPlaceDetailsUseCase.unsubscribe();
+        this.getPlaceDetailsUseCase.dispose();
         this.photosView = null;
     }
 
     public void setPlaceId(String placeId) {
-        this.getPlaceDetailsUseCase.setPlaceId(placeId);
-        this.getPlaceDetailsUseCase.execute(new PhotosPresenter.PhotosSubscriber());
+        this.getPlaceDetailsUseCase.execute(new PhotosPresenter.PhotosSubscriber(),
+                GetPlaceDetails.Params.forPlace(placeId));
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {

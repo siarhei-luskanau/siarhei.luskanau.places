@@ -17,7 +17,7 @@ package siarhei.luskanau.places.data.repository.datasource;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.domain.LatLng;
 
@@ -26,15 +26,14 @@ import siarhei.luskanau.places.domain.LatLng;
  */
 public interface PlaceDataStore {
     /**
-     * Get an {@link rx.Observable} which will emit a List of {@link PlaceEntity}.
+     * Get an {@link Observable} which will emit a List of {@link PlaceEntity}.
      */
     Observable<List<PlaceEntity>> placeEntityList(LatLng location);
 
     /**
-     * Get an {@link rx.Observable} which will emit a {@link PlaceEntity} by its id.
+     * Get an {@link Observable} which will emit a {@link PlaceEntity} by its id.
      *
      * @param placeId The id to retrieve place data.
      */
     Observable<PlaceEntity> placeEntityDetails(final String placeId);
-
 }

@@ -17,7 +17,7 @@ package siarhei.luskanau.places.domain.interactor;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
@@ -27,10 +27,9 @@ import siarhei.luskanau.places.domain.repository.PlaceRepository;
  * This class is an implementation of {@link UseCase} that represents a use case for
  * retrieving data related to an specific {@link siarhei.luskanau.places.domain.Place}.
  */
-public class GetPlaceDetails extends UseCase<Place> {
+public class GetPlaceDetails extends UseCase<Place, GetPlaceDetails.Params> {
 
     private final PlaceRepository placeRepository;
-    private String placeId;
 
     @Inject
     public GetPlaceDetails(PlaceRepository placeRepository,
@@ -40,11 +39,20 @@ public class GetPlaceDetails extends UseCase<Place> {
     }
 
     @Override
-    protected Observable<Place> buildUseCaseObservable() {
-        return this.placeRepository.place(this.placeId);
+    protected Observable<Place> buildUseCaseObservable(Params params) {
+        return this.placeRepository.place(params.placeId);
     }
 
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
+    public static final class Params {
+
+        private String placeId;
+
+        private Params(String placeId) {
+            this.placeId = placeId;
+        }
+
+        public static Params forPlace(String placeId) {
+            return new Params(placeId);
+        }
     }
 }

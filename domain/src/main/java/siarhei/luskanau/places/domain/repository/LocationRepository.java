@@ -1,6 +1,6 @@
 package siarhei.luskanau.places.domain.repository;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.domain.LatLng;
 
 public interface LocationRepository {

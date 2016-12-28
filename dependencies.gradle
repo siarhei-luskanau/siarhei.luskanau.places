@@ -1,6 +1,7 @@
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
 
@@ -15,15 +16,13 @@ ext {
 
     //Libraries
     daggerVersion = '2.8'
-    retrofitVersion = '2.1.0'
-    okHttpVersion = '3.4.2'
+    retrofitVersion = '2.1.1-SNAPSHOT'
+    okHttpVersion = '3.5.0'
     gsonVersion = '2.7'
     glideVersion = '3.7.0'
     javaxInjectVersion = '1'
-    rxJavaVersion = '1.2.4'
-    rxAndroidVersion = '1.2.1'
-//    rxJavaVersion = '2.0.2'
-//    rxAndroidVersion = '2.0.1'
+    rxJavaVersion = '2.0.2'
+    rxAndroidVersion = '2.0.1'
 
     //Testing
     jUnitVersion = '4.12'
@@ -37,27 +36,27 @@ ext {
     leakCanaryVersion = '1.5'
 
     presentationDependencies = [
-            daggerCompiler: "com.google.dagger:dagger-compiler:${daggerVersion}",
-            dagger        : "com.google.dagger:dagger:${daggerVersion}",
-            supportDesign        : "com.android.support:design:${SUPPORT_LIBRARY_VERSION}",
-            supportCardview        : "com.android.support:cardview-v7:${SUPPORT_LIBRARY_VERSION}",
-            glide        : "com.github.bumptech.glide:glide:${glideVersion}",
+            daggerCompiler : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger         : "com.google.dagger:dagger:${daggerVersion}",
+            supportDesign  : "com.android.support:design:${SUPPORT_LIBRARY_VERSION}",
+            supportCardview: "com.android.support:cardview-v7:${SUPPORT_LIBRARY_VERSION}",
+            glide          : "com.github.bumptech.glide:glide:${glideVersion}",
     ]
 
     presentationTestDependencies = [
-            junit           : "junit:junit:${jUnitVersion}",
-            mockitoAll         : "org.mockito:mockito-all:${mockitoAllVersion}",
-            powermockJunit  : "org.powermock:powermock-module-junit4:${powermockVersion}",
-            powermockMockito: "org.powermock:powermock-api-mockito:${powermockVersion}",
+            junit             : "junit:junit:${jUnitVersion}",
+            mockitoAll        : "org.mockito:mockito-all:${mockitoAllVersion}",
+            powermockJunit    : "org.powermock:powermock-module-junit4:${powermockVersion}",
+            powermockMockito  : "org.powermock:powermock-api-mockito:${powermockVersion}",
             supportAnnotations: "com.android.support:support-annotations:${SUPPORT_LIBRARY_VERSION}",
-            supportTestRunner: "com.android.support.test:runner:${supportTestRunnerVersion}",
+            supportTestRunner : "com.android.support.test:runner:${supportTestRunnerVersion}",
     ]
 
     dataDependencies = [
-            rxAndroid               : "io.reactivex:rxandroid:${rxAndroidVersion}",
+            rxAndroid               : "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}",
             gson                    : "com.google.code.gson:gson:${gsonVersion}",
             retrofit                : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
-            retrofitAdapterRxJava   : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+            retrofitAdapterRxJava   : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
             retrofitConverterScalars: "com.squareup.retrofit2:converter-scalars:${retrofitVersion}",
             okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             playServicesLocation    : "com.google.android.gms:play-services-location:${PLAY_SERVICES_VERSION}",
@@ -70,8 +69,7 @@ ext {
     ]
 
     domainDependencies = [
-            rxJava     : "io.reactivex:rxjava:${rxJavaVersion}",
-//            rxJava:"io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            rxJava     : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             javaxInject: "javax.inject:javax.inject:${javaxInjectVersion}",
     ]
 

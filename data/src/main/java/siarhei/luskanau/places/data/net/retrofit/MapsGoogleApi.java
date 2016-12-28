@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Authenticator;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -18,10 +20,8 @@ import okhttp3.Response;
 import okhttp3.Route;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import rx.Observable;
-import rx.schedulers.Schedulers;
 import siarhei.luskanau.places.data.BuildConfig;
 import siarhei.luskanau.places.data.entity.BaseResponse;
 import siarhei.luskanau.places.data.entity.Photo;
@@ -107,7 +107,7 @@ public class MapsGoogleApi {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MapsGoogleApiService.BASE_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .client(okHttpClientBuilder.build())
                 .build();

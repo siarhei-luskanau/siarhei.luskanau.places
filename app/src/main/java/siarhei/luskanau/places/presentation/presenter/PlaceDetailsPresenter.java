@@ -54,13 +54,13 @@ public class PlaceDetailsPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        this.getPlaceDetailsUseCase.unsubscribe();
+        this.getPlaceDetailsUseCase.dispose();
         this.placeDetailsView = null;
     }
 
     public void setPlaceId(String placeId) {
-        this.getPlaceDetailsUseCase.setPlaceId(placeId);
-        this.getPlaceDetailsUseCase.execute(new PlaceDetailsSubscriber());
+        this.getPlaceDetailsUseCase.execute(new PlaceDetailsSubscriber(),
+                GetPlaceDetails.Params.forPlace(placeId));
     }
 
     public void onPlacePhoneClicked(CharSequence phoneNumber) {

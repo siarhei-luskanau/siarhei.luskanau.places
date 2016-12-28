@@ -3,9 +3,10 @@ package siarhei.luskanau.places.abstracts;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import org.reactivestreams.Subscription;
+
 import javax.inject.Inject;
 
-import rx.Subscription;
 import siarhei.luskanau.places.AppApplication;
 import siarhei.luskanau.places.presentation.internal.di.components.ApplicationComponent;
 import siarhei.luskanau.places.presentation.internal.di.modules.ActivityModule;
@@ -41,9 +42,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void releaseSubscription(Subscription subscription) {
-        if (subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+        if (subscription != null) {
+            subscription.cancel();
         }
     }
-
 }

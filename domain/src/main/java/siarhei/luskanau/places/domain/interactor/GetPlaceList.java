@@ -19,7 +19,7 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.domain.PlaceListBundle;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
@@ -30,7 +30,7 @@ import siarhei.luskanau.places.domain.repository.PlaceRepository;
  * This class is an implementation of {@link UseCase} that represents a use case for
  * retrieving a collection of all {@link siarhei.luskanau.places.domain.Place}.
  */
-public class GetPlaceList extends UseCase<PlaceListBundle> {
+public class GetPlaceList extends UseCase<PlaceListBundle, Void> {
 
     private final LocationRepository locationRepository;
     private final PlaceRepository placeRepository;
@@ -44,7 +44,7 @@ public class GetPlaceList extends UseCase<PlaceListBundle> {
     }
 
     @Override
-    public Observable<PlaceListBundle> buildUseCaseObservable() {
+    public Observable<PlaceListBundle> buildUseCaseObservable(Void unused) {
         return this.locationRepository.location()
                 .flatMap(latLng -> {
                     if (latLng != null) {

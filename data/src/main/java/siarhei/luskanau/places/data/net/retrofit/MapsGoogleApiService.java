@@ -1,8 +1,8 @@
 package siarhei.luskanau.places.data.net.retrofit;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 public interface MapsGoogleApiService {
 
@@ -14,5 +14,4 @@ public interface MapsGoogleApiService {
 
     @GET("maps/api/place/details/json")
     Observable<String> placeDetails(@Query("placeid") String placeid);
-
 }

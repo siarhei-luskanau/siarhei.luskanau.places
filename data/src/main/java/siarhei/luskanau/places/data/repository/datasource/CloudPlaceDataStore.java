@@ -17,8 +17,7 @@ package siarhei.luskanau.places.data.repository.datasource;
 
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Action1;
+import io.reactivex.Observable;
 import siarhei.luskanau.places.data.cache.PlaceCache;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.data.net.RestApi;
@@ -31,12 +30,6 @@ class CloudPlaceDataStore implements PlaceDataStore {
 
     private final RestApi restApi;
     private final PlaceCache placeCache;
-
-    private final Action1<PlaceEntity> saveToCacheAction = placeEntity -> {
-        if (placeEntity != null) {
-            CloudPlaceDataStore.this.placeCache.put(placeEntity);
-        }
-    };
 
     /**
      * Construct a {@link PlaceDataStore} based on connections to the api (Cloud).
@@ -56,7 +49,11 @@ class CloudPlaceDataStore implements PlaceDataStore {
 
     @Override
     public Observable<PlaceEntity> placeEntityDetails(final String placeId) {
-        return this.restApi.placeEntityById(placeId).doOnNext(saveToCacheAction);
+        return this.restApi.placeEntityById(placeId)
+                .doOnNext(placeEntity -> {
+                    if (placeEntity != null) {
+                        CloudPlaceDataStore.this.placeCache.put(placeEntity);
+                    }
+                });
     }
-
 }
