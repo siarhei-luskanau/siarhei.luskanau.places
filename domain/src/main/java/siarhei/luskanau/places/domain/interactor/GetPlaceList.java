@@ -16,14 +16,10 @@
 package siarhei.luskanau.places.domain.interactor;
 
 import java.util.Collections;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.functions.Func1;
-import siarhei.luskanau.places.domain.LatLng;
-import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.PlaceListBundle;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
@@ -50,28 +46,14 @@ public class GetPlaceList extends UseCase<PlaceListBundle> {
     @Override
     public Observable<PlaceListBundle> buildUseCaseObservable() {
         return this.locationRepository.location()
-                .flatMap(new Func1<LatLng, Observable<PlaceListBundle>>() {
-                             @Override
-                             public Observable<PlaceListBundle> call(final LatLng latLng) {
-                                 if (latLng != null) {
-                                     return placeRepository.places(latLng)
-                                             .onErrorReturn(new Func1<Throwable, List<Place>>() {
-                                                 @Override
-                                                 public List<Place> call(Throwable throwable) {
-                                                     return Collections.emptyList();
-                                                 }
-                                             })
-                                             .flatMap(new Func1<List<Place>, Observable<PlaceListBundle>>() {
-                                                 @Override
-                                                 public Observable<PlaceListBundle> call(List<Place> places) {
-                                                     return Observable.just(new PlaceListBundle(latLng, places));
-                                                 }
-                                             });
-                                 } else {
-                                     return Observable.just(new PlaceListBundle(null, Collections.<Place>emptyList()));
-                                 }
-                             }
-                         }
-                );
+                .flatMap(latLng -> {
+                    if (latLng != null) {
+                        return placeRepository.places(latLng)
+                                .onErrorReturn(throwable -> Collections.emptyList())
+                                .flatMap(places -> Observable.just(new PlaceListBundle(latLng, places)));
+                    } else {
+                        return Observable.just(new PlaceListBundle(null, Collections.emptyList()));
+                    }
+                });
     }
 }
