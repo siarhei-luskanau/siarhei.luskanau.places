@@ -30,7 +30,7 @@ ext {
     mockitoAllVersion = '1.10.19'
     powermockVersion = '1.6.6'
     supportTestRunnerVersion = '0.5'
-    supportTestRunnerVersion = '0.5'
+    testEspressoVersion = '2.2.2'
 
     //Development
     leakCanaryVersion = '1.5'
@@ -50,6 +50,7 @@ ext {
             powermockMockito  : "org.powermock:powermock-api-mockito:${powermockVersion}",
             supportAnnotations: "com.android.support:support-annotations:${SUPPORT_LIBRARY_VERSION}",
             supportTestRunner : "com.android.support.test:runner:${supportTestRunnerVersion}",
+            testEspressoCore  : "com.android.support.test.espresso:espresso-core:${testEspressoVersion}",
     ]
 
     dataDependencies = [

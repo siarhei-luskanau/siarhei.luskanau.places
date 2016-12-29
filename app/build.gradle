@@ -57,6 +57,7 @@ dependencies {
 
     androidTestCompile presentationTestDependencies.supportAnnotations
     androidTestCompile presentationTestDependencies.supportTestRunner
+    androidTestCompile presentationTestDependencies.testEspressoCore
 
     //Development
     debugCompile developmentDependencies.leakCanary
