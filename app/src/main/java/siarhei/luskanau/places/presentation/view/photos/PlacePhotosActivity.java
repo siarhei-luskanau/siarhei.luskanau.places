@@ -16,9 +16,11 @@ public class PlacePhotosActivity extends PlaceComponentActivity
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
 
     public static Intent buildIntent(Context context, String placeId, int position) {
-        return new Intent(context, PlacePhotosActivity.class)
-                .putExtra(EXTRA_PLACE_ID, placeId)
-                .putExtra(EXTRA_POSITION, position);
+        return buildIntent(new Intent(context, PlacePhotosActivity.class), placeId, position);
+    }
+
+    public static Intent buildIntent(Intent intent, String placeId, int position) {
+        return intent.putExtra(EXTRA_PLACE_ID, placeId).putExtra(EXTRA_POSITION, position);
     }
 
     @Override
@@ -31,6 +33,10 @@ public class PlacePhotosActivity extends PlaceComponentActivity
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setTitle(R.string.nav_place_details);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.contentFrame, new PlacePhotosFragment())
+                .commit();
     }
 
     @Override

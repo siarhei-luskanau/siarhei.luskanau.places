@@ -41,7 +41,9 @@ public class LocationRepositoryImpl implements LocationRepository {
                     //noinspection MissingPermission
                     Location lastKnownLocation = locationManager.getLastKnownLocation(provider);
                     Log.d(TAG, "LastKnownLocation: " + lastKnownLocation);
-                    emitter.onNext(lastKnownLocation);
+                    if (lastKnownLocation != null) {
+                        emitter.onNext(lastKnownLocation);
+                    }
 
                     LocationListener locationListener = new LocationListener() {
                         @Override
@@ -84,6 +86,12 @@ public class LocationRepositoryImpl implements LocationRepository {
                     locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage(), e);
+                }
+                if (lastLocation == null) {
+                    Location location = new Location("");
+                    location.setLatitude(37.7757028);
+                    location.setLongitude(-122.4156366);
+                    emitter.onNext(location);
                 }
             }
         });
