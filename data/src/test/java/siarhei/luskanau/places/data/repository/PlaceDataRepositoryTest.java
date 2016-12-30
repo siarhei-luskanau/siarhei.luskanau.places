@@ -26,7 +26,8 @@ public class PlaceDataRepositoryTest {
     private static final LatLng FAKE_LAT_LNG = new LatLng(1.11, 2.22);
     private static final String FAKE_PLACE_ID = "place_id";
 
-    private PlaceDataRepository placeDataRepository;
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
     private PlaceDataStoreFactory mockPlaceDataStoreFactory;
@@ -35,8 +36,7 @@ public class PlaceDataRepositoryTest {
     @Mock
     private PlaceDataStore mockPlaceDataStore;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    private PlaceDataRepository placeDataRepository;
 
     @Before
     public void setUp() {

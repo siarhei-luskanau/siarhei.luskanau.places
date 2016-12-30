@@ -19,17 +19,16 @@ import static org.mockito.BDDMockito.given;
 
 public class UseCaseTest {
 
-    private UseCaseTestClass useCase;
-
-    private TestDisposableObserver<Object> testObserver;
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
     private ThreadExecutor mockThreadExecutor;
     @Mock
     private PostExecutionThread mockPostExecutionThread;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    private UseCaseTestClass useCase;
+    private TestDisposableObserver<Object> testObserver;
 
     @Before
     public void setUp() {

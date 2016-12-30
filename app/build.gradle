@@ -49,6 +49,7 @@ dependencies {
     compile presentationDependencies.supportDesign
     compile presentationDependencies.supportCardview
     compile presentationDependencies.glide
+    compile presentationDependencies.espressoIdlingResource
 
     testCompile presentationTestDependencies.junit
     testCompile presentationTestDependencies.mockitoAll

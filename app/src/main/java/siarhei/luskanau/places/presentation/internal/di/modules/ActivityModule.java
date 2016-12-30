@@ -19,6 +19,7 @@ import android.app.Activity;
 
 import dagger.Module;
 import dagger.Provides;
+import siarhei.luskanau.places.presentation.EspressoIdlingResource;
 
 /**
  * A module to wrap the Activity state and expose it to the graph.
@@ -37,5 +38,10 @@ public class ActivityModule {
     @Provides
     Activity provideActivity() {
         return this.activity;
+    }
+
+    @Provides
+    EspressoIdlingResource provideEspressoIdlingResource() {
+        return new EspressoIdlingResource(activity.getClass().getSimpleName());
     }
 }

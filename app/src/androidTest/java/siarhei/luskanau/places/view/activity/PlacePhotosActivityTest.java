@@ -1,10 +1,12 @@
 package siarhei.luskanau.places.view.activity;
 
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,16 +24,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @LargeTest
 public class PlacePhotosActivityTest {
 
+    private static final String FAKE_PLACE_ID = "ChIJw3lIVZyAhYARGtSW4pX2Dvg";
     @Rule
     public ActivityTestRule<PlacePhotosActivity> mActivityRule = new ActivityTestRule(PlacePhotosActivity.class);
-
-    private static final String FAKE_PLACE_ID = "ChIJw3lIVZyAhYARGtSW4pX2Dvg";
 
     @Before
     public void intentWithStubbedNoteId() {
         Intent intent = new Intent();
         PlacePhotosActivity.buildIntent(intent, FAKE_PLACE_ID, 0);
         mActivityRule.launchActivity(intent);
+
+        Espresso.registerIdlingResources(mActivityRule.getActivity().getIdlingResource());
     }
 
     @Test
@@ -40,4 +43,8 @@ public class PlacePhotosActivityTest {
         onView(withId(R.id.viewPager)).check(matches(isDisplayed()));
     }
 
+    @After
+    public void unregisterIdlingResource() {
+        Espresso.unregisterIdlingResources(mActivityRule.getActivity().getIdlingResource());
+    }
 }
