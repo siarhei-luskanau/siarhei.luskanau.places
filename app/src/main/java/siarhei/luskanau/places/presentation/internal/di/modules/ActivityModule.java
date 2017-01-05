@@ -20,6 +20,7 @@ import android.app.Activity;
 import dagger.Module;
 import dagger.Provides;
 import siarhei.luskanau.places.presentation.EspressoIdlingResource;
+import siarhei.luskanau.places.presentation.internal.di.PerActivity;
 
 /**
  * A module to wrap the Activity state and expose it to the graph.
@@ -36,11 +37,13 @@ public class ActivityModule {
      * Expose the activity to dependents in the graph.
      */
     @Provides
+    @PerActivity
     Activity provideActivity() {
         return this.activity;
     }
 
     @Provides
+    @PerActivity
     EspressoIdlingResource provideEspressoIdlingResource() {
         return new EspressoIdlingResource(activity.getClass().getSimpleName());
     }

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 apply from: '../config/quality.gradle'
-build.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint', 'test', "connectedAndroidTest"
+build.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint', 'test'
 
 android {
 

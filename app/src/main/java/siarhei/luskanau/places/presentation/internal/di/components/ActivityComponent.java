@@ -29,9 +29,6 @@ import siarhei.luskanau.places.presentation.internal.di.modules.ActivityModule;
  * {@link PerActivity}
  */
 @PerActivity
-@Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
+@Component(modules = ActivityModule.class)
 public interface ActivityComponent {
-
-    //Exposed to sub-graphs.
-    Activity activity();
 }
