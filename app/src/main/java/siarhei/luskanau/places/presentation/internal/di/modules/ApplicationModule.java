@@ -15,21 +15,20 @@
  */
 package siarhei.luskanau.places.presentation.internal.di.modules;
 
-import android.content.Context;
-
-import javax.inject.Named;
-
 import dagger.Module;
 import dagger.Provides;
 import siarhei.luskanau.places.AppApplication;
-import siarhei.luskanau.places.data.cache.PlaceCache;
-import siarhei.luskanau.places.data.cache.PlaceCacheImpl;
+import siarhei.luskanau.places.data.entity.mapper.PlaceEntityDataMapper;
 import siarhei.luskanau.places.data.executor.JobExecutor;
+import siarhei.luskanau.places.data.net.RestApi;
+import siarhei.luskanau.places.data.net.RestApiImpl;
+import siarhei.luskanau.places.data.net.retrofit.MapsGoogleApi;
 import siarhei.luskanau.places.data.repository.PlaceDataRepository;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
 import siarhei.luskanau.places.presentation.UIThread;
+import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
 import siarhei.luskanau.places.utils.AppUtils;
 
 /**
@@ -37,6 +36,7 @@ import siarhei.luskanau.places.utils.AppUtils;
  */
 @Module
 public class ApplicationModule {
+
     private final AppApplication application;
 
     public ApplicationModule(AppApplication application) {
@@ -44,33 +44,30 @@ public class ApplicationModule {
     }
 
     @Provides
-    Context provideApplicationContext() {
+    AppApplication provideApplicationContext() {
         return this.application;
     }
 
     @Provides
-    ThreadExecutor provideThreadExecutor(JobExecutor jobExecutor) {
-        return jobExecutor;
+    ThreadExecutor provideThreadExecutor() {
+        return new JobExecutor();
     }
 
     @Provides
-    PostExecutionThread providePostExecutionThread(UIThread uiThread) {
-        return uiThread;
+    PostExecutionThread providePostExecutionThread() {
+        return new UIThread();
     }
 
     @Provides
-    PlaceCache providePlaceCache(PlaceCacheImpl placeCache) {
-        return placeCache;
+    PlaceRepository providePlaceRepository() {
+        String geoApiKey = AppUtils.getGeoApiKey(this.application);
+        MapsGoogleApi mapsGoogleApi = new MapsGoogleApi(geoApiKey);
+        RestApi restApi = new RestApiImpl(this.application, mapsGoogleApi);
+        return new PlaceDataRepository(restApi, new PlaceEntityDataMapper());
     }
 
     @Provides
-    @Named("geoApiKey")
-    String provideGeoApiKey() {
-        return AppUtils.getGeoApiKey(this.application);
-    }
-
-    @Provides
-    PlaceRepository providePlaceRepository(PlaceDataRepository placeDataRepository) {
-        return placeDataRepository;
+    ErrorMessageFactory provide() {
+        return new ErrorMessageFactory(application);
     }
 }

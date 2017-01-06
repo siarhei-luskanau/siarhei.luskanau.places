@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 
 import org.reactivestreams.Subscription;
 
-import siarhei.luskanau.places.presentation.internal.di.HasComponent;
+import siarhei.luskanau.places.presentation.view.HasComponent;
 import siarhei.luskanau.places.presentation.navigation.Navigator;
 
 public class BaseFragment extends Fragment {

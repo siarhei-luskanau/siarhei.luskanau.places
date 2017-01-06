@@ -26,16 +26,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.inject.Inject;
-
 /**
  * Helper class to do operations on regular files/directories.
  */
 public class FileManager {
-
-    @Inject
-    public FileManager() {
-    }
 
     /**
      * Writes a file to Disk.

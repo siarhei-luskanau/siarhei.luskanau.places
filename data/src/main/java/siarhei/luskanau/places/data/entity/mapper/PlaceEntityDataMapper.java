@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 import siarhei.luskanau.places.domain.Photo;
 import siarhei.luskanau.places.domain.Place;
@@ -30,10 +28,6 @@ import siarhei.luskanau.places.domain.Place;
  * domain layer.
  */
 public class PlaceEntityDataMapper {
-
-    @Inject
-    public PlaceEntityDataMapper() {
-    }
 
     /**
      * Transform a {@link PlaceEntity} into an {@link Place}.

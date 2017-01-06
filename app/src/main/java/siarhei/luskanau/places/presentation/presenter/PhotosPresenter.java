@@ -2,25 +2,19 @@ package siarhei.luskanau.places.presentation.presenter;
 
 import android.support.annotation.NonNull;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.exception.DefaultErrorBundle;
 import siarhei.luskanau.places.domain.exception.ErrorBundle;
 import siarhei.luskanau.places.domain.interactor.DefaultSubscriber;
 import siarhei.luskanau.places.domain.interactor.GetPlaceDetails;
-import siarhei.luskanau.places.domain.interactor.UseCase;
 import siarhei.luskanau.places.presentation.EspressoIdlingResource;
 import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
-import siarhei.luskanau.places.presentation.internal.di.PerActivity;
 import siarhei.luskanau.places.presentation.view.photos.PhotosView;
 
 /**
  * {@link Presenter} that controls communication between views and models of the presentation
  * layer.
  */
-@PerActivity
 public class PhotosPresenter implements Presenter {
 
     private final GetPlaceDetails getPlaceDetailsUseCase;
@@ -28,11 +22,10 @@ public class PhotosPresenter implements Presenter {
     private final EspressoIdlingResource espressoIdlingResource;
     private PhotosView photosView;
 
-    @Inject
-    public PhotosPresenter(@Named("placeDetails") UseCase getPlaceDetailsUseCase,
+    public PhotosPresenter(GetPlaceDetails getPlaceDetailsUseCase,
                            ErrorMessageFactory errorMessageFactory,
                            EspressoIdlingResource espressoIdlingResource) {
-        this.getPlaceDetailsUseCase = (GetPlaceDetails) getPlaceDetailsUseCase;
+        this.getPlaceDetailsUseCase = getPlaceDetailsUseCase;
         this.errorMessageFactory = errorMessageFactory;
         this.espressoIdlingResource = espressoIdlingResource;
     }
@@ -54,7 +47,7 @@ public class PhotosPresenter implements Presenter {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = errorMessageFactory.create(this.photosView.context(), errorBundle.getException());
+        String errorMessage = errorMessageFactory.create(errorBundle.getException());
         this.photosView.showError(errorMessage);
     }
 

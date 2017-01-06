@@ -19,8 +19,6 @@ import android.content.Context;
 
 import java.io.File;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import siarhei.luskanau.places.data.cache.serializer.JsonSerializer;
 import siarhei.luskanau.places.data.entity.PlaceEntity;
@@ -51,7 +49,6 @@ public class PlaceCacheImpl implements PlaceCache {
      * @param placeCacheSerializer {@link JsonSerializer} for object serialization.
      * @param fileManager          {@link FileManager} for saving serialized objects to the file system.
      */
-    @Inject
     public PlaceCacheImpl(Context context, JsonSerializer placeCacheSerializer,
                           FileManager fileManager, ThreadExecutor executor) {
         if (context == null || placeCacheSerializer == null || fileManager == null || executor == null) {

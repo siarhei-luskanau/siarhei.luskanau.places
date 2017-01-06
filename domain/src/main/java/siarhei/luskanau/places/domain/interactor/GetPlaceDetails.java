@@ -15,8 +15,6 @@
  */
 package siarhei.luskanau.places.domain.interactor;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
@@ -31,7 +29,6 @@ public class GetPlaceDetails extends UseCase<Place, GetPlaceDetails.Params> {
 
     private final PlaceRepository placeRepository;
 
-    @Inject
     public GetPlaceDetails(PlaceRepository placeRepository,
                            ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);

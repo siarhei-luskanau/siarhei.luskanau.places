@@ -17,8 +17,6 @@ package siarhei.luskanau.places.presentation.exception;
 
 import android.content.Context;
 
-import javax.inject.Inject;
-
 import siarhei.luskanau.places.R;
 import siarhei.luskanau.places.data.exception.NetworkConnectionException;
 import siarhei.luskanau.places.data.exception.PlaceNotFoundException;
@@ -28,18 +26,19 @@ import siarhei.luskanau.places.data.exception.PlaceNotFoundException;
  */
 public class ErrorMessageFactory {
 
-    @Inject
-    public ErrorMessageFactory() {
+    private Context context;
+
+    public ErrorMessageFactory(Context context) {
+        this.context = context;
     }
 
     /**
      * Creates a String representing an error message.
      *
-     * @param context   Context needed to retrieve string resources.
      * @param exception An exception used as a condition to retrieve the correct error message.
      * @return {@link String} an error message.
      */
-    public String create(Context context, Exception exception) {
+    public String create(Exception exception) {
         String message = context.getString(R.string.exception_message_generic);
 
         if (exception instanceof NetworkConnectionException) {

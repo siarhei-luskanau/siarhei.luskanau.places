@@ -2,15 +2,11 @@ package siarhei.luskanau.places.presentation.presenter;
 
 import android.support.annotation.NonNull;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import siarhei.luskanau.places.domain.PlaceListBundle;
 import siarhei.luskanau.places.domain.exception.DefaultErrorBundle;
 import siarhei.luskanau.places.domain.exception.ErrorBundle;
 import siarhei.luskanau.places.domain.interactor.DefaultSubscriber;
 import siarhei.luskanau.places.domain.interactor.GetPlaceList;
-import siarhei.luskanau.places.domain.interactor.UseCase;
 import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
 import siarhei.luskanau.places.presentation.view.placelist.PlaceListView;
 
@@ -23,10 +19,9 @@ public class PlaceListPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private PlaceListView placeListView;
 
-    @Inject
-    public PlaceListPresenter(@Named("placeList") UseCase getPlaceListUseCase,
+    public PlaceListPresenter(GetPlaceList getPlaceListUseCase,
                               ErrorMessageFactory errorMessageFactory) {
-        this.getPlaceListUseCase = (GetPlaceList) getPlaceListUseCase;
+        this.getPlaceListUseCase = getPlaceListUseCase;
         this.errorMessageFactory = errorMessageFactory;
     }
 
@@ -45,7 +40,7 @@ public class PlaceListPresenter implements Presenter {
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = errorMessageFactory.create(this.placeListView.context(), errorBundle.getException());
+        String errorMessage = errorMessageFactory.create(errorBundle.getException());
         this.placeListView.showError(errorMessage);
     }
 

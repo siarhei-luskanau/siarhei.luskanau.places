@@ -15,35 +15,38 @@
  */
 package siarhei.luskanau.places.presentation.internal.di.modules;
 
-import android.app.Activity;
-
 import dagger.Module;
 import dagger.Provides;
+import siarhei.luskanau.places.abstracts.BaseActivity;
 import siarhei.luskanau.places.presentation.EspressoIdlingResource;
-import siarhei.luskanau.places.presentation.internal.di.PerActivity;
+import siarhei.luskanau.places.presentation.internal.di.scope.ActivityScope;
+import siarhei.luskanau.places.presentation.navigation.Navigator;
 
 /**
  * A module to wrap the Activity state and expose it to the graph.
  */
 @Module
 public class ActivityModule {
-    private final Activity activity;
+    private final BaseActivity activity;
 
-    public ActivityModule(Activity activity) {
+    public ActivityModule(BaseActivity activity) {
         this.activity = activity;
     }
 
-    /**
-     * Expose the activity to dependents in the graph.
-     */
     @Provides
-    @PerActivity
-    Activity provideActivity() {
+    @ActivityScope
+    BaseActivity provideBaseActivity() {
         return this.activity;
     }
 
     @Provides
-    @PerActivity
+    @ActivityScope
+    Navigator provideNavigator() {
+        return new Navigator();
+    }
+
+    @Provides
+    @ActivityScope
     EspressoIdlingResource provideEspressoIdlingResource() {
         return new EspressoIdlingResource(activity.getClass().getSimpleName());
     }

@@ -29,7 +29,6 @@ dependencies {
     def domainTestDependencies = rootProject.ext.domainTestDependencies
 
     compile domainDependencies.rxJava
-    compile domainDependencies.javaxInject
 
     testCompile domainTestDependencies.junit
     testCompile domainTestDependencies.mockito

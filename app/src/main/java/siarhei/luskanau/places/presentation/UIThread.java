@@ -15,8 +15,6 @@
  */
 package siarhei.luskanau.places.presentation;
 
-import javax.inject.Inject;
-
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
@@ -26,10 +24,6 @@ import siarhei.luskanau.places.domain.executor.PostExecutionThread;
  * which will execute actions on the Android UI thread
  */
 public class UIThread implements PostExecutionThread {
-
-    @Inject
-    public UIThread() {
-    }
 
     @Override
     public Scheduler getScheduler() {

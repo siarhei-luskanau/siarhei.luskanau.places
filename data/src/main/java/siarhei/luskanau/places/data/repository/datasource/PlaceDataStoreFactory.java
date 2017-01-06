@@ -18,9 +18,6 @@ package siarhei.luskanau.places.data.repository.datasource;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import siarhei.luskanau.places.data.cache.PlaceCache;
 import siarhei.luskanau.places.data.net.RestApi;
 import siarhei.luskanau.places.data.net.RestApiImpl;
@@ -35,9 +32,7 @@ public class PlaceDataStoreFactory {
     private final PlaceCache placeCache;
     private final String geoApiKey;
 
-    @Inject
-    public PlaceDataStoreFactory(@NonNull Context context, @NonNull PlaceCache placeCache,
-                                 @Named("geoApiKey") String geoApiKey) {
+    public PlaceDataStoreFactory(@NonNull Context context, @NonNull PlaceCache placeCache, String geoApiKey) {
         this.context = context.getApplicationContext();
         this.placeCache = placeCache;
         this.geoApiKey = geoApiKey;

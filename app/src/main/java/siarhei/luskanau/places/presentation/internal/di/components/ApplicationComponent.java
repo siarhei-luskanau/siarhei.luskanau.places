@@ -15,32 +15,29 @@
  */
 package siarhei.luskanau.places.presentation.internal.di.components;
 
-import android.content.Context;
-
-import javax.inject.Singleton;
-
 import dagger.Component;
-import siarhei.luskanau.places.abstracts.BaseActivity;
+import siarhei.luskanau.places.AppApplication;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
+import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
 import siarhei.luskanau.places.presentation.internal.di.modules.ApplicationModule;
+import siarhei.luskanau.places.presentation.internal.di.scope.ApplicationScope;
 
 /**
  * A component whose lifetime is the life of the application.
  */
-@Singleton // Constraints this component to one-per-application or unscoped bindings.
+@ApplicationScope
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(BaseActivity baseActivity);
-
-    //Exposed to sub-graphs.
-    Context context();
+    AppApplication appApplication();
 
     ThreadExecutor threadExecutor();
 
     PostExecutionThread postExecutionThread();
 
     PlaceRepository placeRepository();
+
+    ErrorMessageFactory errorMessageFactory();
 }

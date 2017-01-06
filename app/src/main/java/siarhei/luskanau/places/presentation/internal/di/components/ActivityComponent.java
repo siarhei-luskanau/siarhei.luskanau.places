@@ -15,20 +15,38 @@
  */
 package siarhei.luskanau.places.presentation.internal.di.components;
 
-import android.app.Activity;
-
 import dagger.Component;
-import siarhei.luskanau.places.presentation.internal.di.PerActivity;
+import siarhei.luskanau.places.abstracts.BaseActivity;
+import siarhei.luskanau.places.domain.executor.PostExecutionThread;
+import siarhei.luskanau.places.domain.executor.ThreadExecutor;
+import siarhei.luskanau.places.domain.repository.PlaceRepository;
+import siarhei.luskanau.places.presentation.EspressoIdlingResource;
+import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
 import siarhei.luskanau.places.presentation.internal.di.modules.ActivityModule;
+import siarhei.luskanau.places.presentation.internal.di.scope.ActivityScope;
 
 /**
  * A base component upon which fragment's components may depend.
  * Activity-level components should extend this component.
  * <p>
  * Subtypes of ActivityComponent should be decorated with annotation:
- * {@link PerActivity}
+ * {@link ActivityScope}
  */
-@PerActivity
-@Component(modules = ActivityModule.class)
+@ActivityScope
+@Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
+
+    void inject(BaseActivity baseActivity);
+
+    ThreadExecutor threadExecutor();
+
+    PostExecutionThread postExecutionThread();
+
+    PlaceRepository placeRepository();
+
+    ErrorMessageFactory errorMessageFactory();
+
+    BaseActivity baseActivity();
+
+    EspressoIdlingResource espressoIdlingResource();
 }

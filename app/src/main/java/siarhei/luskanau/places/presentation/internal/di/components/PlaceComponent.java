@@ -16,23 +16,19 @@
 package siarhei.luskanau.places.presentation.internal.di.components;
 
 import dagger.Component;
-import siarhei.luskanau.places.presentation.internal.di.PerActivity;
-import siarhei.luskanau.places.presentation.internal.di.modules.ActivityModule;
 import siarhei.luskanau.places.presentation.internal.di.modules.PlaceModule;
-import siarhei.luskanau.places.presentation.view.PlaceComponentActivity;
+import siarhei.luskanau.places.presentation.internal.di.scope.PlaceScope;
 import siarhei.luskanau.places.presentation.view.photos.PlacePhotosFragment;
 import siarhei.luskanau.places.presentation.view.placedetails.PlaceDetailsFragment;
 import siarhei.luskanau.places.presentation.view.placelist.PlaceListFragment;
 
 /**
- * A scope {@link PerActivity} component.
+ * A scope {@link PlaceScope} component.
  * Injects place specific Fragments.
  */
-@PerActivity
-@Component(dependencies = ApplicationComponent.class, modules = {ActivityModule.class, PlaceModule.class})
-public interface PlaceComponent extends ActivityComponent {
-
-    void inject(PlaceComponentActivity placeListFragment);
+@Component(dependencies = ActivityComponent.class, modules = PlaceModule.class)
+@PlaceScope
+public interface PlaceComponent {
 
     void inject(PlaceListFragment placeListFragment);
 

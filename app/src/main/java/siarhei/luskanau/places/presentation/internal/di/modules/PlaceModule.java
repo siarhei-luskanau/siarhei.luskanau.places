@@ -15,19 +15,21 @@
  */
 package siarhei.luskanau.places.presentation.internal.di.modules;
 
-import javax.inject.Named;
-
 import dagger.Module;
 import dagger.Provides;
+import siarhei.luskanau.places.abstracts.BaseActivity;
 import siarhei.luskanau.places.data.repository.LocationRepositoryImpl;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 import siarhei.luskanau.places.domain.interactor.GetPlaceDetails;
 import siarhei.luskanau.places.domain.interactor.GetPlaceList;
-import siarhei.luskanau.places.domain.interactor.UseCase;
 import siarhei.luskanau.places.domain.repository.LocationRepository;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
-import siarhei.luskanau.places.presentation.internal.di.PerActivity;
+import siarhei.luskanau.places.presentation.EspressoIdlingResource;
+import siarhei.luskanau.places.presentation.exception.ErrorMessageFactory;
+import siarhei.luskanau.places.presentation.presenter.PhotosPresenter;
+import siarhei.luskanau.places.presentation.presenter.PlaceDetailsPresenter;
+import siarhei.luskanau.places.presentation.presenter.PlaceListPresenter;
 
 /**
  * Dagger module that provides place related collaborators.
@@ -35,28 +37,40 @@ import siarhei.luskanau.places.presentation.internal.di.PerActivity;
 @Module
 public class PlaceModule {
 
-    public PlaceModule() {
+    @Provides
+    LocationRepository provideLocationRepository(BaseActivity context) {
+        return new LocationRepositoryImpl(context);
     }
 
     @Provides
-    @Named("placeList")
-    @PerActivity
-    UseCase provideGetPlaceListUseCase(GetPlaceList getPlaceList) {
-        return getPlaceList;
+    GetPlaceList provideGetPlaceList(LocationRepository locationRepository, PlaceRepository placeRepository,
+                                     ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetPlaceList(locationRepository, placeRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides
-    @Named("placeDetails")
-    @PerActivity
-    UseCase provideGetPlaceDetailsUseCase(PlaceRepository placeRepository,
-                                          ThreadExecutor threadExecutor,
-                                          PostExecutionThread postExecutionThread) {
+    GetPlaceDetails provideGetPlaceDetails(PlaceRepository placeRepository,
+                                           ThreadExecutor threadExecutor,
+                                           PostExecutionThread postExecutionThread) {
         return new GetPlaceDetails(placeRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides
-    @PerActivity
-    LocationRepository provideLocationRepository(LocationRepositoryImpl locationRepository) {
-        return locationRepository;
+    PlaceListPresenter providePlaceListPresenter(GetPlaceList getPlaceListUseCase,
+                                                 ErrorMessageFactory errorMessageFactory) {
+        return new PlaceListPresenter(getPlaceListUseCase, errorMessageFactory);
+    }
+
+    @Provides
+    PlaceDetailsPresenter providePlaceDetailsPresenter(GetPlaceDetails getPlaceDetailsUseCase,
+                                                       ErrorMessageFactory errorMessageFactory) {
+        return new PlaceDetailsPresenter(getPlaceDetailsUseCase, errorMessageFactory);
+    }
+
+    @Provides
+    PhotosPresenter providePhotosPresenter(GetPlaceDetails getPlaceDetailsUseCase,
+                                           ErrorMessageFactory errorMessageFactory,
+                                           EspressoIdlingResource espressoIdlingResource) {
+        return new PhotosPresenter(getPlaceDetailsUseCase, errorMessageFactory, espressoIdlingResource);
     }
 }

@@ -17,8 +17,6 @@ package siarhei.luskanau.places.data.cache.serializer;
 
 import com.google.gson.Gson;
 
-import javax.inject.Inject;
-
 import siarhei.luskanau.places.data.entity.PlaceEntity;
 
 /**
@@ -27,10 +25,6 @@ import siarhei.luskanau.places.data.entity.PlaceEntity;
 public class JsonSerializer {
 
     private final Gson gson = new Gson();
-
-    @Inject
-    public JsonSerializer() {
-    }
 
     /**
      * Serialize an object to Json.

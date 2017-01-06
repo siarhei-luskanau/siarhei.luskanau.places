@@ -17,8 +17,6 @@ package siarhei.luskanau.places.domain.interactor;
 
 import java.util.Collections;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import siarhei.luskanau.places.domain.PlaceListBundle;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
@@ -35,7 +33,6 @@ public class GetPlaceList extends UseCase<PlaceListBundle, Void> {
     private final LocationRepository locationRepository;
     private final PlaceRepository placeRepository;
 
-    @Inject
     public GetPlaceList(LocationRepository locationRepository, PlaceRepository placeRepository,
                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);

@@ -7,8 +7,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,7 +20,6 @@ public class LocationRepositoryImpl implements LocationRepository {
     private final Context context;
     private Location lastLocation;
 
-    @Inject
     public LocationRepositoryImpl(Context context) {
         this.context = context;
     }
