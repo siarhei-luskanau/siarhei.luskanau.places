@@ -18,12 +18,14 @@ package siarhei.luskanau.places.presentation.internal.di.modules;
 import dagger.Module;
 import dagger.Provides;
 import siarhei.luskanau.places.AppApplication;
+import siarhei.luskanau.places.data.cache.FileManager;
+import siarhei.luskanau.places.data.cache.PlaceCache;
+import siarhei.luskanau.places.data.cache.PlaceCacheImpl;
+import siarhei.luskanau.places.data.cache.serializer.JsonSerializer;
 import siarhei.luskanau.places.data.entity.mapper.PlaceEntityDataMapper;
 import siarhei.luskanau.places.data.executor.JobExecutor;
-import siarhei.luskanau.places.data.net.RestApi;
-import siarhei.luskanau.places.data.net.RestApiImpl;
-import siarhei.luskanau.places.data.net.retrofit.MapsGoogleApi;
 import siarhei.luskanau.places.data.repository.PlaceDataRepository;
+import siarhei.luskanau.places.data.repository.datasource.PlaceDataStoreFactory;
 import siarhei.luskanau.places.domain.executor.PostExecutionThread;
 import siarhei.luskanau.places.domain.executor.ThreadExecutor;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
@@ -59,11 +61,14 @@ public class ApplicationModule {
     }
 
     @Provides
-    PlaceRepository providePlaceRepository() {
+    PlaceRepository providePlaceRepository(ThreadExecutor threadExecutor) {
         String geoApiKey = AppUtils.getGeoApiKey(this.application);
-        MapsGoogleApi mapsGoogleApi = new MapsGoogleApi(geoApiKey);
-        RestApi restApi = new RestApiImpl(this.application, mapsGoogleApi);
-        return new PlaceDataRepository(restApi, new PlaceEntityDataMapper());
+        PlaceCache placeCache = new PlaceCacheImpl(this.application,
+                new JsonSerializer(),
+                new FileManager(),
+                threadExecutor);
+        PlaceDataStoreFactory dataStoreFactory = new PlaceDataStoreFactory(this.application, placeCache, geoApiKey);
+        return new PlaceDataRepository(dataStoreFactory, new PlaceEntityDataMapper());
     }
 
     @Provides

@@ -19,29 +19,42 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import siarhei.luskanau.places.data.entity.mapper.PlaceEntityDataMapper;
-import siarhei.luskanau.places.data.net.RestApi;
+import siarhei.luskanau.places.data.repository.datasource.PlaceDataStore;
+import siarhei.luskanau.places.data.repository.datasource.PlaceDataStoreFactory;
 import siarhei.luskanau.places.domain.LatLng;
 import siarhei.luskanau.places.domain.Place;
 import siarhei.luskanau.places.domain.repository.PlaceRepository;
 
+/**
+ * {@link PlaceRepository} for retrieving place data.
+ */
 public class PlaceDataRepository implements PlaceRepository {
 
-    private final RestApi restApi;
+    private final PlaceDataStoreFactory placeDataStoreFactory;
     private final PlaceEntityDataMapper placeEntityDataMapper;
 
-
-    public PlaceDataRepository(RestApi restApi, PlaceEntityDataMapper placeEntityDataMapper) {
-        this.restApi = restApi;
+    /**
+     * Constructs a {@link PlaceRepository}.
+     *
+     * @param dataStoreFactory      A factory to construct different data source implementations.
+     * @param placeEntityDataMapper {@link PlaceEntityDataMapper}.
+     */
+    public PlaceDataRepository(PlaceDataStoreFactory dataStoreFactory,
+                               PlaceEntityDataMapper placeEntityDataMapper) {
+        this.placeDataStoreFactory = dataStoreFactory;
         this.placeEntityDataMapper = placeEntityDataMapper;
     }
 
     @Override
     public Observable<List<Place>> places(LatLng location) {
-        return restApi.placeEntityList(location).map(this.placeEntityDataMapper::transform);
+        //we always get all places from the cloud
+        final PlaceDataStore placeDataStore = this.placeDataStoreFactory.createCloudDataStore();
+        return placeDataStore.placeEntityList(location).map(this.placeEntityDataMapper::transform);
     }
 
     @Override
     public Observable<Place> place(String placeId) {
-        return restApi.placeEntityById(placeId).map(this.placeEntityDataMapper::transform);
+        final PlaceDataStore placeDataStore = this.placeDataStoreFactory.create(placeId);
+        return placeDataStore.placeEntityDetails(placeId).map(this.placeEntityDataMapper::transform);
     }
 }
